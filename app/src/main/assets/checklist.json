@@ -263,7 +263,7 @@
                ]
             },
             {
-               "name": "enVironment",
+               "name": "Environment",
                "nameAudio": "",
                "items": [
                   {
@@ -1738,7 +1738,7 @@
       },
       {
          "type": "checklist",
-         "name": "Inflight",
+         "name": "In Flight",
          "nameAudio": "",
          "defaultView": "checklistView",
          "lists": [
@@ -2937,7 +2937,7 @@
                ]
             },
             {
-               "name": "Engine Failure In flight | Inflight Engine Failure",
+               "name": "Engine Failure In Flight | In Flight Engine Failure",
                "nameAudio": "",
                "items": [
                   {
@@ -3291,7 +3291,7 @@
                ]
             },
             {
-               "name": "Engine Fire Inflight | Inflight Engine Fire",
+               "name": "Engine Fire In Flight | In Flight Engine Fire",
                "nameAudio": "",
                "items": [
                   {
@@ -3566,7 +3566,7 @@
                   },
                   {
                      "type": "note",
-                     "label1": "If rought after 1 min.",
+                     "label1": "If rough after 1 min.",
                      "label1Audio": "",
                      "label2": "",
                      "label2Audio": "",
@@ -3753,7 +3753,7 @@
                ]
             },
             {
-               "name": "Inflight Canopy Opening",
+               "name": "In Flight Canopy Opening",
                "nameAudio": "",
                "items": [
                   {
@@ -3980,7 +3980,7 @@
                   },
                   {
                      "type": "item",
-                     "label1": "Circuit Breadkers",
+                     "label1": "Circuit Breakers",
                      "label1Audio": "",
                      "label2": "CHECK",
                      "label2Audio": "",
@@ -4684,7 +4684,7 @@
                   },
                   {
                      "type": "item",
-                     "label1": "Enroute Climb Flaps Up",
+                     "label1": "En Route Climb Flaps Up",
                      "label1Audio": "",
                      "label2": "110-130 KIAS",
                      "label2Audio": "",
