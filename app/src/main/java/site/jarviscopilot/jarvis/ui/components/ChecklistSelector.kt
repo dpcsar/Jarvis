@@ -21,8 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.model.ChecklistList
-import site.jarviscopilot.jarvis.ui.theme.AvBlue
-import site.jarviscopilot.jarvis.ui.theme.AvRed
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
@@ -32,6 +31,8 @@ fun ChecklistSelector(
     onListSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val aviationColors = LocalAviationColors.current
+    
     Row(
         modifier = modifier
             .horizontalScroll(rememberScrollState())
@@ -41,8 +42,8 @@ fun ChecklistSelector(
         lists.forEachIndexed { index, list ->
             val isSelected = index == selectedIndex
             val backgroundColor = when {
-                isSelected -> AvBlue
-                list.name.contains("Emergency", ignoreCase = true) -> AvRed
+                isSelected -> aviationColors.avBlue
+                list.name.contains("Emergency", ignoreCase = true) -> aviationColors.avRed
                 else -> Color.Transparent
             }
             
@@ -64,7 +65,7 @@ fun ChecklistSelector(
                     text = list.name,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                    color = if (isSelected || backgroundColor != Color.Transparent) Color.White else Color.White
+                    color = aviationColors.textOnSurface
                 )
             }
         }

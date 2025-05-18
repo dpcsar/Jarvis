@@ -28,6 +28,7 @@ import site.jarviscopilot.jarvis.ui.components.ChecklistItemComponent
 import site.jarviscopilot.jarvis.ui.components.ChecklistSelector
 import site.jarviscopilot.jarvis.ui.components.SectionHeader
 import site.jarviscopilot.jarvis.ui.components.TopBar
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 import androidx.core.graphics.toColorInt
 
@@ -39,6 +40,7 @@ fun ChecklistDetailScreen(
     viewModel: ChecklistViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val aviationColors = LocalAviationColors.current
     
     // Set the selected list when the screen is first displayed
     LaunchedEffect(key1 = listIndex) {
@@ -88,7 +90,7 @@ fun ChecklistDetailScreen(
             } else if (uiState.error != null) {
                 Text(
                     text = uiState.error!!,
-                    color = Color.Red,
+                    color = aviationColors.avRed,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(16.dp)
@@ -130,9 +132,15 @@ fun ChecklistDetailScreen(
                         currentList.children.forEachIndexed { sectionIndex, section ->
                             // Section header
                             item {
+                                val sectionColor = try {
+                                    Color(section.backgroundColor.toColorInt())
+                                } catch (e: Exception) {
+                                    aviationColors.headerBackground
+                                }
+                                
                                 SectionHeader(
                                     title = section.name,
-                                    backgroundColor = Color(section.backgroundColor.toColorInt()),
+                                    backgroundColor = sectionColor,
                                     modifier = Modifier.padding(vertical = 8.dp)
                                 )
                             }
@@ -164,6 +172,7 @@ fun ChecklistDetailScreen(
                 } else {
                     Text(
                         text = "No checklist selected",
+                        color = aviationColors.textOnBackground,
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(16.dp)

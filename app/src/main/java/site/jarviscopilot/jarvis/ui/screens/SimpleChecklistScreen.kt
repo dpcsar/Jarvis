@@ -38,8 +38,6 @@ import site.jarviscopilot.jarvis.ui.components.BottomBar
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemComponent
 import site.jarviscopilot.jarvis.ui.components.SectionHeader
 import site.jarviscopilot.jarvis.ui.components.TopBar
-import site.jarviscopilot.jarvis.ui.theme.AvBlue
-import site.jarviscopilot.jarvis.ui.theme.AvRed
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 

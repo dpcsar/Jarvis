@@ -14,7 +14,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import site.jarviscopilot.jarvis.ui.screens.SimpleChecklistScreen
+import androidx.navigation.compose.rememberNavController
+import site.jarviscopilot.jarvis.ui.navigation.JarvisNavGraph
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 
@@ -43,7 +44,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SimpleChecklistScreen(viewModel = viewModel)
+                    val navController = rememberNavController()
+                    JarvisNavGraph(
+                        navController = navController,
+                        viewModel = viewModel
+                    )
                 }
             }
         }

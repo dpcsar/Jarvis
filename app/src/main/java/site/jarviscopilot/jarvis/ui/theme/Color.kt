@@ -31,9 +31,3 @@ val AvDarkGreyDark = Color(0xFF666666)  // Lighter dark grey for dark mode
 val AvLightGreyDark = Color(0xFF333333)  // Darker light grey for dark mode
 val AvBlackDark = Color(0xFF000000)
 val AvWhiteDark = Color(0xFFFFFFFF)
-
-// Night mode colors
-val NightRed = Color(0xFF661A1A)
-val NightGreen = Color(0xFF114D29)
-val NightBlue = Color(0xFF0A2E5C)
-val NightBackground = Color(0xFF111111)

@@ -20,16 +20,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.ui.components.TopBar
-import site.jarviscopilot.jarvis.ui.theme.AvBlue
-import site.jarviscopilot.jarvis.ui.theme.AvLightGrey
-import site.jarviscopilot.jarvis.ui.theme.AvRed
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 
 @Composable
@@ -39,6 +36,7 @@ fun HomeScreen(
     viewModel: ChecklistViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val aviationColors = LocalAviationColors.current
     
     Scaffold(
         topBar = {
@@ -60,7 +58,7 @@ fun HomeScreen(
             } else if (uiState.error != null) {
                 Text(
                     text = uiState.error!!,
-                    color = Color.Red,
+                    color = aviationColors.avRed,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(16.dp)
@@ -73,11 +71,33 @@ fun HomeScreen(
                             text = checklist.name,
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
+                            color = aviationColors.textOnSurface,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(AvLightGrey)
+                                .background(aviationColors.headerBackground)
                                 .padding(16.dp)
                         )
+                        
+                        if (checklist.description.isNotEmpty()) {
+                            Text(
+                                text = checklist.description,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = aviationColors.textOnBackground,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                            )
+                        } else {
+                            Text(
+                                text = "Select a flight phase checklist below:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = aviationColors.textOnBackground,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                            )
+                        }
                         
                         // List of checklists
                         LazyColumn(
@@ -107,9 +127,10 @@ private fun ChecklistListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val aviationColors = LocalAviationColors.current
     val isEmergency = list.name.contains("Emergency", ignoreCase = true)
-    val backgroundColor = if (isEmergency) AvRed.copy(alpha = 0.8f) else AvBlue
-    val textColor = Color.White
+    val backgroundColor = if (isEmergency) aviationColors.avRed.copy(alpha = 0.8f) else aviationColors.avBlue
+    val textColor = aviationColors.textOnSurface
     
     Box(
         modifier = modifier
