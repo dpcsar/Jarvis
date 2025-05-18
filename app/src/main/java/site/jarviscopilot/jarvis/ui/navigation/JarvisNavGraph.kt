@@ -7,11 +7,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import site.jarviscopilot.jarvis.ui.screens.ChecklistDetailScreen
 import site.jarviscopilot.jarvis.ui.screens.HomeScreen
+import site.jarviscopilot.jarvis.ui.screens.NotificationsScreen
+import site.jarviscopilot.jarvis.ui.screens.ProfileScreen
+import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 
 object JarvisDestinations {
     const val HOME_ROUTE = "home"
     const val CHECKLIST_DETAIL_ROUTE = "checklist/{listIndex}"
+    const val SETTINGS_ROUTE = "settings"
+    const val PROFILE_ROUTE = "profile"
+    const val NOTIFICATIONS_ROUTE = "notifications"
     
     fun checklistDetailRoute(listIndex: Int): String {
         return "checklist/$listIndex"
@@ -32,7 +38,13 @@ fun JarvisNavGraph(
                 onChecklistSelected = { listIndex ->
                     navController.navigate(JarvisDestinations.checklistDetailRoute(listIndex))
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
+                onNavigateToSettings = {
+                    navController.navigate(JarvisDestinations.SETTINGS_ROUTE)
+                },
+                onNavigateToNotifications = {
+                    navController.navigate(JarvisDestinations.NOTIFICATIONS_ROUTE)
+                }
             )
         }
         
@@ -45,6 +57,24 @@ fun JarvisNavGraph(
                 listIndex = listIndex,
                 onNavigateUp = { navController.navigateUp() },
                 viewModel = viewModel
+            )
+        }
+        
+        composable(JarvisDestinations.SETTINGS_ROUTE) {
+            SettingsScreen(
+                navController = navController
+            )
+        }
+        
+        composable(JarvisDestinations.PROFILE_ROUTE) {
+            ProfileScreen(
+                navController = navController
+            )
+        }
+        
+        composable(JarvisDestinations.NOTIFICATIONS_ROUTE) {
+            NotificationsScreen(
+                navController = navController
             )
         }
     }

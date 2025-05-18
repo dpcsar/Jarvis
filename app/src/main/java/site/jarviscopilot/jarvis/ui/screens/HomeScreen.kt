@@ -4,11 +4,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.tooling.preview.Preview
 import site.jarviscopilot.jarvis.model.Checklist
 import site.jarviscopilot.jarvis.ui.components.TopBar
+import site.jarviscopilot.jarvis.ui.components.VoiceAssistant
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
@@ -32,6 +40,8 @@ import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 @Composable
 fun HomeScreen(
     onChecklistSelected: (Int) -> Unit,
+    onNavigateToSettings: () -> Unit,
+    onNavigateToNotifications: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ChecklistViewModel = viewModel()
 ) {
@@ -65,17 +75,38 @@ fun HomeScreen(
             } else {
                 uiState.checklist?.let { checklist ->
                     Column(modifier = Modifier.fillMaxSize()) {
-                        // Header
-                        Text(
-                            text = "Available Checklists",
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = aviationColors.textOnSurface,
+                        // Header with action buttons
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(aviationColors.headerBackground)
-                                .padding(16.dp)
-                        )
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "Available Checklists",
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = aviationColors.textOnSurface,
+                                modifier = Modifier.weight(1f)
+                            )
+                            
+                            IconButton(onClick = onNavigateToNotifications) {
+                                Icon(
+                                    imageVector = Icons.Default.Notifications,
+                                    contentDescription = "Notifications",
+                                    tint = aviationColors.textOnSurface
+                                )
+                            }
+                            
+                            IconButton(onClick = onNavigateToSettings) {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = "Settings",
+                                    tint = aviationColors.textOnSurface
+                                )
+                            }
+                        }
                         
                         Text(
                             text = "Select a checklist to view its details:",
@@ -116,6 +147,17 @@ fun HomeScreen(
                                 )
                             }
                         }
+                        
+                        Spacer(modifier = Modifier.weight(1f))
+                        
+                        // Voice assistant
+                        VoiceAssistant(
+                            onStartListening = { },
+                            onStopListening = { },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        )
                     }
                 }
             }
@@ -156,17 +198,38 @@ private fun HomeScreenPreviewContent(checklist: Checklist) {
                 .padding(paddingValues)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                // Header
-                Text(
-                    text = "Available Checklists",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = aviationColors.textOnSurface,
+                // Header with action buttons
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(aviationColors.headerBackground)
-                        .padding(16.dp)
-                )
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Text(
+                        text = "Available Checklists",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = aviationColors.textOnSurface,
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    IconButton(onClick = { }) {
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = "Notifications",
+                            tint = aviationColors.textOnSurface
+                        )
+                    }
+                    
+                    IconButton(onClick = { }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings",
+                            tint = aviationColors.textOnSurface
+                        )
+                    }
+                }
                 
                 Text(
                     text = "Select a checklist to view its details:",

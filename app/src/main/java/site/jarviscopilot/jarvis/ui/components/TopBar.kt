@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -85,6 +87,51 @@ fun TopBar(
     }
 }
 
+/**
+ * Simplified top bar component with optional back button and title
+ * For use in detail screens or secondary screens
+ */
+@Composable
+fun TopBar(
+    modifier: Modifier = Modifier,
+    title: String,
+    onBackPressed: (() -> Unit)? = null,
+    showBackButton: Boolean = false
+) {
+    val aviationColors = LocalAviationColors.current
+    
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(aviationColors.avDarkBlue)
+                .statusBarsPadding()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (showBackButton && onBackPressed != null) {
+                IconButton(onClick = onBackPressed) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = aviationColors.avTextWhite
+                    )
+                }
+            }
+            
+            Text(
+                text = title,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                color = aviationColors.avTextWhite,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = if (showBackButton) TextAlign.Start else TextAlign.Center
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun TopBarPreview() {
@@ -93,6 +140,18 @@ private fun TopBarPreview() {
             localTime = "12:34:56",
             utcTime = "17:34:56",
             onMenuClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SimpleTopBarPreview() {
+    JarvisTheme {
+        TopBar(
+            title = "Settings",
+            onBackPressed = {},
+            showBackButton = true
         )
     }
 }
