@@ -20,9 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.ui.theme.AvDarkBlue
-import site.jarviscopilot.jarvis.ui.theme.AvDarkGrey
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
 fun TopBar(
@@ -37,7 +36,7 @@ fun TopBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(AvDarkBlue)
+                .background(LocalAviationColors.current.avDarkBlue)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -53,7 +52,7 @@ fun TopBar(
             
             Text(
                 text = "Local: $localTime",
-                color = Color.White,
+                color = LocalAviationColors.current.avTextWhite,
                 style = MaterialTheme.typography.bodyMedium
             )
             
@@ -61,7 +60,7 @@ fun TopBar(
             
             Text(
                 text = "UTC: $utcTime",
-                color = Color.White,
+                color = LocalAviationColors.current.avTextWhite,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -70,13 +69,13 @@ fun TopBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(AvDarkGrey)
+                .background(LocalAviationColors.current.avDarkGrey)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Current Phase: $currentPhase",
-                color = Color.White,
+                color = LocalAviationColors.current.avTextWhite,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyLarge
             )

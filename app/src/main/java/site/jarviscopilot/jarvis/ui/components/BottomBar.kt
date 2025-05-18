@@ -20,9 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.ui.theme.AvBlack
 import site.jarviscopilot.jarvis.ui.theme.AvGreen
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
 fun BottomBar(
@@ -38,7 +38,7 @@ fun BottomBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(AvBlack)
+            .background(LocalAviationColors.current.avBlack)
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
@@ -48,7 +48,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.Default.Home,
                 contentDescription = "Home",
-                tint = Color.White,
+                tint = LocalAviationColors.current.avTextWhite,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -71,7 +71,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowRight,
                 contentDescription = "Skip",
-                tint = if (canSkip) Color.White else Color.Gray.copy(alpha = 0.5f),
+                tint = if (canSkip) LocalAviationColors.current.avTextWhite else Color.Gray.copy(alpha = 0.5f),
                 modifier = Modifier.size(40.dp)
             )
         }
@@ -81,7 +81,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.Default.Mic,
                 contentDescription = "Mic",
-                tint = if (isListening) AvGreen else Color.White,
+                tint = if (isListening) LocalAviationColors.current.avGreen else LocalAviationColors.current.avTextWhite,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -91,7 +91,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = "Repeat",
-                tint = Color.White,
+                tint = LocalAviationColors.current.avTextWhite,
                 modifier = Modifier.size(24.dp)
             )
         }

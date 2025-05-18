@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,14 +32,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import android.util.Log
 import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.ui.components.BottomBar
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemComponent
 import site.jarviscopilot.jarvis.ui.components.SectionHeader
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.AvBlue
-import site.jarviscopilot.jarvis.ui.theme.AvLightGrey
 import site.jarviscopilot.jarvis.ui.theme.AvRed
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 
 @Composable
@@ -47,6 +49,19 @@ fun SimpleChecklistScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showListSelector by remember { mutableStateOf(true) }
+    
+    // Reset to list selector when checklist data changes
+    LaunchedEffect(key1 = uiState.checklist) {
+        if (uiState.checklist != null) {
+            Log.d("SimpleChecklistScreen", "Checklist loaded, showing list selector")
+            showListSelector = true
+        }
+    }
+    
+    Log.d("SimpleChecklistScreen", "UI State: isLoading=${uiState.isLoading}, " +
+            "hasChecklist=${uiState.checklist != null}, " +
+            "error=${uiState.error}, " +
+            "showListSelector=$showListSelector")
     
     Scaffold(
         topBar = {
@@ -81,28 +96,58 @@ fun SimpleChecklistScreen(
             } else if (uiState.error != null) {
                 Text(
                     text = uiState.error!!,
-                    color = Color.Red,
+                    color = LocalAviationColors.current.avRed,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(16.dp)
                 )
             } else {
                 uiState.checklist?.let { checklist ->
+                    // Debug details of checklist
+                    Log.d("SimpleChecklistScreen", "Checklist details: name=${checklist.name}")
+                    Log.d("SimpleChecklistScreen", "Number of lists: ${checklist.children.size}")
+                    
+                    // List all available checklist names for debugging
+                    checklist.children.forEachIndexed { index, list ->
+                        Log.d("SimpleChecklistScreen", "List $index: ${list.name}, visible=${list.visible}, sections=${list.children.size}")
+                    }
+                    
                     if (showListSelector) {
-                        // Show list selector
                         Column(modifier = Modifier.fillMaxSize()) {
-                            // Header
+                            val aviationColors = LocalAviationColors.current
                             Text(
                                 text = checklist.name,
                                 style = MaterialTheme.typography.headlineMedium,
+                                color = aviationColors.textOnSurface,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(AvLightGrey)
+                                    .background(aviationColors.headerBackground)
                                     .padding(16.dp)
                             )
                             
-                            // List of checklists
+                            if (checklist.description.isNotEmpty()) {
+                                Text(
+                                    text = checklist.description,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = aviationColors.textOnBackground,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = "Select a flight phase checklist below:",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = aviationColors.textOnBackground,
+                                    fontWeight = FontWeight.Medium,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                                )
+                            }
+                            
+                            // List of sections
                             LazyColumn(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -125,20 +170,21 @@ fun SimpleChecklistScreen(
                         // Show checklist details
                         val currentList = uiState.checklist?.children?.getOrNull(uiState.selectedListIndex)
                         
+                        Log.d("SimpleChecklistScreen", "Showing checklist details for list index: ${uiState.selectedListIndex}")
+                        
                         if (currentList != null) {
                             Column(modifier = Modifier.fillMaxSize()) {
-                                // List name as header
                                 Text(
-                                    text = currentList.name,
+                                    text = "${checklist.name} - ${currentList.name}",
                                     style = MaterialTheme.typography.headlineMedium,
+                                    color = LocalAviationColors.current.textOnSurface,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .background(AvLightGrey)
+                                        .background(LocalAviationColors.current.headerBackground)
                                         .padding(16.dp)
                                 )
                                 
-                                // Sections and items
                                 LazyColumn(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -177,7 +223,6 @@ fun SimpleChecklistScreen(
                                     }
                                 }
                                 
-                                // List selector row at the bottom
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -187,9 +232,10 @@ fun SimpleChecklistScreen(
                                 ) {
                                     checklist.children.forEachIndexed { index, list ->
                                         val isSelected = index == uiState.selectedListIndex
+                                        val aviationColors = LocalAviationColors.current
                                         val backgroundColor = when {
-                                            isSelected -> AvBlue
-                                            list.name.contains("Emergency", ignoreCase = true) -> AvRed
+                                            isSelected -> aviationColors.avBlue
+                                            list.name.contains("Emergency", ignoreCase = true) -> aviationColors.avRed
                                             else -> Color.Transparent
                                         }
                                         
@@ -208,7 +254,7 @@ fun SimpleChecklistScreen(
                                             Text(
                                                 text = list.name,
                                                 style = MaterialTheme.typography.bodySmall,
-                                                color = Color.White,
+                                                color = aviationColors.textOnSurface,
                                                 textAlign = TextAlign.Center,
                                                 maxLines = 1
                                             )
@@ -237,9 +283,10 @@ private fun ChecklistListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val aviationColors = LocalAviationColors.current
     val isEmergency = list.name.contains("Emergency", ignoreCase = true)
-    val backgroundColor = if (isEmergency) AvRed.copy(alpha = 0.8f) else AvBlue
-    val textColor = Color.White
+    val backgroundColor = if (isEmergency) aviationColors.avRed.copy(alpha = 0.8f) else aviationColors.avBlue
+    val textColor = aviationColors.textOnSurface
     
     Box(
         modifier = modifier

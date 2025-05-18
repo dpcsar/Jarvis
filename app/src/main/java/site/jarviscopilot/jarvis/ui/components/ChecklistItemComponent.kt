@@ -28,12 +28,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.model.ChecklistItem
-import site.jarviscopilot.jarvis.ui.theme.AvBlack
-import site.jarviscopilot.jarvis.ui.theme.AvGreen
-import site.jarviscopilot.jarvis.ui.theme.AvLightGrey
-import site.jarviscopilot.jarvis.ui.theme.AvRed
-import site.jarviscopilot.jarvis.ui.theme.AvWhite
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
 fun ChecklistItemComponent(
@@ -42,15 +38,17 @@ fun ChecklistItemComponent(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val aviationColors = LocalAviationColors.current
+    
     val backgroundColor = when {
-        isSelected -> AvLightGrey
-        item.checked -> Color.White
-        else -> Color.White
+        isSelected -> aviationColors.selectedItemBackground
+        item.checked -> aviationColors.itemBackground
+        else -> aviationColors.itemBackground
     }
     
     val borderColor = when {
-        isSelected -> AvBlack
-        item.mandatory -> AvRed
+        isSelected -> aviationColors.avBlack
+        item.mandatory -> aviationColors.avRed
         else -> Color.Transparent
     }
     
@@ -77,12 +75,12 @@ fun ChecklistItemComponent(
                 modifier = Modifier
                     .size(24.dp)
                     .background(
-                        color = if (item.checked) AvGreen else AvWhite,
+                        color = if (item.checked) aviationColors.avGreen else aviationColors.avWhite,
                         shape = CircleShape
                     )
                     .border(
                         width = 1.dp,
-                        color = AvBlack,
+                        color = aviationColors.avBlack,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -91,7 +89,7 @@ fun ChecklistItemComponent(
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = "Completed",
-                        tint = AvWhite,
+                        tint = aviationColors.avWhite,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -106,6 +104,7 @@ fun ChecklistItemComponent(
                         text = item.label1.trim(),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
+                        color = aviationColors.textOnSurface,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -114,6 +113,7 @@ fun ChecklistItemComponent(
                     Text(
                         text = item.label2.trim(),
                         style = MaterialTheme.typography.bodyMedium,
+                        color = aviationColors.textOnSurface,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -122,7 +122,7 @@ fun ChecklistItemComponent(
                     Text(
                         text = item.label3.trim(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray,
+                        color = aviationColors.textOnSurface.copy(alpha = 0.7f),
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -131,7 +131,7 @@ fun ChecklistItemComponent(
                     Text(
                         text = "Note: ${item.comments}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray,
+                        color = aviationColors.textOnSurface.copy(alpha = 0.7f),
                         fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(top = 4.dp)

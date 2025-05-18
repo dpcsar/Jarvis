@@ -16,14 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.ui.theme.AvDarkGrey
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
 fun SectionHeader(
     title: String,
-    backgroundColor: Color = AvDarkGrey,
-    textColor: Color = Color.White,
+    backgroundColor: Color = LocalAviationColors.current.avDarkGrey,
+    textColor: Color = LocalAviationColors.current.textOnSurface,
     modifier: Modifier = Modifier
 ) {
     Box(

@@ -1,6 +1,7 @@
 package site.jarviscopilot.jarvis.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +40,7 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     init {
         loadChecklist()
         startTimeUpdates()
+        Log.d("ChecklistViewModel", "ViewModel initialized")
     }
     
     private fun startTimeUpdates() {
@@ -69,6 +71,7 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             
             repository.loadChecklistFromAssets()
                 .onSuccess { checklist ->
+                    Log.d("ChecklistViewModel", "Checklist loaded successfully: ${checklist.name}, ${checklist.children.size} lists")
                     _uiState.update { 
                         it.copy(
                             isLoading = false,
@@ -78,6 +81,7 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
                     }
                 }
                 .onFailure { exception ->
+                    Log.e("ChecklistViewModel", "Failed to load checklist", exception)
                     _uiState.update {
                         it.copy(
                             isLoading = false,
