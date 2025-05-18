@@ -11,6 +11,7 @@ android {
     defaultConfig {
         applicationId = "site.jarviscopilot.jarvis"
         minSdk = 34
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -49,6 +50,25 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    
+    // Icons
+    implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
+    
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+    
+    // Gson for JSON parsing
+    implementation(libs.gson)
+    
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    
+    // Google LiteRT for ML
+    implementation(libs.litert)
+    implementation(libs.litert.support)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
