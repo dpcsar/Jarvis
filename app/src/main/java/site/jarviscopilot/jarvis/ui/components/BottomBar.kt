@@ -26,6 +26,7 @@ import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
 fun BottomBar(
+    modifier: Modifier = Modifier,
     onHomeClick: () -> Unit,
     onCheckClick: () -> Unit,
     onSkipClick: () -> Unit,
@@ -33,7 +34,6 @@ fun BottomBar(
     onRepeatClick: () -> Unit,
     canSkip: Boolean = true,
     isListening: Boolean = false,
-    modifier: Modifier = Modifier
 ) {
     val aviationColors = LocalAviationColors.current
     

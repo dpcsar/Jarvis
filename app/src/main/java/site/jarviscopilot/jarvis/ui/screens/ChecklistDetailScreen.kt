@@ -30,7 +30,13 @@ import site.jarviscopilot.jarvis.ui.components.SectionHeader
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
+import site.jarviscopilot.jarvis.model.Checklist
+import site.jarviscopilot.jarvis.model.ChecklistItem
+import site.jarviscopilot.jarvis.model.ChecklistList
+import site.jarviscopilot.jarvis.model.ChecklistSection
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import androidx.core.graphics.toColorInt
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ChecklistDetailScreen(
@@ -177,6 +183,174 @@ fun ChecklistDetailScreen(
                             .align(Alignment.Center)
                             .padding(16.dp)
                     )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ChecklistDetailScreenPreview() {
+    JarvisTheme {
+        val mockChecklist = Checklist(
+            name = "C172S Checklist",
+            description = "Standard procedures for Cessna 172S",
+            children = listOf(
+                ChecklistList(
+                    name = "Normal Procedures",
+                    type = "list",
+                    children = listOf(
+                        ChecklistSection(
+                            name = "Pre-Flight",
+                            backgroundColor = "#0066CC",
+                            children = listOf(
+                                ChecklistItem(
+                                    label1 = "Preflight Inspection",
+                                    label2 = "COMPLETE"
+                                ),
+                                ChecklistItem(
+                                    label1 = "Control Lock",
+                                    label2 = "REMOVE"
+                                ),
+                                ChecklistItem(
+                                    label1 = "Ignition Switch",
+                                    label2 = "OFF"
+                                )
+                            )
+                        ),
+                        ChecklistSection(
+                            name = "Before Starting Engine",
+                            backgroundColor = "#006633",
+                            children = listOf(
+                                ChecklistItem(
+                                    label1 = "Preflight Inspection",
+                                    label2 = "COMPLETE"
+                                ),
+                                ChecklistItem(
+                                    label1 = "Seats, Belts",
+                                    label2 = "ADJUST, SECURE"
+                                )
+                            )
+                        )
+                    )
+                ),
+                ChecklistList(
+                    name = "Emergency Procedures",
+                    type = "list",
+                    children = listOf(
+                        ChecklistSection(
+                            name = "Engine Failure",
+                            backgroundColor = "#CC0000",
+                            children = listOf(
+                                ChecklistItem(
+                                    label1 = "Airspeed",
+                                    label2 = "65 KIAS"
+                                ),
+                                ChecklistItem(
+                                    label1 = "Fuel Selector",
+                                    label2 = "BOTH"
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        
+        ChecklistDetailScreenPreviewContent(mockChecklist)
+    }
+}
+
+@Composable
+private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
+    val aviationColors = LocalAviationColors.current
+    val currentList = checklist.children.getOrNull(0)
+    val selectedListIndex = 0
+    
+    Scaffold(
+        topBar = {
+            TopBar(
+                localTime = "12:34:56",
+                utcTime = "16:34:56",
+                currentPhase = "PreFlight",
+                onMenuClick = { }
+            )
+        },
+        bottomBar = {
+            Column {
+                // List selector bar at the bottom
+                ChecklistSelector(
+                    lists = checklist.children,
+                    selectedIndex = selectedListIndex,
+                    onListSelected = { }
+                )
+                
+                // Control buttons
+                BottomBar(
+                    onHomeClick = { },
+                    onCheckClick = { },
+                    onSkipClick = { },
+                    onMicClick = { },
+                    onRepeatClick = { },
+                    canSkip = true,
+                    isListening = false
+                )
+            }
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            if (currentList != null) {
+                val listState = rememberLazyListState()
+                val currentSectionIndex = 0
+                val currentItemIndex = 0
+                
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    currentList.children.forEachIndexed { sectionIndex, section ->
+                        // Section header
+                        item {
+                            val sectionColor = try {
+                                Color(section.backgroundColor.toColorInt())
+                            } catch (_: Exception) {
+                                aviationColors.headerBackground
+                            }
+                            
+                            SectionHeader(
+                                title = section.name,
+                                backgroundColor = sectionColor,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                        
+                        // Section items
+                        items(section.children.size) { itemIndex ->
+                            val item = section.children[itemIndex]
+                            val isSelected = sectionIndex == currentSectionIndex && itemIndex == currentItemIndex
+                            
+                            if (item.visible) {
+                                ChecklistItemComponent(
+                                    item = item,
+                                    isSelected = isSelected,
+                                    onClick = {},
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                )
+                            }
+                        }
+                        
+                        // Spacer after section
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
                 }
             }
         }

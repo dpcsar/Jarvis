@@ -24,8 +24,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.tooling.preview.Preview
+import site.jarviscopilot.jarvis.model.Checklist
 import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.ui.components.TopBar
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 
@@ -68,7 +71,7 @@ fun HomeScreen(
                     Column(modifier = Modifier.fillMaxSize()) {
                         // Header
                         Text(
-                            text = checklist.name,
+                            text = "Available Checklists",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = aviationColors.textOnSurface,
@@ -78,26 +81,15 @@ fun HomeScreen(
                                 .padding(16.dp)
                         )
                         
-                        if (checklist.description.isNotEmpty()) {
-                            Text(
-                                text = checklist.description,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = aviationColors.textOnBackground,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                            )
-                        } else {
-                            Text(
-                                text = "Select a flight phase checklist below:",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = aviationColors.textOnBackground,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                            )
-                        }
+                        Text(
+                            text = "Select a checklist to view its details:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = aviationColors.textOnBackground,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
                         
                         // List of checklists
                         LazyColumn(
@@ -148,5 +140,94 @@ private fun ChecklistListItem(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    JarvisTheme {
+        val mockChecklist = Checklist(
+            name = "C172S Checklist",
+            description = "Standard procedures for Cessna 172S",
+            children = listOf(
+                ChecklistList(
+                    name = "Normal Procedures",
+                    type = "list"
+                ),
+                ChecklistList(
+                    name = "Emergency Procedures",
+                    type = "list"
+                ),
+                ChecklistList(
+                    name = "Performance Data",
+                    type = "list"
+                )
+            )
+        )
+        
+        HomeScreenPreviewContent(mockChecklist)
+    }
+}
+
+@Composable
+private fun HomeScreenPreviewContent(checklist: Checklist) {
+    val aviationColors = LocalAviationColors.current
+    
+    Scaffold(
+        topBar = {
+            TopBar(
+                localTime = "12:34:56",
+                utcTime = "16:34:56",
+                currentPhase = "PreFlight",
+                onMenuClick = { }
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                // Header
+                Text(
+                    text = "Available Checklists",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = aviationColors.textOnSurface,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(aviationColors.headerBackground)
+                        .padding(16.dp)
+                )
+                
+                Text(
+                    text = "Select a checklist to view its details:",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = aviationColors.textOnBackground,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                
+                // List of checklists
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(8.dp)
+                ) {
+                    itemsIndexed(checklist.children) { index, list ->
+                        ChecklistListItem(
+                            list = list,
+                            onClick = { },
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
     }
 }
