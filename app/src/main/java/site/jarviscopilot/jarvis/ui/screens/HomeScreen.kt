@@ -43,7 +43,6 @@ fun HomeScreen(
             TopBar(
                 localTime = uiState.currentLocalTime,
                 utcTime = uiState.currentUtcTime,
-                currentPhase = uiState.currentPhase,
                 onMenuClick = { /* Open menu - implement later */ }
             )
         }
@@ -147,7 +146,6 @@ private fun HomeScreenPreviewContent(checklist: Checklist) {
             TopBar(
                 localTime = "12:34:56",
                 utcTime = "16:34:56",
-                currentPhase = "PreFlight",
                 onMenuClick = { }
             )
         }

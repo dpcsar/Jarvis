@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -32,7 +31,6 @@ import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 fun TopBar(
     localTime: String,
     utcTime: String,
-    currentPhase: String,
     onMenuClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -84,22 +82,6 @@ fun TopBar(
                 }
             }
         }
-        
-        // Second level ribbon - phase indicator
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(aviationColors.avDarkGrey)
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Current Phase: $currentPhase",
-                color = aviationColors.avTextWhite,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
     }
 }
 
@@ -110,7 +92,6 @@ private fun TopBarPreview() {
         TopBar(
             localTime = "12:34:56",
             utcTime = "17:34:56",
-            currentPhase = "PreFlight",
             onMenuClick = {}
         )
     }

@@ -26,8 +26,7 @@ data class ChecklistUiState(
     val selectedListIndex: Int = 0,
     val selectedItemIndex: Int = 0,
     val currentLocalTime: String = "",
-    val currentUtcTime: String = "",
-    val currentPhase: String = "PreFlight"
+    val currentUtcTime: String = ""
 )
 
 class ChecklistViewModel(application: Application) : AndroidViewModel(application) {
@@ -209,10 +208,6 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
                 selectedListIndex = nextListIndex
             )
         }
-    }
-    
-    fun setPhase(phase: String) {
-        _uiState.update { it.copy(currentPhase = phase) }
     }
     
     private fun getCurrentSection(): ChecklistSection? {

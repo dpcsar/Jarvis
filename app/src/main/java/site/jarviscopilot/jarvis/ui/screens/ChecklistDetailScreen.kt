@@ -56,7 +56,6 @@ fun ChecklistDetailScreen(
             TopBar(
                 localTime = uiState.currentLocalTime,
                 utcTime = uiState.currentUtcTime,
-                currentPhase = uiState.currentPhase,
                 onMenuClick = { /* Open menu - implement later */ }
             )
         },
@@ -280,7 +279,6 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
             TopBar(
                 localTime = "12:34:56",
                 utcTime = "16:34:56",
-                currentPhase = "PreFlight",
                 onMenuClick = { }
             )
         },
