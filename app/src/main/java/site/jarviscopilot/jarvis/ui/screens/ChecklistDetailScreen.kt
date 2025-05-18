@@ -134,7 +134,7 @@ fun ChecklistDetailScreen(
                             item {
                                 val sectionColor = try {
                                     Color(section.backgroundColor.toColorInt())
-                                } catch (e: Exception) {
+                                } catch (_: Exception) {
                                     aviationColors.headerBackground
                                 }
                                 
