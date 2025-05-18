@@ -1,11 +1,14 @@
 package site.jarviscopilot.jarvis.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -23,6 +26,10 @@ import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
+/**
+ * Top bar component with two-level ribbon layout
+ * Includes status bar padding for edge-to-edge design
+ */
 @Composable
 fun TopBar(
     localTime: String,
@@ -31,51 +38,66 @@ fun TopBar(
     onMenuClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val aviationColors = LocalAviationColors.current
+    
     Column(modifier = modifier.fillMaxWidth()) {
-        // First level ribbon
+        // First level ribbon with status bar insets handling
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(LocalAviationColors.current.avDarkBlue)
+                .background(aviationColors.avDarkBlue)
+                .statusBarsPadding()
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Menu button
             IconButton(onClick = onMenuClick) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Menu",
-                    tint = Color.White
+                    tint = aviationColors.avTextWhite
                 )
             }
             
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            Text(
-                text = "Local: $localTime",
-                color = LocalAviationColors.current.avTextWhite,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            
             Spacer(modifier = Modifier.weight(1f))
             
-            Text(
-                text = "UTC: $utcTime",
-                color = LocalAviationColors.current.avTextWhite,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            // Time displays aligned to end
+            Column(
+                modifier = Modifier.padding(bottom = 4.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = "Local: $localTime",
+                        color = aviationColors.avTextWhite,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    
+                    Spacer(modifier = Modifier.width(16.dp))
+                    
+                    Text(
+                        text = "UTC: $utcTime",
+                        color = aviationColors.avTextWhite,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
         
-        // Second level ribbon
+        // Second level ribbon - phase indicator
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(LocalAviationColors.current.avDarkGrey)
+                .background(aviationColors.avDarkGrey)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Current Phase: $currentPhase",
-                color = LocalAviationColors.current.avTextWhite,
+                color = aviationColors.avTextWhite,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyLarge
             )
@@ -85,7 +107,7 @@ fun TopBar(
 
 @Preview
 @Composable
-fun TopBarPreview() {
+private fun TopBarPreview() {
     JarvisTheme {
         TopBar(
             localTime = "12:34:56",

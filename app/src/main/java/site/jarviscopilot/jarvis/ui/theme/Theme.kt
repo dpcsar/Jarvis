@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -59,7 +60,7 @@ data class AviationColors(
     val headerBackground: Color,
     val itemBackground: Color,
     val selectedItemBackground: Color,
-    val avTextWhite: Color
+    val avTextWhite: Color,
 )
 
 val LightAviationColors = AviationColors(
@@ -114,15 +115,30 @@ fun JarvisTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
-    
+
     val aviationColors = if (darkTheme) DarkAviationColors else LightAviationColors
-    
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+
+            // Enable edge-to-edge content
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+
+            val controller = WindowCompat.getInsetsController(window, view)
+
+            // Configure system bars
+            controller.apply {
+                // For our dark top bar, use light (white) status bar icons
+                isAppearanceLightStatusBars = false
+                // Navigation bar icons adapt to the theme
+                isAppearanceLightNavigationBars = !darkTheme
+            }
+
+            // Make status bar transparent (modern Android 14+ approach)
+            @Suppress("DEPRECATION")
+            window.statusBarColor = Color.Transparent.toArgb()
         }
     }
 

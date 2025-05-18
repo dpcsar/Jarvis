@@ -35,8 +35,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[ChecklistViewModel::class.java]
-        requestAudioPermission()
         enableEdgeToEdge()
+        requestAudioPermission()
         setContent {
             JarvisTheme {
                 Surface(

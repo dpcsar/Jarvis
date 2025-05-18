@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
@@ -20,25 +21,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.ui.theme.AvGreen
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
 fun BottomBar(
-    modifier: Modifier = Modifier,
     onHomeClick: () -> Unit,
     onCheckClick: () -> Unit,
     onSkipClick: () -> Unit,
     onMicClick: () -> Unit,
     onRepeatClick: () -> Unit,
     canSkip: Boolean = true,
-    isListening: Boolean = false
+    isListening: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
+    val aviationColors = LocalAviationColors.current
+    
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(LocalAviationColors.current.avBlack)
+            .background(aviationColors.avBlack)
+            .navigationBarsPadding()
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
@@ -48,7 +51,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.Default.Home,
                 contentDescription = "Home",
-                tint = LocalAviationColors.current.avTextWhite,
+                tint = aviationColors.avTextWhite,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -58,7 +61,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "Check",
-                tint = AvGreen,
+                tint = aviationColors.avGreen,
                 modifier = Modifier.size(40.dp)
             )
         }
@@ -71,7 +74,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowRight,
                 contentDescription = "Skip",
-                tint = if (canSkip) LocalAviationColors.current.avTextWhite else Color.Gray.copy(alpha = 0.5f),
+                tint = if (canSkip) aviationColors.avTextWhite else Color.Gray.copy(alpha = 0.5f),
                 modifier = Modifier.size(40.dp)
             )
         }
@@ -81,7 +84,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.Default.Mic,
                 contentDescription = "Mic",
-                tint = if (isListening) LocalAviationColors.current.avGreen else LocalAviationColors.current.avTextWhite,
+                tint = if (isListening) aviationColors.avGreen else aviationColors.avTextWhite,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -91,7 +94,7 @@ fun BottomBar(
             Icon(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = "Repeat",
-                tint = LocalAviationColors.current.avTextWhite,
+                tint = aviationColors.avTextWhite,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -100,16 +103,14 @@ fun BottomBar(
 
 @Preview
 @Composable
-fun BottomBarPreview() {
+private fun BottomBarPreview() {
     JarvisTheme {
         BottomBar(
             onHomeClick = {},
             onCheckClick = {},
             onSkipClick = {},
             onMicClick = {},
-            onRepeatClick = {},
-            canSkip = true,
-            isListening = false
+            onRepeatClick = {}
         )
     }
 }
