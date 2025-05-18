@@ -52,6 +52,25 @@ fun ChecklistItemComponent(
         else -> Color.Transparent
     }
     
+    // Use different styling for non-standard item types
+    val isNormalItem = item.type == "item" 
+    val isWarningItem = item.type == "warning"
+    val isCautionItem = item.type == "caution"
+    val isNoteItem = item.type == "note"
+    val isLabelItem = item.type == "label"
+    
+    val textColor = when {
+        isWarningItem -> aviationColors.avRed
+        isCautionItem -> aviationColors.avAmber
+        isNoteItem -> aviationColors.avBlue
+        else -> aviationColors.textOnSurface
+    }
+    
+    val fontWeight = when {
+        isLabelItem || isWarningItem || isCautionItem -> FontWeight.Bold
+        else -> FontWeight.Normal
+    }
+    
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -63,39 +82,41 @@ fun ChecklistItemComponent(
                 shape = RoundedCornerShape(8.dp)
             )
             .clip(RoundedCornerShape(8.dp))
-            .clickable(enabled = item.enabled) { onClick() }
+            .clickable { onClick() }
             .padding(8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Status indicator
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .background(
-                        color = if (item.checked) aviationColors.avGreen else aviationColors.avWhite,
-                        shape = CircleShape
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = aviationColors.avBlack,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                if (item.checked) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Completed",
-                        tint = aviationColors.avWhite,
-                        modifier = Modifier.size(16.dp)
-                    )
+            // Status indicator - only show for normal items
+            if (isNormalItem) {
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .background(
+                            color = if (item.checked) aviationColors.avGreen else aviationColors.avWhite,
+                            shape = CircleShape
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = aviationColors.avBlack,
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (item.checked) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Completed",
+                            tint = aviationColors.avWhite,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
+                
+                Spacer(modifier = Modifier.width(12.dp))
             }
-            
-            Spacer(modifier = Modifier.width(12.dp))
             
             // Item content
             Column(modifier = Modifier.weight(1f)) {
@@ -103,8 +124,8 @@ fun ChecklistItemComponent(
                     Text(
                         text = item.label1.trim(),
                         style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = aviationColors.textOnSurface,
+                        fontWeight = fontWeight,
+                        color = textColor,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -113,28 +134,10 @@ fun ChecklistItemComponent(
                     Text(
                         text = item.label2.trim(),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = aviationColors.textOnSurface,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                
-                if (item.label3.isNotBlank()) {
-                    Text(
-                        text = item.label3.trim(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = aviationColors.textOnSurface.copy(alpha = 0.7f),
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                
-                if (item.comments.isNotBlank()) {
-                    Text(
-                        text = "Note: ${item.comments}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = aviationColors.textOnSurface.copy(alpha = 0.7f),
-                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                        fontWeight = if (isNormalItem) FontWeight.Bold else fontWeight,
+                        color = textColor,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = Modifier.padding(start = if (isNormalItem) 8.dp else 0.dp)
                     )
                 }
             }
@@ -146,21 +149,45 @@ fun ChecklistItemComponent(
 @Composable
 fun ChecklistItemComponentPreview() {
     JarvisTheme {
-        ChecklistItemComponent(
-            item = ChecklistItem(
-                id = "1",
-                type = "item",
-                checked = false,
-                visible = true,
-                enabled = true,
-                label1 = "Pitot Heat",
-                label2 = "Test",
-                label3 = "",
-                mandatory = true,
-                comments = "Ensure indicator light is on"
-            ),
-            isSelected = true,
-            onClick = {}
-        )
+        Column {
+            ChecklistItemComponent(
+                item = ChecklistItem(
+                    type = "item",
+                    label1 = "Pitot Heat",
+                    label1Audio = "",
+                    label2 = "TEST",
+                    label2Audio = "",
+                    mandatory = true
+                ),
+                isSelected = true,
+                onClick = {}
+            )
+            
+            ChecklistItemComponent(
+                item = ChecklistItem(
+                    type = "warning",
+                    label1 = "WARNING: Do not operate heater on the ground for more than 30 seconds",
+                    label1Audio = "",
+                    label2 = "",
+                    label2Audio = "",
+                    mandatory = false
+                ),
+                isSelected = false,
+                onClick = {}
+            )
+            
+            ChecklistItemComponent(
+                item = ChecklistItem(
+                    type = "note",
+                    label1 = "Note: Wait for at least 2 minutes between cranking attempts",
+                    label1Audio = "",
+                    label2 = "",
+                    label2Audio = "",
+                    mandatory = false
+                ),
+                isSelected = false,
+                onClick = {}
+            )
+        }
     }
 }

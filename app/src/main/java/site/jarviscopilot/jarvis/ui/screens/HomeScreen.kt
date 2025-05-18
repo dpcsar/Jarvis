@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.tooling.preview.Preview
 import site.jarviscopilot.jarvis.model.Checklist
-import site.jarviscopilot.jarvis.model.ChecklistList
+import site.jarviscopilot.jarvis.model.ChecklistSection
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
@@ -98,9 +98,9 @@ fun HomeScreen(
                                 .weight(1f)
                                 .padding(8.dp)
                         ) {
-                            itemsIndexed(checklist.children) { index, list ->
-                                ChecklistListItem(
-                                    list = list,
+                            itemsIndexed(checklist.sections) { index, section ->
+                                ChecklistSectionItem(
+                                    section = section,
                                     onClick = { onChecklistSelected(index) },
                                     modifier = Modifier.padding(vertical = 4.dp)
                                 )
@@ -114,13 +114,14 @@ fun HomeScreen(
 }
 
 @Composable
-private fun ChecklistListItem(
-    list: ChecklistList,
+private fun ChecklistSectionItem(
+    section: ChecklistSection,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val aviationColors = LocalAviationColors.current
-    val isEmergency = list.name.contains("Emergency", ignoreCase = true)
+    val isEmergency = section.type.equals("emergency", ignoreCase = true) || 
+                      section.name.contains("Emergency", ignoreCase = true)
     val backgroundColor = if (isEmergency) aviationColors.avRed.copy(alpha = 0.8f) else aviationColors.avBlue
     val textColor = aviationColors.textOnSurface
     
@@ -133,7 +134,7 @@ private fun ChecklistListItem(
             .padding(vertical = 16.dp, horizontal = 16.dp)
     ) {
         Text(
-            text = list.name,
+            text = section.name,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = textColor,
@@ -150,18 +151,27 @@ fun HomeScreenPreview() {
         val mockChecklist = Checklist(
             name = "C172S Checklist",
             description = "Standard procedures for Cessna 172S",
-            children = listOf(
-                ChecklistList(
+            sections = listOf(
+                ChecklistSection(
+                    type = "checklist",
                     name = "Normal Procedures",
-                    type = "list"
+                    nameAudio = "",
+                    defaultView = "checklistView",
+                    lists = emptyList()
                 ),
-                ChecklistList(
+                ChecklistSection(
+                    type = "emergency",
                     name = "Emergency Procedures",
-                    type = "list"
+                    nameAudio = "",
+                    defaultView = "onePageView",
+                    lists = emptyList()
                 ),
-                ChecklistList(
+                ChecklistSection(
+                    type = "data",
                     name = "Performance Data",
-                    type = "list"
+                    nameAudio = "",
+                    defaultView = "checklistView",
+                    lists = emptyList()
                 )
             )
         )
@@ -219,9 +229,9 @@ private fun HomeScreenPreviewContent(checklist: Checklist) {
                         .weight(1f)
                         .padding(8.dp)
                 ) {
-                    itemsIndexed(checklist.children) { index, list ->
-                        ChecklistListItem(
-                            list = list,
+                    itemsIndexed(checklist.sections) { index, section ->
+                        ChecklistSectionItem(
+                            section = section,
                             onClick = { },
                             modifier = Modifier.padding(vertical = 4.dp)
                         )

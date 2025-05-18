@@ -20,6 +20,7 @@ val AvDarkGrey = Color(0xFF333333)
 val AvLightGrey = Color(0xFFF2F2F2)
 val AvBlack = Color(0xFF000000)
 val AvWhite = Color(0xFFFFFFFF)
+val AvAmber = Color(0xFFFFBF00)
 
 // Aviation-specific dark mode colors
 val AvBlueDark = Color(0xFF3B89FF)  // Brighter blue for dark mode
@@ -31,3 +32,4 @@ val AvDarkGreyDark = Color(0xFF666666)  // Lighter dark grey for dark mode
 val AvLightGreyDark = Color(0xFF333333)  // Darker light grey for dark mode
 val AvBlackDark = Color(0xFF000000)
 val AvWhiteDark = Color(0xFFFFFFFF)
+val AvAmberDark = Color(0xFFFFCC33)  // Brighter amber for dark mode

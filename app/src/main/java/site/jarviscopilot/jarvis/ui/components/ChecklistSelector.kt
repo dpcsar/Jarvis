@@ -20,15 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.model.ChecklistList
+import site.jarviscopilot.jarvis.model.ChecklistSection
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun ChecklistSelector(
-    lists: List<ChecklistList>,
+    sections: List<ChecklistSection>,
     selectedIndex: Int,
-    onListSelected: (Int) -> Unit,
+    onSectionSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val aviationColors = LocalAviationColors.current
@@ -39,11 +39,11 @@ fun ChecklistSelector(
             .background(Color.Black)
             .padding(vertical = 8.dp)
     ) {
-        lists.forEachIndexed { index, list ->
+        sections.forEachIndexed { index, section ->
             val isSelected = index == selectedIndex
             val backgroundColor = when {
                 isSelected -> aviationColors.avBlue
-                list.name.contains("Emergency", ignoreCase = true) -> aviationColors.avRed
+                section.name.contains("Emergency", ignoreCase = true) -> aviationColors.avRed
                 else -> Color.Transparent
             }
             
@@ -57,12 +57,12 @@ fun ChecklistSelector(
                         color = if (isSelected) Color.White else Color.Gray,
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .clickable { onListSelected(index) }
+                    .clickable { onSectionSelected(index) }
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = list.name,
+                    text = section.name,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                     color = aviationColors.textOnSurface
@@ -75,54 +75,42 @@ fun ChecklistSelector(
 @Preview
 @Composable
 fun ChecklistSelectorPreview() {
-    val demoLists = listOf(
-        ChecklistList(
-            id = "1",
+    val demoSections = listOf(
+        ChecklistSection(
+            type = "checklist",
             name = "PreFlight",
-            type = "list",
-            completionState = "n",
-            visible = true,
-            children = emptyList(),
-            color = "black",
-            defaultView = "checklistView"
+            nameAudio = "",
+            defaultView = "checklistView",
+            lists = emptyList()
         ),
-        ChecklistList(
-            id = "2",
+        ChecklistSection(
+            type = "checklist",
             name = "Before Takeoff",
-            type = "list",
-            completionState = "n",
-            visible = true,
-            children = emptyList(),
-            color = "black",
-            defaultView = "checklistView"
+            nameAudio = "",
+            defaultView = "checklistView",
+            lists = emptyList()
         ),
-        ChecklistList(
-            id = "3",
+        ChecklistSection(
+            type = "checklist",
             name = "InFlight",
-            type = "list",
-            completionState = "n",
-            visible = true,
-            children = emptyList(),
-            color = "black",
-            defaultView = "checklistView"
+            nameAudio = "",
+            defaultView = "checklistView",
+            lists = emptyList()
         ),
-        ChecklistList(
-            id = "4",
+        ChecklistSection(
+            type = "emergency",
             name = "Emergency",
-            type = "list",
-            completionState = "n",
-            visible = true,
-            children = emptyList(),
-            color = "red",
-            defaultView = "checklistView"
+            nameAudio = "",
+            defaultView = "onePageView",
+            lists = emptyList()
         )
     )
     
     JarvisTheme {
         ChecklistSelector(
-            lists = demoLists,
+            sections = demoSections,
             selectedIndex = 1,
-            onListSelected = {}
+            onSectionSelected = {}
         )
     }
 }

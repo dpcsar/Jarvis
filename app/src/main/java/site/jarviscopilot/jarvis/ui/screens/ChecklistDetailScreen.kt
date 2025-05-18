@@ -35,7 +35,6 @@ import site.jarviscopilot.jarvis.model.ChecklistItem
 import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.model.ChecklistSection
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
-import androidx.core.graphics.toColorInt
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -48,9 +47,9 @@ fun ChecklistDetailScreen(
     val uiState by viewModel.uiState.collectAsState()
     val aviationColors = LocalAviationColors.current
     
-    // Set the selected list when the screen is first displayed
+    // Set the selected section when the screen is first displayed
     LaunchedEffect(key1 = listIndex) {
-        viewModel.selectList(listIndex)
+        viewModel.selectSection(listIndex)
     }
     
     Scaffold(
@@ -64,12 +63,12 @@ fun ChecklistDetailScreen(
         },
         bottomBar = {
             Column {
-                // List selector bar at the bottom
+                // Section selector bar at the bottom
                 uiState.checklist?.let { checklist ->
                     ChecklistSelector(
-                        lists = checklist.children,
-                        selectedIndex = uiState.selectedListIndex,
-                        onListSelected = { viewModel.selectList(it) }
+                        sections = checklist.sections,
+                        selectedIndex = uiState.selectedSectionIndex,
+                        onSectionSelected = { viewModel.selectSection(it) }
                     )
                 }
                 
@@ -102,22 +101,22 @@ fun ChecklistDetailScreen(
                         .padding(16.dp)
                 )
             } else {
-                val currentList = uiState.checklist?.children?.getOrNull(uiState.selectedListIndex)
-                if (currentList != null) {
+                val currentSection = uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)
+                if (currentSection != null) {
                     val listState = rememberLazyListState()
-                    val currentSectionIndex = uiState.selectedSectionIndex
+                    val currentListIndex = uiState.selectedListIndex
                     val currentItemIndex = uiState.selectedItemIndex
                     
                     // Calculate the overall index for scrolling
-                    val targetIndex by remember(currentSectionIndex, currentItemIndex) {
+                    val targetIndex by remember(currentListIndex, currentItemIndex) {
                         derivedStateOf {
                             var index = 0
-                            for (i in 0 until currentSectionIndex) {
-                                index += 1 // Section header
-                                index += currentList.children[i].children.size
-                                index += 1 // Spacer after section
+                            for (i in 0 until currentListIndex) {
+                                index += 1 // List header
+                                index += currentSection.lists[i].items.size
+                                index += 1 // Spacer after list
                             }
-                            index += 1 // Current section header
+                            index += 1 // Current list header
                             index += currentItemIndex
                             
                             index
@@ -135,41 +134,40 @@ fun ChecklistDetailScreen(
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        currentList.children.forEachIndexed { sectionIndex, section ->
-                            // Section header
+                        currentSection.lists.forEachIndexed { listIndex, list ->
+                            // List header
                             item {
-                                val sectionColor = try {
-                                    Color(section.backgroundColor.toColorInt())
-                                } catch (_: Exception) {
+                                // Use a different background color for emergency checklists
+                                val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
+                                    aviationColors.avRed
+                                } else {
                                     aviationColors.headerBackground
                                 }
                                 
                                 SectionHeader(
-                                    title = section.name,
-                                    backgroundColor = sectionColor,
+                                    title = list.name,
+                                    backgroundColor = backgroundColor,
                                     modifier = Modifier.padding(vertical = 8.dp)
                                 )
                             }
                             
-                            // Section items
-                            items(section.children.size) { itemIndex ->
-                                val item = section.children[itemIndex]
-                                val isSelected = sectionIndex == currentSectionIndex && itemIndex == currentItemIndex
+                            // List items
+                            items(list.items.size) { itemIndex ->
+                                val item = list.items[itemIndex]
+                                val isSelected = listIndex == currentListIndex && itemIndex == currentItemIndex
                                 
-                                if (item.visible) {
-                                    ChecklistItemComponent(
-                                        item = item,
-                                        isSelected = isSelected,
-                                        onClick = {
-                                            viewModel.selectSection(sectionIndex)
-                                            viewModel.selectItem(itemIndex)
-                                        },
-                                        modifier = Modifier.padding(vertical = 4.dp)
-                                    )
-                                }
+                                ChecklistItemComponent(
+                                    item = item,
+                                    isSelected = isSelected,
+                                    onClick = {
+                                        viewModel.selectList(listIndex)
+                                        viewModel.selectItem(itemIndex)
+                                    },
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                )
                             }
                             
-                            // Spacer after section
+                            // Spacer after list
                             item {
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
@@ -194,62 +192,72 @@ fun ChecklistDetailScreen(
 fun ChecklistDetailScreenPreview() {
     JarvisTheme {
         val mockChecklist = Checklist(
-            name = "C172S Checklist",
-            description = "Standard procedures for Cessna 172S",
-            children = listOf(
-                ChecklistList(
-                    name = "Normal Procedures",
-                    type = "list",
-                    children = listOf(
-                        ChecklistSection(
-                            name = "Pre-Flight",
-                            backgroundColor = "#0066CC",
-                            children = listOf(
+            name = "RV-6A",
+            nameAudio = "R V nine two six romeo uniform",
+            checklistId = "N926RU",
+            description = "Checklist for RV-6A",
+            sections = listOf(
+                ChecklistSection(
+                    type = "checklist",
+                    name = "Preflight",
+                    nameAudio = "",
+                    defaultView = "checklistView",
+                    lists = listOf(
+                        ChecklistList(
+                            name = "Preflight Inspection",
+                            nameAudio = "",
+                            items = listOf(
                                 ChecklistItem(
+                                    type = "item",
                                     label1 = "Preflight Inspection",
-                                    label2 = "COMPLETE"
+                                    label1Audio = "",
+                                    label2 = "COMPLETE",
+                                    label2Audio = "",
+                                    mandatory = true
                                 ),
                                 ChecklistItem(
+                                    type = "item",
                                     label1 = "Control Lock",
-                                    label2 = "REMOVE"
-                                ),
-                                ChecklistItem(
-                                    label1 = "Ignition Switch",
-                                    label2 = "OFF"
+                                    label1Audio = "",
+                                    label2 = "REMOVE",
+                                    label2Audio = "",
+                                    mandatory = true
                                 )
                             )
                         ),
-                        ChecklistSection(
+                        ChecklistList(
                             name = "Before Starting Engine",
-                            backgroundColor = "#006633",
-                            children = listOf(
+                            nameAudio = "",
+                            items = listOf(
                                 ChecklistItem(
-                                    label1 = "Preflight Inspection",
-                                    label2 = "COMPLETE"
-                                ),
-                                ChecklistItem(
+                                    type = "item",
                                     label1 = "Seats, Belts",
-                                    label2 = "ADJUST, SECURE"
+                                    label1Audio = "",
+                                    label2 = "ADJUST, SECURE",
+                                    label2Audio = "",
+                                    mandatory = true
                                 )
                             )
                         )
                     )
                 ),
-                ChecklistList(
-                    name = "Emergency Procedures",
-                    type = "list",
-                    children = listOf(
-                        ChecklistSection(
+                ChecklistSection(
+                    type = "emergency",
+                    name = "Emergency",
+                    nameAudio = "",
+                    defaultView = "onePageView",
+                    lists = listOf(
+                        ChecklistList(
                             name = "Engine Failure",
-                            backgroundColor = "#CC0000",
-                            children = listOf(
+                            nameAudio = "",
+                            items = listOf(
                                 ChecklistItem(
+                                    type = "item",
                                     label1 = "Airspeed",
-                                    label2 = "65 KIAS"
-                                ),
-                                ChecklistItem(
-                                    label1 = "Fuel Selector",
-                                    label2 = "BOTH"
+                                    label1Audio = "",
+                                    label2 = "80 KIAS",
+                                    label2Audio = "",
+                                    mandatory = false
                                 )
                             )
                         )
@@ -265,8 +273,8 @@ fun ChecklistDetailScreenPreview() {
 @Composable
 private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
     val aviationColors = LocalAviationColors.current
-    val currentList = checklist.children.getOrNull(0)
-    val selectedListIndex = 0
+    val currentSection = checklist.sections.getOrNull(0)
+    val selectedSectionIndex = 0
     
     Scaffold(
         topBar = {
@@ -279,11 +287,11 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
         },
         bottomBar = {
             Column {
-                // List selector bar at the bottom
+                // Section selector bar at the bottom
                 ChecklistSelector(
-                    lists = checklist.children,
-                    selectedIndex = selectedListIndex,
-                    onListSelected = { }
+                    sections = checklist.sections,
+                    selectedIndex = selectedSectionIndex,
+                    onSectionSelected = { }
                 )
                 
                 // Control buttons
@@ -304,9 +312,9 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (currentList != null) {
+            if (currentSection != null) {
                 val listState = rememberLazyListState()
-                val currentSectionIndex = 0
+                val currentListIndex = 0
                 val currentItemIndex = 0
                 
                 LazyColumn(
@@ -315,38 +323,36 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    currentList.children.forEachIndexed { sectionIndex, section ->
-                        // Section header
+                    currentSection.lists.forEachIndexed { listIndex, list ->
+                        // List header
                         item {
-                            val sectionColor = try {
-                                Color(section.backgroundColor.toColorInt())
-                            } catch (_: Exception) {
+                            val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
+                                aviationColors.avRed
+                            } else {
                                 aviationColors.headerBackground
                             }
                             
                             SectionHeader(
-                                title = section.name,
-                                backgroundColor = sectionColor,
+                                title = list.name,
+                                backgroundColor = backgroundColor,
                                 modifier = Modifier.padding(vertical = 8.dp)
                             )
                         }
                         
-                        // Section items
-                        items(section.children.size) { itemIndex ->
-                            val item = section.children[itemIndex]
-                            val isSelected = sectionIndex == currentSectionIndex && itemIndex == currentItemIndex
+                        // List items
+                        items(list.items.size) { itemIndex ->
+                            val item = list.items[itemIndex]
+                            val isSelected = listIndex == currentListIndex && itemIndex == currentItemIndex
                             
-                            if (item.visible) {
-                                ChecklistItemComponent(
-                                    item = item,
-                                    isSelected = isSelected,
-                                    onClick = {},
-                                    modifier = Modifier.padding(vertical = 4.dp)
-                                )
-                            }
+                            ChecklistItemComponent(
+                                item = item,
+                                isSelected = isSelected,
+                                onClick = {},
+                                modifier = Modifier.padding(vertical = 4.dp)
+                            )
                         }
                         
-                        // Spacer after section
+                        // Spacer after list
                         item {
                             Spacer(modifier = Modifier.height(16.dp))
                         }
