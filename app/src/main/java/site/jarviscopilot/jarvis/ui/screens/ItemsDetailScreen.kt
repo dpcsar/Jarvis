@@ -143,38 +143,18 @@ fun ItemsDetailScreen(
                     // Remember the header height for proper placement
                     val headerHeight = remember { mutableStateOf(90.dp) }
 
-                    // Scroll to the selected item
+                    // Scroll to the selected item, positioning it in the middle of the screen
                     LaunchedEffect(targetIndex, currentListIndex, currentItemIndex) {
-                        // If we switched to a different list, scroll to show the header (index - currentItemIndex)
-                        if (previousListIndex.value != currentListIndex) {
-                            // Calculate the index of just the header of the current list
-                            var headerIndex = 0
-                            for (i in 0 until currentListIndex) {
-                                headerIndex += 1 // List header
-                                headerIndex += currentSection.lists[i].items.size
-                                headerIndex += 1 // Spacer after list
-                            }
-
+                        // If we switched to a different list or the item changed, scroll to center the current item
+                        if (previousListIndex.value != currentListIndex || previousItemIndex.value != currentItemIndex) {
                             previousListIndex.value = currentListIndex
-
-                            // Position the selected item with enough space below header
-                            listState.scrollToItem(
-                                index = 0, // Scroll to the first spacer item
-                                scrollOffset = 0
-                            )
-
-                            // Then move to the current item with proper offset
-                            listState.scrollToItem(
-                                index = currentItemIndex,
-                                scrollOffset = 0
-                            )
-                        } else if (previousItemIndex.value != currentItemIndex) {
-                            // If only the item changed, ensure it's positioned properly
-                            listState.scrollToItem(
-                                index = currentItemIndex,
-                                scrollOffset = 0
-                            )
                             previousItemIndex.value = currentItemIndex
+
+                            // Center the current item on screen with an offset
+                            listState.animateScrollToItem(
+                                index = currentItemIndex,
+                                scrollOffset = -listState.layoutInfo.viewportSize.height / 3 // Position item roughly in the middle
+                            )
                         }
                     }
                     
