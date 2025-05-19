@@ -4,11 +4,10 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import site.jarviscopilot.jarvis.data.ChecklistRepository
@@ -46,14 +45,9 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     
     private fun startTimeUpdates() {
         viewModelScope.launch {
-            // Use Flow with fixed timer interval instead of infinite loop with delay
-            flow {
-                while (true) {
-                    emit(Unit)
-                    kotlinx.coroutines.delay(1000)
-                }
-            }.collectLatest {
+            while (true) {
                 updateTime()
+                delay(1000) // More efficient than creating a flow with emissions
             }
         }
     }

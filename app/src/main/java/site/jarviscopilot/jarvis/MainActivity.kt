@@ -22,6 +22,7 @@ import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: ChecklistViewModel
     
+    // Simplified permission launcher
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -35,9 +36,14 @@ class MainActivity : ComponentActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ChecklistViewModel::class.java]
+
         enableEdgeToEdge()
         requestAudioPermission()
+
+        // Setup UI
         setContent {
             JarvisTheme {
                 Surface(
@@ -60,9 +66,11 @@ class MainActivity : ComponentActivity() {
                 this,
                 Manifest.permission.RECORD_AUDIO
             ) == PackageManager.PERMISSION_GRANTED -> {
+                // Permission already granted
                 // TODO: Initialize wake word detection
             }
             shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
+                // Show rationale then request permission
                 Toast.makeText(
                     this,
                     "Audio permission is needed for wake word detection and voice commands",
@@ -71,8 +79,10 @@ class MainActivity : ComponentActivity() {
                 requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
             }
             else -> {
+                // First-time permission request
                 requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
             }
         }
     }
 }
+

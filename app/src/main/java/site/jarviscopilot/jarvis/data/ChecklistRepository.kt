@@ -10,11 +10,16 @@ import java.io.IOException
 class ChecklistRepository(private val context: Context) {
 
     private val gson = Gson()
-    
+    private var cachedChecklist: Checklist? = null
+
     suspend fun loadChecklistFromAssets(): Result<Checklist> = withContext(Dispatchers.IO) {
+        // Return cached checklist if available
+        cachedChecklist?.let { return@withContext Result.success(it) }
+
         try {
             val jsonString = context.assets.open("checklist.json").bufferedReader().use { it.readText() }
             val checklist = gson.fromJson(jsonString, Checklist::class.java)
+            cachedChecklist = checklist
             Result.success(checklist)
         } catch (e: IOException) {
             Result.failure(e)
@@ -23,3 +28,4 @@ class ChecklistRepository(private val context: Context) {
         }
     }
 }
+
