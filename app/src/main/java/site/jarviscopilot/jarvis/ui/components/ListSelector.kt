@@ -14,10 +14,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,17 +40,20 @@ fun ListSelector(
     val aviationColors = LocalAviationColors.current
     val scrollState = rememberScrollState()
 
+    // Store positions of each item
+    val itemPositions = remember { mutableStateMapOf<Int, Float>() }
+    val itemWidths = remember { mutableStateMapOf<Int, Int>() }
+
     // Auto-scroll to the selected index when it changes
-    LaunchedEffect(selectedIndex, lists) {
-        // Short delay to ensure the layout is ready
+    LaunchedEffect(selectedIndex, lists, itemPositions, itemWidths) {
+        // Short delay to ensure all positions are measured
         delay(100)
 
-        // Calculate approximate scroll position based on item width
-        // Assuming each item has an average width of 150dp + padding
-        val itemWidth = 150 + 28 // 150dp for text + 28dp for horizontal padding
-        val targetScrollPosition = (selectedIndex * itemWidth).coerceAtMost(scrollState.maxValue)
-
-        scrollState.animateScrollTo(targetScrollPosition)
+        // If we have the position for the selected item, scroll to it
+        if (itemPositions.containsKey(selectedIndex)) {
+            val position = itemPositions[selectedIndex] ?: 0f
+            scrollState.animateScrollTo(position.toInt().coerceAtMost(scrollState.maxValue))
+        }
     }
 
     Row(
@@ -69,6 +76,11 @@ fun ListSelector(
                         shape = RoundedCornerShape(4.dp)
                     )
                     .clickable { onListSelected(index) }
+                    .onGloballyPositioned { coordinates ->
+                        // Save the item's x position and width
+                        itemPositions[index] = coordinates.positionInParent().x
+                        itemWidths[index] = coordinates.size.width
+                    }
                     .padding(horizontal = 14.dp, vertical = 6.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -83,7 +95,7 @@ fun ListSelector(
     }
 }
 
-@Preview
+@Preview(apiLevel = 36)
 @Composable
 fun ListSelectorPreview() {
     JarvisTheme {
