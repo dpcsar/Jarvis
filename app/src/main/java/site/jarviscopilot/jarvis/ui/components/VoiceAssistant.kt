@@ -130,9 +130,9 @@ fun MicButton(
         animationSpec = infiniteRepeatable(
             animation = keyframes {
                 durationMillis = 1000
-                1f at 0 with FastOutSlowInEasing
-                1.2f at 500 with FastOutSlowInEasing
-                1f at 1000 with FastOutSlowInEasing
+                1f at 0 using FastOutSlowInEasing
+                1.2f at 500 using FastOutSlowInEasing
+                1f at 1000 using FastOutSlowInEasing
             },
             repeatMode = RepeatMode.Restart
         ),
@@ -315,3 +315,4 @@ fun VoiceWaveformPreview() {
         VoiceWaveform()
     }
 }
+

@@ -43,6 +43,7 @@ fun ChecklistSelector(
             val isSelected = index == selectedIndex
             val backgroundColor = when {
                 isSelected -> aviationColors.avBlue
+                section.type == "reference" -> aviationColors.avYellow
                 section.name.contains("Emergency", ignoreCase = true) -> aviationColors.avRed
                 else -> Color.Transparent
             }
@@ -91,10 +92,10 @@ fun ChecklistSelectorPreview() {
             lists = emptyList()
         ),
         ChecklistSection(
-            type = "checklist",
-            name = "InFlight",
+            type = "reference",
+            name = "Reference Info",
             nameAudio = "",
-            defaultView = "checklistView",
+            defaultView = "referenceView",
             lists = emptyList()
         ),
         ChecklistSection(
@@ -114,3 +115,4 @@ fun ChecklistSelectorPreview() {
         )
     }
 }
+

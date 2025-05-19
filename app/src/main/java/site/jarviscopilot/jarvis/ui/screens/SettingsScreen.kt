@@ -11,7 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -64,7 +64,7 @@ fun SettingsScreen(
             SettingsItem(
                 title = "Wake Word Detection",
                 description = "Enable 'Hey Jarvis' wake word detection",
-                icon = Icons.Default.VolumeUp,
+                icon = Icons.AutoMirrored.Filled.VolumeUp,
                 trailingContent = {
                     Switch(
                         checked = wakeWordEnabled,
@@ -140,3 +140,4 @@ fun SettingsScreenPreview() {
         )
     }
 }
+
