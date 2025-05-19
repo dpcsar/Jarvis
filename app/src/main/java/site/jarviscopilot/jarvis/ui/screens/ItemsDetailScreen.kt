@@ -35,9 +35,14 @@ import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.model.ChecklistSection
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Surface
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.zIndex
 
 @Composable
-fun ChecklistDetailScreen(
+fun ItemsDetailScreen(
     listIndex: Int,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -113,7 +118,8 @@ fun ChecklistDetailScreen(
                     val listState = rememberLazyListState()
                     val currentListIndex = uiState.selectedListIndex
                     val currentItemIndex = uiState.selectedItemIndex
-                    
+                    val currentList = currentSection.lists.getOrNull(currentListIndex)
+
                     // Calculate the overall index for scrolling
                     val targetIndex by remember(currentListIndex, currentItemIndex) {
                         derivedStateOf {
@@ -132,9 +138,13 @@ fun ChecklistDetailScreen(
                     
                     // Track previous list index to detect list changes
                     val previousListIndex = remember { mutableStateOf(currentListIndex) }
+                    val previousItemIndex = remember { mutableStateOf(currentItemIndex) }
+
+                    // Remember the header height for proper placement
+                    val headerHeight = remember { mutableStateOf(90.dp) }
 
                     // Scroll to the selected item
-                    LaunchedEffect(targetIndex, currentListIndex) {
+                    LaunchedEffect(targetIndex, currentListIndex, currentItemIndex) {
                         // If we switched to a different list, scroll to show the header (index - currentItemIndex)
                         if (previousListIndex.value != currentListIndex) {
                             // Calculate the index of just the header of the current list
@@ -144,59 +154,90 @@ fun ChecklistDetailScreen(
                                 headerIndex += currentSection.lists[i].items.size
                                 headerIndex += 1 // Spacer after list
                             }
-                            // Scroll to the header
-                            listState.animateScrollToItem(headerIndex)
+
                             previousListIndex.value = currentListIndex
-                        } else {
-                            // Otherwise, just scroll to the selected item
-                            listState.animateScrollToItem(targetIndex.coerceAtLeast(0))
+
+                            // Position the selected item with enough space below header
+                            listState.scrollToItem(
+                                index = 0, // Scroll to the first spacer item
+                                scrollOffset = 0
+                            )
+
+                            // Then move to the current item with proper offset
+                            listState.scrollToItem(
+                                index = currentItemIndex,
+                                scrollOffset = 0
+                            )
+                        } else if (previousItemIndex.value != currentItemIndex) {
+                            // If only the item changed, ensure it's positioned properly
+                            listState.scrollToItem(
+                                index = currentItemIndex,
+                                scrollOffset = 0
+                            )
+                            previousItemIndex.value = currentItemIndex
                         }
                     }
                     
-                    LazyColumn(
-                        state = listState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        // Get the current list
-                        val currentList = currentSection.lists.getOrNull(currentListIndex)
-
+                    // Use a box to position the sticky header separately from the list content
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        // Create the header first as a fixed element at the top
                         if (currentList != null) {
-                            // Show only the current list header
-                            item {
-                                // Use a different background color for emergency checklists
-                                val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
-                                    aviationColors.avRed
-                                } else {
-                                    aviationColors.headerBackground
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .zIndex(1f)
+                                    .shadow(4.dp),
+                                content = {
+                                    // Use a different background color for emergency checklists
+                                    val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
+                                        aviationColors.avRed
+                                    } else {
+                                        aviationColors.headerBackground
+                                    }
+
+                                    SectionHeader(
+                                        title = currentList.name,
+                                        backgroundColor = backgroundColor,
+                                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
+                                    )
                                 }
-                                
-                                SectionHeader(
-                                    title = currentList.name,
-                                    backgroundColor = backgroundColor,
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                )
-                            }
-                            
-                            // Show only items from the current list
-                            items(currentList.items.size) { itemIndex ->
-                                val item = currentList.items[itemIndex]
-                                val isSelected = itemIndex == currentItemIndex
+                            )
+                        }
 
-                                ItemsList(
-                                    item = item,
-                                    isSelected = isSelected,
-                                    onClick = {
-                                        // First select the item
-                                        viewModel.selectItem(itemIndex)
+                        // Then render the list content in a new column that's offset from the top
+                        Column {
+                            // Add padding at the top to account for the header
+                            Spacer(modifier = Modifier.height(headerHeight.value))
 
-                                        // Then toggle its checked state
-                                        viewModel.toggleItemChecked(itemIndex)
-                                    },
-                                    modifier = Modifier.padding(vertical = 4.dp),
-                                    sectionType = currentSection.type // Pass section type
-                                )
+                            // Render the list with items starting below the header
+                            LazyColumn(
+                                state = listState,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp)
+                            ) {
+                                // Get the current list
+                                if (currentList != null) {
+                                    // Show only items from the current list
+                                    items(currentList.items.size) { itemIndex ->
+                                        val item = currentList.items[itemIndex]
+                                        val isSelected = itemIndex == currentItemIndex
+
+                                        ItemsList(
+                                            item = item,
+                                            isSelected = isSelected,
+                                            onClick = {
+                                                // First select the item
+                                                viewModel.selectItem(itemIndex)
+
+                                                // Then toggle its checked state
+                                                viewModel.toggleItemChecked(itemIndex)
+                                            },
+                                            modifier = Modifier.padding(vertical = 4.dp),
+                                            sectionType = currentSection.type // Pass section type
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -352,44 +393,62 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                 val currentListIndex = 0
                 val currentItemIndex = 0
                 
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    // Get the current list
-                    val currentList = currentSection.lists.getOrNull(currentListIndex)
+                Box(modifier = Modifier.fillMaxSize()) {
+                    // First, render the list content
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        // Get the current list
+                        val currentList = currentSection.lists.getOrNull(currentListIndex)
 
-                    if (currentList != null) {
-                        // Show only the current list header
-                        item {
-                            val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
-                                aviationColors.avRed
-                            } else {
-                                aviationColors.headerBackground
+                        if (currentList != null) {
+                            // Add space at the top for the sticky header to prevent items from being hidden behind it
+                            item {
+                                Spacer(modifier = Modifier.height(72.dp))
                             }
                             
-                            SectionHeader(
-                                title = currentList.name,
-                                backgroundColor = backgroundColor,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-                        
-                        // Show only items from the current list
-                        items(currentList.items.size) { itemIndex ->
-                            val item = currentList.items[itemIndex]
-                            val isSelected = itemIndex == currentItemIndex
+                            // Show only items from the current list
+                            items(currentList.items.size) { itemIndex ->
+                                val item = currentList.items[itemIndex]
+                                val isSelected = itemIndex == currentItemIndex
 
-                            ItemsList(
-                                item = item,
-                                isSelected = isSelected,
-                                onClick = { /* No action in preview */ },
-                                modifier = Modifier.padding(vertical = 4.dp),
-                                sectionType = currentSection.type
-                            )
+                                ItemsList(
+                                    item = item,
+                                    isSelected = isSelected,
+                                    onClick = { /* No action in preview */ },
+                                    modifier = Modifier.padding(vertical = 4.dp),
+                                    sectionType = currentSection.type
+                                )
+                            }
                         }
+                    }
+
+                    // Then, render the sticky header on top
+                    if (currentSection.lists.getOrNull(currentListIndex) != null) {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .zIndex(1f)
+                                .shadow(4.dp),
+                            content = {
+                                val currentList = currentSection.lists.getOrNull(currentListIndex)
+                                // Use a different background color for emergency checklists
+                                val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
+                                    aviationColors.avRed
+                                } else {
+                                    aviationColors.headerBackground
+                                }
+
+                                SectionHeader(
+                                    title = currentList?.name ?: "",
+                                    backgroundColor = backgroundColor,
+                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
+                                )
+                            }
+                        )
                     }
                 }
             }
