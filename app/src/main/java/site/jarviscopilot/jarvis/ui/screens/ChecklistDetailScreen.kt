@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import site.jarviscopilot.jarvis.ui.components.BottomBar
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemComponent
 import site.jarviscopilot.jarvis.ui.components.ChecklistSelector
+import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionHeader
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
@@ -61,6 +62,15 @@ fun ChecklistDetailScreen(
         },
         bottomBar = {
             Column {
+                // List selector for the current section
+                uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.let { section ->
+                    ListSelector(
+                        lists = section.lists,
+                        selectedIndex = uiState.selectedListIndex,
+                        onListSelected = { viewModel.selectList(it) }
+                    )
+                }
+
                 // Section selector bar at the bottom
                 uiState.checklist?.let { checklist ->
                     ChecklistSelector(
@@ -69,7 +79,7 @@ fun ChecklistDetailScreen(
                         onSectionSelected = { viewModel.selectSection(it) }
                     )
                 }
-                
+
                 // Control buttons
                 BottomBar(
                     onHomeClick = onNavigateUp,
@@ -284,13 +294,22 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
         },
         bottomBar = {
             Column {
+                // List selector for the current section
+                currentSection?.let { section ->
+                    ListSelector(
+                        lists = section.lists,
+                        selectedIndex = 0,
+                        onListSelected = { }
+                    )
+                }
+
                 // Section selector bar at the bottom
                 ChecklistSelector(
                     sections = checklist.sections,
                     selectedIndex = selectedSectionIndex,
                     onSectionSelected = { }
                 )
-                
+
                 // Control buttons
                 BottomBar(
                     onHomeClick = { },
@@ -359,3 +378,4 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
         }
     }
 }
+
