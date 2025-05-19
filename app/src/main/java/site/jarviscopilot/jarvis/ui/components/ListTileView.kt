@@ -36,14 +36,14 @@ fun ListTileView(
 
     val backgroundColor = when (sectionType.lowercase()) {
         "emergency" -> aviationColors.avRed.copy(alpha = 0.15f)
-        "reference" -> aviationColors.avAmber.copy(alpha = 0.15f)
+        "reference" -> aviationColors.avBlue.copy(alpha = 0.15f)
         else -> MaterialTheme.colorScheme.surface
     }
 
     val borderColor = when (sectionType.lowercase()) {
         "emergency" -> aviationColors.avRed
-        "reference" -> aviationColors.avAmber
-        else -> aviationColors.avBlue
+        "reference" -> aviationColors.avBlue
+        else -> aviationColors.avGreen
     }
 
     Box(

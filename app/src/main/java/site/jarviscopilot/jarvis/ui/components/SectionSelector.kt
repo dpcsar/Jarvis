@@ -52,14 +52,14 @@ fun SectionSelector(
     Row(
         modifier = modifier
             .horizontalScroll(scrollState)
-            .background(Color.Black)
+            .background(Color.Black)  // This is the ribbon's background color
             .padding(vertical = 8.dp)
     ) {
         sections.forEachIndexed { index, section ->
             val isSelected = index == selectedIndex
             val backgroundColor = when {
-                isSelected -> aviationColors.avBlue
-                section.type == "reference" -> aviationColors.avYellow
+                isSelected -> aviationColors.avGreen
+                section.type == "reference" -> aviationColors.avBlue
                 section.name.contains("Emergency", ignoreCase = true) -> aviationColors.avRed
                 else -> Color.Transparent
             }
@@ -82,7 +82,11 @@ fun SectionSelector(
                     text = if (section.selectorName.isNotBlank()) section.selectorName else section.name,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                    color = aviationColors.textOnSurface
+                    // Use black text on green background, white text on other backgrounds
+                    color = when {
+                        isSelected -> Color.Black  // Green background gets black text
+                        else -> Color.White        // Other backgrounds get white text
+                    }
                 )
             }
         }

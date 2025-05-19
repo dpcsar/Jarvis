@@ -62,7 +62,7 @@ fun ListSelector(
                 modifier = Modifier
                     .wrapContentSize()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(if (isSelected) aviationColors.avBlue else Color.Transparent)
+                    .background(if (isSelected) aviationColors.avGreen else Color.Transparent)
                     .border(
                         width = 1.dp,
                         color = if (isSelected) Color.White else Color.Gray,
@@ -76,7 +76,7 @@ fun ListSelector(
                     text = if (list.selectorName.isNotBlank()) list.selectorName else list.name,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                    color = aviationColors.textOnSurface
+                    color = if (isSelected) Color.Black else aviationColors.textOnSurface
                 )
             }
         }

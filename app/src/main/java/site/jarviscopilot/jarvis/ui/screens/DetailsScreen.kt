@@ -174,8 +174,8 @@ fun DetailsScreen(
                     }
                     
                     // Track previous list index to detect list changes
-                    val previousListIndex = remember { androidx.compose.runtime.mutableIntStateOf(currentListIndex) }
-                    val previousItemIndex = remember { androidx.compose.runtime.mutableIntStateOf(currentItemIndex) }
+                    val previousListIndex = remember { mutableIntStateOf(currentListIndex) }
+                    val previousItemIndex = remember { mutableIntStateOf(currentItemIndex) }
 
                     // Remember the header height for proper placement
                     val headerHeight = remember { mutableStateOf(90.dp) }
@@ -206,12 +206,10 @@ fun DetailsScreen(
                                     .shadow(4.dp),
                                 content = {
                                     // Use a different background color for emergency checklists
-                                    val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
-                                        aviationColors.avRed
-                                    } else if (currentSection.type.equals("reference", ignoreCase = true)) {
-                                        aviationColors.avAmber
-                                    } else {
-                                        aviationColors.headerBackground
+                                    val sectionType = when {
+                                        currentSection.type.equals("emergency", ignoreCase = true) -> "emergency"
+                                        currentSection.type.equals("reference", ignoreCase = true) -> "reference"
+                                        else -> "normal"
                                     }
 
                                     // Determine the header title based on context
@@ -230,7 +228,7 @@ fun DetailsScreen(
 
                                     ViewHeader(
                                         title = headerTitle,
-                                        backgroundColor = backgroundColor,
+                                        sectionType = sectionType,
                                         modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
                                     )
                                 }

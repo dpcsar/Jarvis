@@ -267,7 +267,7 @@
             },
             {
                "name": "Environment",
-               "selectorName": "enVironment",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1752,7 +1752,7 @@
       },
       {
          "type": "checklist",
-         "name": "Inflight",
+         "name": "In Flight",
          "selectorName": "",
          "nameAudio": "",
          "defaultView": "checklistView",
@@ -2968,8 +2968,8 @@
                ]
             },
             {
-               "name": "Engine Failure In flight | Inflight Engine Failure",
-               "selectorName": "Inflight Engine Failure",
+               "name": "Engine Failure In Flight | In Flight Engine Failure",
+               "selectorName": "In Flight Engine Failure",
                "nameAudio": "",
                "items": [
                   {
@@ -3325,8 +3325,8 @@
                ]
             },
             {
-               "name": "Engine Fire Inflight | Inflight Engine Fire",
-               "selectorName": "Inflight Engine Fire",
+               "name": "Engine Fire In Flight | In Flight Engine Fire",
+               "selectorName": "In Flight Engine Fire",
                "nameAudio": "",
                "items": [
                   {
@@ -3794,7 +3794,7 @@
                ]
             },
             {
-               "name": "Inflight Canopy Opening",
+               "name": "In Flight Canopy Opening",
                "selectorName": "",
                "nameAudio": "",
                "items": [

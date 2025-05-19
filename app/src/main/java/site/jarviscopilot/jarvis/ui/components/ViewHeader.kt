@@ -22,15 +22,31 @@ import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 @Composable
 fun ViewHeader(
     title: String,
-    backgroundColor: Color = LocalAviationColors.current.avDarkGrey,
-    textColor: Color = LocalAviationColors.current.textOnSurface,
+    sectionType: String? = null,
+    backgroundColor: Color? = null,
+    textColor: Color? = null,
     modifier: Modifier = Modifier
 ) {
+    val aviationColors = LocalAviationColors.current
+
+    // Determine background color based on section type if provided
+    val headerBackgroundColor = backgroundColor ?: when(sectionType?.lowercase()) {
+        "emergency" -> aviationColors.avRed
+        "reference" -> aviationColors.avBlue
+        else -> aviationColors.avGreen
+    }
+
+    // Determine text color based on background color
+    val headerTextColor = textColor ?: when(headerBackgroundColor) {
+        aviationColors.avGreen -> Color.Black
+        else -> Color.White
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp))
-            .background(backgroundColor)
+            .background(headerBackgroundColor)
             .padding(vertical = 12.dp, horizontal = 16.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -38,7 +54,7 @@ fun ViewHeader(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = textColor,
+            color = headerTextColor,
             textAlign = TextAlign.Center
         )
     }
@@ -51,3 +67,4 @@ fun SectionHeaderPreview() {
         ViewHeader(title = "Pilot currency and proficiency")
     }
 }
+
