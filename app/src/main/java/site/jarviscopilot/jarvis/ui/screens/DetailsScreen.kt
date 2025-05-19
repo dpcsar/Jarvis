@@ -2,9 +2,12 @@ package site.jarviscopilot.jarvis.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,10 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import site.jarviscopilot.jarvis.ui.components.BottomBar
-import site.jarviscopilot.jarvis.ui.components.ItemsList
+import site.jarviscopilot.jarvis.ui.components.ListView
+import site.jarviscopilot.jarvis.ui.components.Item
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.ListSelector
-import site.jarviscopilot.jarvis.ui.components.SectionHeader
+import site.jarviscopilot.jarvis.ui.components.ViewHeader
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
@@ -35,14 +39,18 @@ import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.model.ChecklistSection
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Surface
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.zIndex
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.runtime.mutableIntStateOf
+import site.jarviscopilot.jarvis.ui.components.ListTileView
 
 @Composable
-fun ItemsDetailScreen(
+fun DetailsScreen(
     listIndex: Int,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -56,6 +64,18 @@ fun ItemsDetailScreen(
         viewModel.selectSection(listIndex)
     }
     
+    // Track if we're in emergency/reference tile view
+    val isEmergencyOrRef = uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.type?.equals("emergency", ignoreCase = true) == true ||
+                           uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.type?.equals("reference", ignoreCase = true) == true
+
+    // Track if we're viewing list tiles or a specific list - move to higher scope
+    val isViewingListTiles = remember(uiState.selectedSectionIndex) { mutableStateOf(isEmergencyOrRef) }
+
+    // Update tile view state when section type changes
+    LaunchedEffect(isEmergencyOrRef) {
+        isViewingListTiles.value = isEmergencyOrRef
+    }
+
     Scaffold(
         topBar = {
             TopBar(
@@ -66,13 +86,21 @@ fun ItemsDetailScreen(
         },
         bottomBar = {
             Column {
-                // List selector for the current section
-                uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.let { section ->
-                    ListSelector(
-                        lists = section.lists,
-                        selectedIndex = uiState.selectedListIndex,
-                        onListSelected = { viewModel.selectList(it) }
-                    )
+                // Only show list selector when not in tile view mode
+                if (!isEmergencyOrRef || !isViewingListTiles.value) {
+                    // List selector for the current section
+                    uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.let { section ->
+                        ListSelector(
+                            lists = section.lists,
+                            selectedIndex = uiState.selectedListIndex,
+                            onListSelected = {
+                                viewModel.selectList(it)
+                                if (isEmergencyOrRef) {
+                                    isViewingListTiles.value = false
+                                }
+                            }
+                        )
+                    }
                 }
 
                 // Section selector bar at the bottom
@@ -80,7 +108,16 @@ fun ItemsDetailScreen(
                     SectionSelector(
                         sections = checklist.sections,
                         selectedIndex = uiState.selectedSectionIndex,
-                        onSectionSelected = { viewModel.selectSection(it) }
+                        onSectionSelected = {
+                            viewModel.selectSection(it)
+                            // Reset to tile view when selecting a new emergency/reference section
+                            val newSectionType = checklist.sections.getOrNull(it)?.type
+                            val isNewSectionEmergencyOrRef = newSectionType?.equals("emergency", ignoreCase = true) == true ||
+                                                            newSectionType?.equals("reference", ignoreCase = true) == true
+                            if (isNewSectionEmergencyOrRef) {
+                                isViewingListTiles.value = true
+                            }
+                        }
                     )
                 }
 
@@ -137,8 +174,8 @@ fun ItemsDetailScreen(
                     }
                     
                     // Track previous list index to detect list changes
-                    val previousListIndex = remember { mutableStateOf(currentListIndex) }
-                    val previousItemIndex = remember { mutableStateOf(currentItemIndex) }
+                    val previousListIndex = remember { androidx.compose.runtime.mutableIntStateOf(currentListIndex) }
+                    val previousItemIndex = remember { androidx.compose.runtime.mutableIntStateOf(currentItemIndex) }
 
                     // Remember the header height for proper placement
                     val headerHeight = remember { mutableStateOf(90.dp) }
@@ -146,9 +183,9 @@ fun ItemsDetailScreen(
                     // Scroll to the selected item, positioning it in the middle of the screen
                     LaunchedEffect(targetIndex, currentListIndex, currentItemIndex) {
                         // If we switched to a different list or the item changed, scroll to center the current item
-                        if (previousListIndex.value != currentListIndex || previousItemIndex.value != currentItemIndex) {
-                            previousListIndex.value = currentListIndex
-                            previousItemIndex.value = currentItemIndex
+                        if (previousListIndex.intValue != currentListIndex || previousItemIndex.intValue != currentItemIndex) {
+                            previousListIndex.intValue = currentListIndex
+                            previousItemIndex.intValue = currentItemIndex
 
                             // Center the current item on screen with an offset
                             listState.animateScrollToItem(
@@ -171,12 +208,28 @@ fun ItemsDetailScreen(
                                     // Use a different background color for emergency checklists
                                     val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
                                         aviationColors.avRed
+                                    } else if (currentSection.type.equals("reference", ignoreCase = true)) {
+                                        aviationColors.avAmber
                                     } else {
                                         aviationColors.headerBackground
                                     }
 
-                                    SectionHeader(
-                                        title = currentList.name,
+                                    // Determine the header title based on context
+                                    val headerTitle = if ((currentSection.type.equals("emergency", ignoreCase = true) ||
+                                                          currentSection.type.equals("reference", ignoreCase = true)) &&
+                                                          isViewingListTiles.value) { // Show section name when in tile view mode
+                                        // In tile view mode, show section name
+                                        if (currentSection.type.equals("emergency", ignoreCase = true))
+                                            "Emergency Procedures"
+                                        else
+                                            "Reference Information"
+                                    } else {
+                                        // In list view mode, show the list name
+                                        currentList.name
+                                    }
+
+                                    ViewHeader(
+                                        title = headerTitle,
                                         backgroundColor = backgroundColor,
                                         modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
                                     )
@@ -184,40 +237,90 @@ fun ItemsDetailScreen(
                             )
                         }
 
-                        // Then render the list content in a new column that's offset from the top
+                        // Determine which view to show based on section type
                         Column {
                             // Add padding at the top to account for the header
                             Spacer(modifier = Modifier.height(headerHeight.value))
 
-                            // Render the list with items starting below the header
-                            LazyColumn(
-                                state = listState,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 8.dp)
-                            ) {
-                                // Get the current list
-                                if (currentList != null) {
-                                    // Show only items from the current list
-                                    items(currentList.items.size) { itemIndex ->
-                                        val item = currentList.items[itemIndex]
-                                        val isSelected = itemIndex == currentItemIndex
+                            // Show tile view for emergency or reference sections, list view for others
+                            if (currentSection.type.equals("emergency", ignoreCase = true) ||
+                                currentSection.type.equals("reference", ignoreCase = true)) {
 
-                                        ItemsList(
-                                            item = item,
-                                            isSelected = isSelected,
-                                            onClick = {
-                                                // First select the item
-                                                viewModel.selectItem(itemIndex)
+                                // Track if we're viewing a specific list or the list of lists
+                                val isViewingList = remember { mutableStateOf(false) }
+                                val selectedListIndex = remember { mutableIntStateOf(0) }
 
-                                                // Then toggle its checked state
-                                                viewModel.toggleItemChecked(itemIndex)
-                                            },
-                                            modifier = Modifier.padding(vertical = 4.dp),
-                                            sectionType = currentSection.type // Pass section type
-                                        )
+                                if (!isViewingList.value) {
+                                    // Show the tile view of all lists in this section
+                                    ListTileView(
+                                        lists = currentSection.lists,
+                                        sectionType = currentSection.type,
+                                        onListSelected = { index ->
+                                            selectedListIndex.intValue = index
+                                            isViewingList.value = true
+                                            viewModel.selectList(index)
+                                        },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 8.dp)
+                                    )
+                                } else {
+                                    // Show a specific list with its items and a back button
+                                    Box(modifier = Modifier.fillMaxWidth()) {
+                                        // Back button to return to list view
+                                        Button(
+                                            onClick = { isViewingList.value = false },
+                                            modifier = Modifier
+                                                .align(Alignment.TopStart)
+                                                .padding(start = 8.dp, bottom = 8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                contentDescription = "Back to lists"
+                                            )
+                                            Spacer(modifier = Modifier.width(4.dp))
+                                            Text("Back to lists")
+                                        }
+
+                                        // Show the items in the selected list
+                                        LazyColumn(
+                                            state = listState,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = 60.dp, start = 8.dp, end = 8.dp)
+                                        ) {
+                                            if (currentList != null) {
+                                                items(currentList.items.size) { itemIndex ->
+                                                    val item = currentList.items[itemIndex]
+                                                    val isSelected = itemIndex == currentItemIndex
+
+                                                    Item(
+                                                        item = item,
+                                                        isSelected = isSelected,
+                                                        onClick = {
+                                                            viewModel.selectItem(itemIndex)
+                                                            viewModel.toggleItemChecked()
+                                                        },
+                                                        modifier = Modifier.padding(vertical = 4.dp),
+                                                        sectionType = currentSection.type
+                                                    )
+                                                }
+                                            }
+                                        }
                                     }
                                 }
+                            } else {
+                                // Standard list view for normal checklists
+                                ListView(
+                                    list = currentList,
+                                    currentItemIndex = currentItemIndex,
+                                    onItemClick = { itemIndex ->
+                                        viewModel.selectItem(itemIndex)
+                                        viewModel.toggleItemChecked()
+                                    },
+                                    listState = listState,
+                                    sectionType = currentSection.type
+                                )
                             }
                         }
                     }
@@ -395,7 +498,7 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                                 val item = currentList.items[itemIndex]
                                 val isSelected = itemIndex == currentItemIndex
 
-                                ItemsList(
+                                Item(
                                     item = item,
                                     isSelected = isSelected,
                                     onClick = { /* No action in preview */ },
@@ -422,7 +525,7 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                                     aviationColors.headerBackground
                                 }
 
-                                SectionHeader(
+                                ViewHeader(
                                     title = currentList?.name ?: "",
                                     backgroundColor = backgroundColor,
                                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)

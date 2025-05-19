@@ -32,7 +32,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
-fun ItemsList(
+fun Item(
     item: ChecklistItem,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -154,7 +154,7 @@ fun ItemsList(
 fun ChecklistItemComponentPreview() {
     JarvisTheme {
         Column {
-            ItemsList(
+            Item(
                 item = ChecklistItem(
                     type = "item",
                     label1 = "Pitot Heat",
@@ -167,7 +167,7 @@ fun ChecklistItemComponentPreview() {
                 onClick = {}
             )
             
-            ItemsList(
+            Item(
                 item = ChecklistItem(
                     type = "warning",
                     label1 = "WARNING: Do not operate heater on the ground for more than 30 seconds",
@@ -180,7 +180,7 @@ fun ChecklistItemComponentPreview() {
                 onClick = {}
             )
             
-            ItemsList(
+            Item(
                 item = ChecklistItem(
                     type = "note",
                     label1 = "Note: Wait for at least 2 minutes between cranking attempts",

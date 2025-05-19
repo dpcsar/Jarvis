@@ -230,7 +230,7 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
     
-    fun toggleItemChecked(itemIndex: Int) {
+    fun toggleItemChecked() {
         val currentItem = getCurrentItem() ?: return
         val currentList = getCurrentList() ?: return
         val currentSection = getCurrentSection() ?: return

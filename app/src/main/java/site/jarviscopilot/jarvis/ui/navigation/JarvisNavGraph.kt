@@ -5,7 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import site.jarviscopilot.jarvis.ui.screens.ItemsDetailScreen
+import site.jarviscopilot.jarvis.ui.screens.DetailsScreen
 import site.jarviscopilot.jarvis.ui.screens.HomeScreen
 import site.jarviscopilot.jarvis.ui.screens.NotificationsScreen
 import site.jarviscopilot.jarvis.ui.screens.ProfileScreen
@@ -53,7 +53,7 @@ fun JarvisNavGraph(
         ) { backStackEntry ->
             val listIndex = backStackEntry.arguments?.getString("listIndex")?.toIntOrNull() ?: 0
             
-            ItemsDetailScreen(
+            DetailsScreen(
                 listIndex = listIndex,
                 onNavigateUp = { navController.navigateUp() },
                 viewModel = viewModel

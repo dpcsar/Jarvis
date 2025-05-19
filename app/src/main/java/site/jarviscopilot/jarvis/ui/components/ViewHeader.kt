@@ -20,7 +20,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
-fun SectionHeader(
+fun ViewHeader(
     title: String,
     backgroundColor: Color = LocalAviationColors.current.avDarkGrey,
     textColor: Color = LocalAviationColors.current.textOnSurface,
@@ -48,6 +48,6 @@ fun SectionHeader(
 @Composable
 fun SectionHeaderPreview() {
     JarvisTheme {
-        SectionHeader(title = "Preflight Inspection")
+        ViewHeader(title = "Pilot currency and proficiency")
     }
 }
