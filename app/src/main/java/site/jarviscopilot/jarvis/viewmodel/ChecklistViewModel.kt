@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import site.jarviscopilot.jarvis.data.ChecklistRepository
@@ -44,9 +46,14 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     
     private fun startTimeUpdates() {
         viewModelScope.launch {
-            while (true) {
+            // Use Flow with fixed timer interval instead of infinite loop with delay
+            flow {
+                while (true) {
+                    emit(Unit)
+                    kotlinx.coroutines.delay(1000)
+                }
+            }.collectLatest {
                 updateTime()
-                kotlinx.coroutines.delay(1000) // Update every second
             }
         }
     }
@@ -132,31 +139,24 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
         _uiState.update { it.copy(selectedItemIndex = index) }
     }
     
-    fun checkCurrentItem() {
-        val currentItem = getCurrentItem() ?: return
-        val currentList = getCurrentList() ?: return
-        val currentSection = getCurrentSection() ?: return
-        val checklist = _uiState.value.checklist ?: return
+    /**
+     * Calculates the next indices for navigation in the checklist structure.
+     * @param advanceToNextSection Whether to automatically advance to the next section if needed
+     * @return Triple of (nextItemIndex, nextListIndex, nextSectionIndex)
+     */
+    private fun calculateNextIndices(advanceToNextSection: Boolean = false): Triple<Int, Int, Int> {
+        val currentList = getCurrentList() ?: return Triple(
+            _uiState.value.selectedItemIndex,
+            _uiState.value.selectedListIndex,
+            _uiState.value.selectedSectionIndex
+        )
 
-        // Since our model is immutable, we need to create new copies with the updated state
-        val updatedItem = currentItem.copy(checked = true)
-        
-        // Update the list with the new item
-        val updatedListItems = currentList.items.toMutableList()
-        updatedListItems[_uiState.value.selectedItemIndex] = updatedItem
-        val updatedList = currentList.copy(items = updatedListItems)
-        
-        // Update the section with the new list
-        val updatedLists = currentSection.lists.toMutableList()
-        updatedLists[_uiState.value.selectedListIndex] = updatedList
-        val updatedSection = currentSection.copy(lists = updatedLists)
-        
-        // Update the checklist with the new section
-        val updatedSections = checklist.sections.toMutableList()
-        updatedSections[_uiState.value.selectedSectionIndex] = updatedSection
-        val updatedChecklist = checklist.copy(sections = updatedSections)
-        
-        // Move to the next item
+        val currentSection = getCurrentSection() ?: return Triple(
+            _uiState.value.selectedItemIndex,
+            _uiState.value.selectedListIndex,
+            _uiState.value.selectedSectionIndex
+        )
+
         var nextItemIndex = _uiState.value.selectedItemIndex + 1
         var nextListIndex = _uiState.value.selectedListIndex
         var nextSectionIndex = _uiState.value.selectedSectionIndex
@@ -170,28 +170,102 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             if (nextListIndex >= currentSection.lists.size) {
                 nextListIndex = 0
 
-                // Check if there's a next section and move to it only if it's of type "checklist"
-                if (nextSectionIndex < checklist.sections.size - 1) {
-                    // Find next checklist-type section
-                    var foundChecklistSection = false
-                    for (i in nextSectionIndex + 1 until checklist.sections.size) {
-                        if (checklist.sections[i].type == "checklist") {
-                            nextSectionIndex = i
-                            foundChecklistSection = true
-                            Log.d("ChecklistViewModel", "Moving to next checklist section: $i")
-                            break
-                        }
-                    }
+                // Only try to advance to next section if the flag is set
+                if (advanceToNextSection) {
+                    val checklist = _uiState.value.checklist ?: return Triple(
+                        _uiState.value.selectedItemIndex,
+                        _uiState.value.selectedListIndex,
+                        _uiState.value.selectedSectionIndex
+                    )
 
-                    // If no checklist section found, stay at current section
-                    if (!foundChecklistSection) {
-                        nextSectionIndex = _uiState.value.selectedSectionIndex
+                    // Check if there's a next section and move to it only if it's of type "checklist"
+                    if (nextSectionIndex < checklist.sections.size - 1) {
+                        // Find next checklist-type section
+                        var foundChecklistSection = false
+                        for (i in nextSectionIndex + 1 until checklist.sections.size) {
+                            if (checklist.sections[i].type == "checklist") {
+                                nextSectionIndex = i
+                                foundChecklistSection = true
+                                Log.d("ChecklistViewModel", "Moving to next checklist section: $i")
+                                break
+                            }
+                        }
+
+                        // If no checklist section found, stay at current section
+                        if (!foundChecklistSection) {
+                            nextSectionIndex = _uiState.value.selectedSectionIndex
+                        }
                     }
                 }
             }
         }
-        
-        _uiState.update { 
+
+        return Triple(nextItemIndex, nextListIndex, nextSectionIndex)
+    }
+
+    /**
+     * Updates an item in the checklist more efficiently by using index-based updates rather than
+     * recreating the entire hierarchy.
+     *
+     * @param sectionIndex Index of the section containing the item
+     * @param listIndex Index of the list containing the item
+     * @param itemIndex Index of the item to update
+     * @param update Lambda that takes the current item and returns an updated one
+     * @return Updated checklist or null if any index is invalid
+     */
+    private fun updateItemInChecklist(
+        sectionIndex: Int,
+        listIndex: Int,
+        itemIndex: Int,
+        update: (ChecklistItem) -> ChecklistItem
+    ): Checklist? {
+        val checklist = _uiState.value.checklist ?: return null
+
+        // Validate indices
+        if (sectionIndex < 0 || sectionIndex >= checklist.sections.size) return null
+
+        val section = checklist.sections[sectionIndex]
+        if (listIndex < 0 || listIndex >= section.lists.size) return null
+
+        val list = section.lists[listIndex]
+        if (itemIndex < 0 || itemIndex >= list.items.size) return null
+
+        // Get the current item
+        val item = list.items[itemIndex]
+
+        // Apply the update function to get the new item
+        val updatedItem = update(item)
+
+        // Create a new checklist with the updated item
+        return checklist.copy(
+            sections = checklist.sections.toMutableList().apply {
+                this[sectionIndex] = this[sectionIndex].copy(
+                    lists = this[sectionIndex].lists.toMutableList().apply {
+                        this[listIndex] = this[listIndex].copy(
+                            items = this[listIndex].items.toMutableList().apply {
+                                this[itemIndex] = updatedItem
+                            }
+                        )
+                    }
+                )
+            }
+        )
+    }
+
+    fun checkCurrentItem() {
+        // Use the efficient update function
+        val updatedChecklist = updateItemInChecklist(
+            _uiState.value.selectedSectionIndex,
+            _uiState.value.selectedListIndex,
+            _uiState.value.selectedItemIndex
+        ) { item ->
+            item.copy(checked = true)
+        } ?: return
+
+        // Calculate next navigation indices
+        val (nextItemIndex, nextListIndex, nextSectionIndex) = calculateNextIndices(advanceToNextSection = true)
+
+        _uiState.update {
             it.copy(
                 checklist = updatedChecklist,
                 selectedItemIndex = nextItemIndex,
@@ -202,27 +276,10 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     }
     
     fun skipCurrentItem() {
-        val currentList = getCurrentList() ?: return
-        
-        // Move to the next item without marking as complete
-        var nextItemIndex = _uiState.value.selectedItemIndex + 1
-        var nextListIndex = _uiState.value.selectedListIndex
-        
-        // Check if we need to move to the next list
-        if (nextItemIndex >= currentList.items.size) {
-            nextItemIndex = 0
-            nextListIndex++
-            
-            val currentSection = getCurrentSection() ?: return
-            
-            // Check if we need to move to the next section
-            if (nextListIndex >= currentSection.lists.size) {
-                nextListIndex = 0
-                // We don't automatically move to the next section
-            }
-        }
-        
-        _uiState.update { 
+        // Calculate next navigation indices (without advancing to next section)
+        val (nextItemIndex, nextListIndex, _) = calculateNextIndices(advanceToNextSection = false)
+
+        _uiState.update {
             it.copy(
                 selectedItemIndex = nextItemIndex,
                 selectedListIndex = nextListIndex
@@ -231,28 +288,16 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     }
     
     fun toggleItemChecked() {
-        val currentItem = getCurrentItem() ?: return
-        val currentList = getCurrentList() ?: return
-        val currentSection = getCurrentSection() ?: return
+        getCurrentItem() ?: return
 
-        // Toggle the checked state
-        val updatedItem = currentItem.copy(checked = !currentItem.checked)
-
-        // Update the list with the new item
-        val updatedListItems = currentList.items.toMutableList()
-        updatedListItems[_uiState.value.selectedItemIndex] = updatedItem
-        val updatedList = currentList.copy(items = updatedListItems)
-
-        // Update the section with the new list
-        val updatedLists = currentSection.lists.toMutableList()
-        updatedLists[_uiState.value.selectedListIndex] = updatedList
-        val updatedSection = currentSection.copy(lists = updatedLists)
-
-        // Update the checklist with the new section
-        val checklist = _uiState.value.checklist ?: return
-        val updatedSections = checklist.sections.toMutableList()
-        updatedSections[_uiState.value.selectedSectionIndex] = updatedSection
-        val updatedChecklist = checklist.copy(sections = updatedSections)
+        // Use the efficient update function instead of manual recreation
+        val updatedChecklist = updateItemInChecklist(
+            _uiState.value.selectedSectionIndex,
+            _uiState.value.selectedListIndex,
+            _uiState.value.selectedItemIndex
+        ) { item ->
+            item.copy(checked = !item.checked)
+        } ?: return
 
         _uiState.update {
             it.copy(checklist = updatedChecklist)
