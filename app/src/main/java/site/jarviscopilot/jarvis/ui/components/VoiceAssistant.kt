@@ -275,7 +275,7 @@ fun VoiceBar(height: Float) {
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun VoiceAssistantPreview() {
     JarvisTheme {
@@ -286,7 +286,7 @@ fun VoiceAssistantPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun MicButtonPreview() {
     JarvisTheme {
@@ -297,7 +297,7 @@ fun MicButtonPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun MicButtonListeningPreview() {
     JarvisTheme {
@@ -308,7 +308,7 @@ fun MicButtonListeningPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun VoiceWaveformPreview() {
     JarvisTheme {

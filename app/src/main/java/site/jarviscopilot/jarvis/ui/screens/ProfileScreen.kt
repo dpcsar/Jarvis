@@ -181,7 +181,7 @@ fun ProfileInfoItem(label: String, value: String) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun ProfileScreenPreview() {
     JarvisTheme {
@@ -190,3 +190,4 @@ fun ProfileScreenPreview() {
         )
     }
 }
+

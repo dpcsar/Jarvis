@@ -95,7 +95,7 @@ fun ListSelector(
     }
 }
 
-@Preview(apiLevel = 36)
+@Preview(apiLevel = 35)
 @Composable
 fun ListSelectorPreview() {
     JarvisTheme {

@@ -60,7 +60,7 @@ fun ViewHeader(
     }
 }
 
-@Preview
+@Preview(apiLevel = 35)
 @Composable
 fun SectionHeaderPreview() {
     JarvisTheme {

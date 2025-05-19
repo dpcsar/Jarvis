@@ -149,7 +149,7 @@ fun Item(
     }
 }
 
-@Preview
+@Preview(apiLevel = 35)
 @Composable
 fun ChecklistItemComponentPreview() {
     JarvisTheme {
@@ -195,5 +195,4 @@ fun ChecklistItemComponentPreview() {
         }
     }
 }
-
 

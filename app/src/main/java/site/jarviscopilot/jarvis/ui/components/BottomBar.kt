@@ -101,7 +101,7 @@ fun BottomBar(
     }
 }
 
-@Preview
+@Preview(apiLevel = 35)
 @Composable
 private fun BottomBarPreview() {
     JarvisTheme {
@@ -114,3 +114,4 @@ private fun BottomBarPreview() {
         )
     }
 }
+

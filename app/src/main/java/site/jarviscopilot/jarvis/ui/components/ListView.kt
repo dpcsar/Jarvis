@@ -63,7 +63,7 @@ fun ListView(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun ItemListViewPreview() {
     // Create sample data for preview
@@ -108,4 +108,3 @@ fun ItemListViewPreview() {
         )
     }
 }
-

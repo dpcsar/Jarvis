@@ -122,26 +122,26 @@ fun TopBar(
     }
 }
 
-@Preview
+@Preview(apiLevel = 35)
 @Composable
-private fun TopBarPreview() {
+fun TopBarPreview() {
     JarvisTheme {
         TopBar(
             localTime = "12:34:56",
-            utcTime = "17:34:56",
+            utcTime = "16:34:56",
             onMenuClick = {}
         )
     }
 }
 
-@Preview
+@Preview(apiLevel = 35)
 @Composable
-private fun SimpleTopBarPreview() {
+fun TopBarWithTitlePreview() {
     JarvisTheme {
         TopBar(
-            title = "Settings",
-            onBackPressed = {},
-            showBackButton = true
+            title = "Details",
+            showBackButton = true,
+            onBackPressed = {}
         )
     }
 }

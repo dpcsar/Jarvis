@@ -105,7 +105,7 @@ fun SectionSelector(
     }
 }
 
-@Preview
+@Preview(apiLevel = 35)
 @Composable
 fun ChecklistSelectorPreview() {
     val demoSections = listOf(

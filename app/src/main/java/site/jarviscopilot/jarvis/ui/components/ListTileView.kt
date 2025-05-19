@@ -125,7 +125,7 @@ fun ChecklistTile(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun ItemListTileViewPreview() {
     val mockLists = listOf(

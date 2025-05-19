@@ -79,7 +79,7 @@ fun SettingsItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun SettingsItemPreview() {
     JarvisTheme {
@@ -94,7 +94,7 @@ fun SettingsItemPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun SettingsItemWithSwitchPreview() {
     JarvisTheme {

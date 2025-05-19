@@ -165,7 +165,7 @@ fun HomeScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun HomeScreenPreview() {
     JarvisTheme {
@@ -274,3 +274,4 @@ private fun HomeScreenPreviewContent(checklist: Checklist) {
         }
     }
 }
+

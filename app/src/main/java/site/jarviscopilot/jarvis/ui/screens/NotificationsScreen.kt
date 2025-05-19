@@ -213,7 +213,7 @@ fun NotificationItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun NotificationsScreenPreview() {
     JarvisTheme {
@@ -223,7 +223,7 @@ fun NotificationsScreenPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun EmptyNotificationsPreview() {
     JarvisTheme {
@@ -231,7 +231,7 @@ fun EmptyNotificationsPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun NotificationItemPreview() {
     JarvisTheme {
@@ -246,3 +246,4 @@ fun NotificationItemPreview() {
         )
     }
 }
+
