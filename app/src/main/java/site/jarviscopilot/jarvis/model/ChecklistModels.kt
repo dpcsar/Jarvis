@@ -22,12 +22,14 @@ data class ChecklistSection(
     val name: String = "",
     @SerializedName("nameAudio") val nameAudio: String = "",
     @SerializedName("defaultView") val defaultView: String = "checklistView",
+    @SerializedName("selectorName") val selectorName: String = "",
     val lists: List<ChecklistList> = emptyList()
 )
 
 data class ChecklistList(
     val name: String = "",
     @SerializedName("nameAudio") val nameAudio: String = "",
+    @SerializedName("selectorName") val selectorName: String = "",
     val items: List<ChecklistItem> = emptyList()
 )
 
@@ -44,3 +46,4 @@ data class ChecklistItem(
     @SerializedName("stopNamedTimers") val stopNamedTimers: List<String> = emptyList(),
     var checked: Boolean = false
 )
+

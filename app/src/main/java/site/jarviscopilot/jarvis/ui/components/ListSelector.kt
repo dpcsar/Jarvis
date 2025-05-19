@@ -73,7 +73,7 @@ fun ListSelector(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = list.name,
+                    text = if (list.selectorName.isNotBlank()) list.selectorName else list.name,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                     color = aviationColors.textOnSurface

@@ -7,11 +7,13 @@
       {
          "type": "checklist",
          "name": "Before You Go",
+         "selectorName": "",
          "nameAudio": "",
          "defaultView": "checklistView",
          "lists": [
             {
                "name": "Pilot currency and proficiency",
+               "selectorName": "Pilot",
                "nameAudio": "",
                "items": [
                   {
@@ -150,6 +152,7 @@
             },
             {
                "name": "Aircraft",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -264,6 +267,7 @@
             },
             {
                "name": "Environment",
+               "selectorName": "enVironment",
                "nameAudio": "",
                "items": [
                   {
@@ -426,6 +430,7 @@
             },
             {
                "name": "External Pressures",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -480,6 +485,7 @@
             },
             {
                "name": "Go No-Go",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -522,6 +528,7 @@
             },
             {
                "name": "Flight Plan",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -555,11 +562,13 @@
       {
          "type": "checklist",
          "name": "Preflight",
+         "selectorName": "",
          "nameAudio": "",
          "defaultView": "checklistView",
          "lists": [
             {
                "name": "Preflight Inspection",
+               "selectorName": "Preflight",
                "nameAudio": "",
                "items": [
                   {
@@ -1106,6 +1115,7 @@
             },
             {
                "name": "Before Start",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1208,6 +1218,7 @@
             },
             {
                "name": "Start Engine",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1418,6 +1429,7 @@
             },
             {
                "name": "Before Taxi",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1520,6 +1532,7 @@
             },
             {
                "name": "Taxi",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1538,6 +1551,7 @@
             },
             {
                "name": "Run-Up",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1738,12 +1752,14 @@
       },
       {
          "type": "checklist",
-         "name": "In Flight",
+         "name": "Inflight",
+         "selectorName": "",
          "nameAudio": "",
          "defaultView": "checklistView",
          "lists": [
             {
                "name": "Pre-Takeoff",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1834,6 +1850,7 @@
             },
             {
                "name": "Takeoff",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -1912,6 +1929,7 @@
             },
             {
                "name": "Climb",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2002,6 +2020,7 @@
             },
             {
                "name": "Cruise",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2092,6 +2111,7 @@
             },
             {
                "name": "Descent",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2209,11 +2229,13 @@
       {
          "type": "checklist",
          "name": "Landing",
+         "selectorName": "",
          "nameAudio": "",
          "defaultView": "checklistView",
          "lists": [
             {
                "name": "Before Landing",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2328,6 +2350,7 @@
             },
             {
                "name": "Landing",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2370,6 +2393,7 @@
             },
             {
                "name": "Final",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2424,6 +2448,7 @@
             },
             {
                "name": "Go-Around",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2492,12 +2517,14 @@
       },
       {
          "type": "checklist",
-         "name": "Postflight",
+         "name": "Post flight",
+         "selectorName": "",
          "nameAudio": "",
          "defaultView": "checklistView",
          "lists": [
             {
                "name": "After Landing",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2552,6 +2579,7 @@
             },
             {
                "name": "Shutdown",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2776,12 +2804,14 @@
       },
       {
          "type": "emergency",
-         "name": "Emergency",
+         "name": "Emergency Procedures",
+         "selectorName": "Emergency",
          "nameAudio": "",
          "defaultView": "onePageView",
          "lists": [
             {
-               "name": "Emergency Air Speeds",
+               "name": "Air Speeds",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -2824,6 +2854,7 @@
             },
             {
                "name": "Engine Failure On Ground | On Ground Engine Failure",
+               "selectorName": "Ground Engine Failure",
                "nameAudio": "",
                "items": [
                   {
@@ -2937,7 +2968,8 @@
                ]
             },
             {
-               "name": "Engine Failure In Flight | In Flight Engine Failure",
+               "name": "Engine Failure In flight | Inflight Engine Failure",
+               "selectorName": "Inflight Engine Failure",
                "nameAudio": "",
                "items": [
                   {
@@ -3040,6 +3072,7 @@
             },
             {
                "name": "Power Off Landing",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3190,6 +3223,7 @@
             },
             {
                "name": "Engine Fire On Startup | Startup Engine Fire",
+               "selectorName": "Startup Engine Fire",
                "nameAudio": "",
                "items": [
                   {
@@ -3291,7 +3325,8 @@
                ]
             },
             {
-               "name": "Engine Fire In Flight | In Flight Engine Fire",
+               "name": "Engine Fire Inflight | Inflight Engine Fire",
+               "selectorName": "Inflight Engine Fire",
                "nameAudio": "",
                "items": [
                   {
@@ -3406,6 +3441,7 @@
             },
             {
                "name": "Emergency Decent",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3436,6 +3472,7 @@
             },
             {
                "name": "Emergency Landing",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3550,6 +3587,7 @@
             },
             {
                "name": "Engine Power Loss in Flight",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3664,6 +3702,7 @@
             },
             {
                "name": "Fuel Pressure Loss",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3694,6 +3733,7 @@
             },
             {
                "name": "Oil Pressure Loss",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3724,6 +3764,7 @@
             },
             {
                "name": "High Oil Pressure",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3753,7 +3794,8 @@
                ]
             },
             {
-               "name": "In Flight Canopy Opening",
+               "name": "Inflight Canopy Opening",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3808,6 +3850,7 @@
             },
             {
                "name": "Electrical Fire",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3898,6 +3941,7 @@
             },
             {
                "name": "Cabin Fire",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -3952,6 +3996,7 @@
             },
             {
                "name": "Alternator Failure",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -4054,6 +4099,7 @@
             },
             {
                "name": "Radio Out | Lost Radio",
+               "selectorName": "Radio Out",
                "nameAudio": "",
                "items": [
                   {
@@ -4204,6 +4250,7 @@
             },
             {
                "name": "Brake Failure on Ground",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -4282,6 +4329,7 @@
             },
             {
                "name": "Ditching Procedure",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -4504,6 +4552,7 @@
             },
             {
                "name": "Spins",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -4573,11 +4622,13 @@
       {
          "type": "reference",
          "name": "Speeds",
+         "selectorName": "",
          "nameAudio": "",
          "defaultView": "onePageView",
          "lists": [
             {
                "name": "Quick Speeds",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -4644,6 +4695,7 @@
             },
             {
                "name": "Normal Operations",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -4782,6 +4834,7 @@
             },
             {
                "name": "All Speeds",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -4947,11 +5000,13 @@
       {
          "type": "reference",
          "name": "Reference",
+         "selectorName": "",
          "nameAudio": "",
          "defaultView": "onePageView",
          "lists": [
             {
                "name": "Engine",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -5078,6 +5133,7 @@
             },
             {
                "name": "Specs",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -5192,6 +5248,7 @@
             },
             {
                "name": "Transponder Codes",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -5210,6 +5267,7 @@
             },
             {
                "name": "ATC Light Gun Signals",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -5228,6 +5286,7 @@
             },
             {
                "name": "Class C & D",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -5270,6 +5329,7 @@
             },
             {
                "name": "Class B",
+               "selectorName": "",
                "nameAudio": "",
                "items": [
                   {
@@ -5475,9 +5535,9 @@
             ]
          },
          {
-            "type": "postflight",
-            "helpId": "copilotPhasePostflight",
-            "name": "Postflight",
+            "type": "postFlight",
+            "helpId": "copilotPhasePostFlight",
+            "name": "PostFlight",
             "showConfirmationPrompt": true,
             "readSection": false,
             "options": [

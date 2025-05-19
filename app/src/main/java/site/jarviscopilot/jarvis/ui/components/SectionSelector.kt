@@ -79,7 +79,7 @@ fun SectionSelector(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = section.name,
+                    text = if (section.selectorName.isNotBlank()) section.selectorName else section.name,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                     color = aviationColors.textOnSurface

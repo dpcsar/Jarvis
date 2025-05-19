@@ -104,7 +104,7 @@ fun ChecklistTile(
         ) {
             // List name
             Text(
-                text = list.name,
+                text = if (list.selectorName.isNotBlank()) list.selectorName else list.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = aviationColors.textOnBackground,
