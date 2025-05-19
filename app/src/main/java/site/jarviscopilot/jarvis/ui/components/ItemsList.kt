@@ -32,11 +32,12 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 
 @Composable
-fun ChecklistItemComponent(
+fun ItemsList(
     item: ChecklistItem,
     isSelected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sectionType: String = "normal" // Add parameter for section type
 ) {
     val aviationColors = LocalAviationColors.current
     
@@ -59,6 +60,9 @@ fun ChecklistItemComponent(
     val isNoteItem = item.type == "note"
     val isLabelItem = item.type == "label"
     
+    // Determine if we should show check circles based on section type
+    val showCheckCircle = isNormalItem && sectionType != "reference"
+
     val textColor = when {
         isWarningItem -> aviationColors.avRed
         isCautionItem -> aviationColors.avAmber
@@ -89,8 +93,8 @@ fun ChecklistItemComponent(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Status indicator - only show for normal items
-            if (isNormalItem) {
+            // Status indicator - only show for normal items in non-reference sections
+            if (showCheckCircle) {
                 Box(
                     modifier = Modifier
                         .size(24.dp)
@@ -150,7 +154,7 @@ fun ChecklistItemComponent(
 fun ChecklistItemComponentPreview() {
     JarvisTheme {
         Column {
-            ChecklistItemComponent(
+            ItemsList(
                 item = ChecklistItem(
                     type = "item",
                     label1 = "Pitot Heat",
@@ -163,7 +167,7 @@ fun ChecklistItemComponentPreview() {
                 onClick = {}
             )
             
-            ChecklistItemComponent(
+            ItemsList(
                 item = ChecklistItem(
                     type = "warning",
                     label1 = "WARNING: Do not operate heater on the ground for more than 30 seconds",
@@ -176,7 +180,7 @@ fun ChecklistItemComponentPreview() {
                 onClick = {}
             )
             
-            ChecklistItemComponent(
+            ItemsList(
                 item = ChecklistItem(
                     type = "note",
                     label1 = "Note: Wait for at least 2 minutes between cranking attempts",
@@ -191,3 +195,4 @@ fun ChecklistItemComponentPreview() {
         }
     }
 }
+

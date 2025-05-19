@@ -13,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -32,10 +35,24 @@ fun ListSelector(
     modifier: Modifier = Modifier
 ) {
     val aviationColors = LocalAviationColors.current
+    val scrollState = rememberScrollState()
+
+    // Auto-scroll to the selected index when it changes
+    LaunchedEffect(selectedIndex, lists) {
+        // Short delay to ensure the layout is ready
+        delay(100)
+
+        // Calculate approximate scroll position based on item width
+        // Assuming each item has an average width of 150dp + padding
+        val itemWidth = 150 + 28 // 150dp for text + 28dp for horizontal padding
+        val targetScrollPosition = (selectedIndex * itemWidth).coerceAtMost(scrollState.maxValue)
+
+        scrollState.animateScrollTo(targetScrollPosition)
+    }
 
     Row(
         modifier = modifier
-            .horizontalScroll(rememberScrollState())
+            .horizontalScroll(scrollState)
             .background(Color.DarkGray)
             .padding(vertical = 6.dp)
     ) {

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,22 +21,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import site.jarviscopilot.jarvis.model.ChecklistSection
 import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
-fun ChecklistSelector(
+fun SectionSelector(
     sections: List<ChecklistSection>,
     selectedIndex: Int,
     onSectionSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val aviationColors = LocalAviationColors.current
-    
+    val scrollState = rememberScrollState()
+
+    // Auto-scroll to the selected index when it changes
+    LaunchedEffect(selectedIndex, sections) {
+        // Short delay to ensure the layout is ready
+        delay(100)
+
+        // Calculate approximate scroll position based on item width
+        // Section items might be wider due to varying text lengths
+        val itemWidth = 160 + 32 // 160dp average for text + 32dp for horizontal padding
+        val targetScrollPosition = (selectedIndex * itemWidth).coerceAtMost(scrollState.maxValue)
+
+        scrollState.animateScrollTo(targetScrollPosition)
+    }
+
     Row(
         modifier = modifier
-            .horizontalScroll(rememberScrollState())
+            .horizontalScroll(scrollState)
             .background(Color.Black)
             .padding(vertical = 8.dp)
     ) {
@@ -108,7 +124,7 @@ fun ChecklistSelectorPreview() {
     )
     
     JarvisTheme {
-        ChecklistSelector(
+        SectionSelector(
             sections = demoSections,
             selectedIndex = 1,
             onSectionSelected = {}

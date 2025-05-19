@@ -2,10 +2,8 @@ package site.jarviscopilot.jarvis.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -17,14 +15,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import site.jarviscopilot.jarvis.ui.components.BottomBar
-import site.jarviscopilot.jarvis.ui.components.ChecklistItemComponent
-import site.jarviscopilot.jarvis.ui.components.ChecklistSelector
+import site.jarviscopilot.jarvis.ui.components.ItemsList
+import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionHeader
 import site.jarviscopilot.jarvis.ui.components.TopBar
@@ -73,7 +72,7 @@ fun ChecklistDetailScreen(
 
                 // Section selector bar at the bottom
                 uiState.checklist?.let { checklist ->
-                    ChecklistSelector(
+                    SectionSelector(
                         sections = checklist.sections,
                         selectedIndex = uiState.selectedSectionIndex,
                         onSectionSelected = { viewModel.selectSection(it) }
@@ -131,9 +130,27 @@ fun ChecklistDetailScreen(
                         }
                     }
                     
+                    // Track previous list index to detect list changes
+                    val previousListIndex = remember { mutableStateOf(currentListIndex) }
+
                     // Scroll to the selected item
-                    LaunchedEffect(targetIndex) {
-                        listState.animateScrollToItem(targetIndex.coerceAtLeast(0))
+                    LaunchedEffect(targetIndex, currentListIndex) {
+                        // If we switched to a different list, scroll to show the header (index - currentItemIndex)
+                        if (previousListIndex.value != currentListIndex) {
+                            // Calculate the index of just the header of the current list
+                            var headerIndex = 0
+                            for (i in 0 until currentListIndex) {
+                                headerIndex += 1 // List header
+                                headerIndex += currentSection.lists[i].items.size
+                                headerIndex += 1 // Spacer after list
+                            }
+                            // Scroll to the header
+                            listState.animateScrollToItem(headerIndex)
+                            previousListIndex.value = currentListIndex
+                        } else {
+                            // Otherwise, just scroll to the selected item
+                            listState.animateScrollToItem(targetIndex.coerceAtLeast(0))
+                        }
                     }
                     
                     LazyColumn(
@@ -142,8 +159,11 @@ fun ChecklistDetailScreen(
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        currentSection.lists.forEachIndexed { listIndex, list ->
-                            // List header
+                        // Get the current list
+                        val currentList = currentSection.lists.getOrNull(currentListIndex)
+
+                        if (currentList != null) {
+                            // Show only the current list header
                             item {
                                 // Use a different background color for emergency checklists
                                 val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
@@ -153,31 +173,30 @@ fun ChecklistDetailScreen(
                                 }
                                 
                                 SectionHeader(
-                                    title = list.name,
+                                    title = currentList.name,
                                     backgroundColor = backgroundColor,
                                     modifier = Modifier.padding(vertical = 8.dp)
                                 )
                             }
                             
-                            // List items
-                            items(list.items.size) { itemIndex ->
-                                val item = list.items[itemIndex]
-                                val isSelected = listIndex == currentListIndex && itemIndex == currentItemIndex
-                                
-                                ChecklistItemComponent(
+                            // Show only items from the current list
+                            items(currentList.items.size) { itemIndex ->
+                                val item = currentList.items[itemIndex]
+                                val isSelected = itemIndex == currentItemIndex
+
+                                ItemsList(
                                     item = item,
                                     isSelected = isSelected,
                                     onClick = {
-                                        viewModel.selectList(listIndex)
+                                        // First select the item
                                         viewModel.selectItem(itemIndex)
+
+                                        // Then toggle its checked state
+                                        viewModel.toggleItemChecked(itemIndex)
                                     },
-                                    modifier = Modifier.padding(vertical = 4.dp)
+                                    modifier = Modifier.padding(vertical = 4.dp),
+                                    sectionType = currentSection.type // Pass section type
                                 )
-                            }
-                            
-                            // Spacer after list
-                            item {
-                                Spacer(modifier = Modifier.height(16.dp))
                             }
                         }
                     }
@@ -304,7 +323,7 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                 }
 
                 // Section selector bar at the bottom
-                ChecklistSelector(
+                SectionSelector(
                     sections = checklist.sections,
                     selectedIndex = selectedSectionIndex,
                     onSectionSelected = { }
@@ -339,8 +358,11 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    currentSection.lists.forEachIndexed { listIndex, list ->
-                        // List header
+                    // Get the current list
+                    val currentList = currentSection.lists.getOrNull(currentListIndex)
+
+                    if (currentList != null) {
+                        // Show only the current list header
                         item {
                             val backgroundColor = if (currentSection.type.equals("emergency", ignoreCase = true)) {
                                 aviationColors.avRed
@@ -349,28 +371,24 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
                             }
                             
                             SectionHeader(
-                                title = list.name,
+                                title = currentList.name,
                                 backgroundColor = backgroundColor,
                                 modifier = Modifier.padding(vertical = 8.dp)
                             )
                         }
                         
-                        // List items
-                        items(list.items.size) { itemIndex ->
-                            val item = list.items[itemIndex]
-                            val isSelected = listIndex == currentListIndex && itemIndex == currentItemIndex
-                            
-                            ChecklistItemComponent(
+                        // Show only items from the current list
+                        items(currentList.items.size) { itemIndex ->
+                            val item = currentList.items[itemIndex]
+                            val isSelected = itemIndex == currentItemIndex
+
+                            ItemsList(
                                 item = item,
                                 isSelected = isSelected,
-                                onClick = {},
-                                modifier = Modifier.padding(vertical = 4.dp)
+                                onClick = { /* No action in preview */ },
+                                modifier = Modifier.padding(vertical = 4.dp),
+                                sectionType = currentSection.type
                             )
-                        }
-                        
-                        // Spacer after list
-                        item {
-                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
@@ -378,4 +396,3 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
         }
     }
 }
-
