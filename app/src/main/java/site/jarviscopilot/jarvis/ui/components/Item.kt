@@ -90,7 +90,6 @@ fun Item(
                 shape = RoundedCornerShape(8.dp)
             )
             .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() }
             .padding(8.dp)
     ) {
         if (isSpecialType) {
@@ -138,7 +137,8 @@ fun Item(
                                 width = 1.dp,
                                 color = aviationColors.avBlack,
                                 shape = CircleShape
-                            ),
+                            )
+                            .clickable { onClick() }, // Added clickable here to only toggle when the circle is clicked
                         contentAlignment = Alignment.Center
                     ) {
                         if (item.checked) {

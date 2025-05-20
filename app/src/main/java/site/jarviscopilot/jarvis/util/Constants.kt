@@ -12,6 +12,4 @@ object Constants {
 
     // Section and item types
     const val SECTION_TYPE_CHECKLIST = "checklist"
-    const val DEFAULT_VIEW_TYPE = "checklistView"
-    const val ITEM_TYPE_DEFAULT = "item"
 }
