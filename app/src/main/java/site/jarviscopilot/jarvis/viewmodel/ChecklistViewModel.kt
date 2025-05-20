@@ -197,9 +197,13 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Calculates the next indices for navigation in the checklist structure.
      * @param advanceToNextSection Whether to automatically advance to the next section if needed
+     * @param isEmergencySection Whether the current section is an emergency checklist
      * @return Triple of (nextItemIndex, nextListIndex, nextSectionIndex)
      */
-    private fun calculateNextIndices(advanceToNextSection: Boolean = false): Triple<Int, Int, Int> {
+    private fun calculateNextIndices(
+        advanceToNextSection: Boolean = false,
+        isEmergencySection: Boolean = false
+    ): Triple<Int, Int, Int> {
         val currentList = getCurrentList() ?: return Triple(
             _uiState.value.selectedItemIndex,
             _uiState.value.selectedListIndex,
@@ -218,38 +222,43 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
 
         // Check if we need to move to the next list
         if (nextItemIndex >= currentList.items.size) {
-            nextItemIndex = 0
-            nextListIndex++
-            
-            // Check if we need to move to the next section
-            if (nextListIndex >= currentSection.lists.size) {
-                nextListIndex = 0
+            // For emergency sections, stay on the last item of the current list
+            if (isEmergencySection) {
+                nextItemIndex = currentList.items.size - 1
+            } else {
+                nextItemIndex = 0
+                nextListIndex++
 
-                // Only try to advance to next section if the flag is set
-                if (advanceToNextSection) {
-                    val checklist = _uiState.value.checklist ?: return Triple(
-                        _uiState.value.selectedItemIndex,
-                        _uiState.value.selectedListIndex,
-                        _uiState.value.selectedSectionIndex
-                    )
+                // Check if we need to move to the next section
+                if (nextListIndex >= currentSection.lists.size) {
+                    nextListIndex = 0
 
-                    // Check if there's a next section and move to it only if it's of type "checklist"
-                    if (nextSectionIndex < checklist.sections.size - 1) {
-                        // Find next checklist-type section
-                        var foundChecklistSection = false
-                        for (i in nextSectionIndex + 1 until checklist.sections.size) {
-                            if (checklist.sections[i].type == Constants.SECTION_TYPE_CHECKLIST) {
-                                nextSectionIndex = i
-                                foundChecklistSection = true
-                                Log.d(Constants.LOG_TAG_CHECKLIST_VIEW_MODEL,
-                                    getApplication<Application>().getString(R.string.log_moving_to_section, i))
-                                break
+                    // Only try to advance to next section if the flag is set
+                    if (advanceToNextSection) {
+                        val checklist = _uiState.value.checklist ?: return Triple(
+                            _uiState.value.selectedItemIndex,
+                            _uiState.value.selectedListIndex,
+                            _uiState.value.selectedSectionIndex
+                        )
+
+                        // Check if there's a next section and move to it only if it's of type "checklist"
+                        if (nextSectionIndex < checklist.sections.size - 1) {
+                            // Find next checklist-type section
+                            var foundChecklistSection = false
+                            for (i in nextSectionIndex + 1 until checklist.sections.size) {
+                                if (checklist.sections[i].type == Constants.SECTION_TYPE_CHECKLIST) {
+                                    nextSectionIndex = i
+                                    foundChecklistSection = true
+                                    Log.d(Constants.LOG_TAG_CHECKLIST_VIEW_MODEL,
+                                        getApplication<Application>().getString(R.string.log_moving_to_section, i))
+                                    break
+                                }
                             }
-                        }
 
-                        // If no checklist section found, stay at current section
-                        if (!foundChecklistSection) {
-                            nextSectionIndex = _uiState.value.selectedSectionIndex
+                            // If no checklist section found, stay at current section
+                            if (!foundChecklistSection) {
+                                nextSectionIndex = _uiState.value.selectedSectionIndex
+                            }
                         }
                     }
                 }
@@ -309,6 +318,9 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun checkCurrentItem() {
+        val currentSection = getCurrentSection() ?: return
+        val isEmergencySection = currentSection.type?.equals("emergency", ignoreCase = true) == true
+
         // Use the efficient update function
         val updatedChecklist = updateItemInChecklist(
             _uiState.value.selectedSectionIndex,
@@ -318,8 +330,12 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             item.copy(checked = true)
         } ?: return
 
+        // For emergency checklists, we don't want to advance to the next section
         // Calculate next navigation indices
-        val (nextItemIndex, nextListIndex, nextSectionIndex) = calculateNextIndices(advanceToNextSection = true)
+        val (nextItemIndex, nextListIndex, nextSectionIndex) = calculateNextIndices(
+            advanceToNextSection = !isEmergencySection,
+            isEmergencySection = isEmergencySection
+        )
 
         _uiState.update {
             it.copy(

@@ -148,7 +148,12 @@ fun DetailsScreen(
                     onRepeatClick = { /* Implement repeat feature later */ },
                     canSkip = true, // Could be based on mandatory status later
                     isListening = false, // Will be true when listening for voice
-                    canCheck = uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.type?.equals("reference", ignoreCase = true) != true
+                    canCheck = uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.type?.equals("reference", ignoreCase = true) != true &&
+                              // Disable the check button if the current item is already checked
+                              !isCurrentItemChecked(
+                                currentList = uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.lists?.getOrNull(uiState.selectedListIndex),
+                                currentItemIndex = uiState.selectedItemIndex
+                              )
                 )
             }
         }
@@ -375,6 +380,16 @@ fun DetailsScreen(
             }
         }
     }
+}
+
+private fun isLastItemChecked(currentList: ChecklistList?, currentItemIndex: Int): Boolean {
+    return currentList?.items?.let { items ->
+        currentItemIndex == items.lastIndex && items[currentItemIndex].checked
+    } ?: false
+}
+
+private fun isCurrentItemChecked(currentList: ChecklistList?, currentItemIndex: Int): Boolean {
+    return currentList?.items?.getOrNull(currentItemIndex)?.checked == true
 }
 
 @Preview(showBackground = true, apiLevel = 35)
