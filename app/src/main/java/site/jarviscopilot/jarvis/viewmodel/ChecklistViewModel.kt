@@ -75,8 +75,9 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
                 .onSuccess { checklist ->
                     Log.d(
                         Constants.LOG_TAG_CHECKLIST_VIEW_MODEL,
-                        getApplication<Application>().getString(
-                            R.string.log_checklist_loaded,
+                        getApplication<Application>().resources.getQuantityString(
+                            R.plurals.log_checklist_loaded,
+                            checklist.sections.size,
                             checklist.name,
                             checklist.sections.size
                         )
