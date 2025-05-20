@@ -147,7 +147,8 @@ fun DetailsScreen(
                     onMicClick = { /* Implement voice feature later */ },
                     onRepeatClick = { /* Implement repeat feature later */ },
                     canSkip = true, // Could be based on mandatory status later
-                    isListening = false // Will be true when listening for voice
+                    isListening = false, // Will be true when listening for voice
+                    canCheck = uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)?.type?.equals("reference", ignoreCase = true) != true
                 )
             }
         }
@@ -331,10 +332,13 @@ fun DetailsScreen(
 
                                                     Item(
                                                         item = item,
-                                                        isSelected = isSelected,
+                                                        isSelected = if (currentSection.type.equals("reference", ignoreCase = true)) false else isSelected,
                                                         onClick = {
-                                                            viewModel.selectItem(itemIndex)
-                                                            viewModel.toggleItemChecked()
+                                                            // For reference sections, don't select items or toggle checked state
+                                                            if (!currentSection.type.equals("reference", ignoreCase = true)) {
+                                                                viewModel.selectItem(itemIndex)
+                                                                viewModel.toggleItemChecked()
+                                                            }
                                                         },
                                                         modifier = Modifier.padding(vertical = 4.dp),
                                                         sectionType = currentSection.type

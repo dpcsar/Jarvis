@@ -10,7 +10,10 @@
     <string name="error_load_checklist">Failed to load checklist: %1$s</string>
 
     <!-- Log messages (optional, can be kept as constants in code) -->
-    <string name="log_checklist_loaded">Checklist loaded successfully: %1$s, %2$d sections</string>
+    <plurals name="log_checklist_loaded">
+        <item quantity="one">Checklist loaded successfully: %1$s, %2$d section</item>
+        <item quantity="other">Checklist loaded successfully: %1$s, %2$d sections</item>
+    </plurals>
     <string name="log_moving_to_section">Moving to next checklist section: %1$d</string>
 </resources>
 

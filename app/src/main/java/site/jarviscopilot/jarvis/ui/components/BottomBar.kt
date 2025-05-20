@@ -34,6 +34,7 @@ fun BottomBar(
     onRepeatClick: () -> Unit,
     canSkip: Boolean = true,
     isListening: Boolean = false,
+    canCheck: Boolean = true,
 ) {
     val aviationColors = LocalAviationColors.current
     
@@ -57,11 +58,11 @@ fun BottomBar(
         }
         
         // Check button (larger)
-        IconButton(onClick = onCheckClick) {
+        IconButton(onClick = onCheckClick, enabled = canCheck) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "Check",
-                tint = aviationColors.avGreen,
+                tint = if (canCheck) aviationColors.avGreen else Color.Gray.copy(alpha = 0.5f),
                 modifier = Modifier.size(40.dp)
             )
         }
