@@ -162,10 +162,23 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             return
         }
         
-        _uiState.update { 
+        // Get the selected list
+        val selectedList = currentSection.lists[index]
+
+        // Find the first unchecked item in the list
+        var targetItemIndex = 0
+        for (i in selectedList.items.indices) {
+            if (!selectedList.items[i].checked) {
+                targetItemIndex = i
+                break
+            }
+        }
+
+        // Update the state with the new list index and the first unchecked item index
+        _uiState.update {
             it.copy(
                 selectedListIndex = index,
-                selectedItemIndex = 0
+                selectedItemIndex = targetItemIndex
             )
         }
     }
