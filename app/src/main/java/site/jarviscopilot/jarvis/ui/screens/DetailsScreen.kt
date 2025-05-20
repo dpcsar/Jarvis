@@ -71,9 +71,15 @@ fun DetailsScreen(
     // Track if we're viewing list tiles or a specific list - move to higher scope
     val isViewingListTiles = remember(uiState.selectedSectionIndex) { mutableStateOf(isEmergencyOrRef) }
 
+    // Create a shared reference to track if we're viewing a specific list within emergency/reference
+    val isViewingSpecificList = remember { mutableStateOf(false) }
+
     // Update tile view state when section type changes
     LaunchedEffect(isEmergencyOrRef) {
         isViewingListTiles.value = isEmergencyOrRef
+        if (isEmergencyOrRef) {
+            isViewingSpecificList.value = false // Reset to tile view when switching to emergency/reference
+        }
     }
 
     Scaffold(
@@ -110,12 +116,24 @@ fun DetailsScreen(
                         selectedIndex = uiState.selectedSectionIndex,
                         onSectionSelected = {
                             viewModel.selectSection(it)
-                            // Reset to tile view when selecting a new emergency/reference section
-                            val newSectionType = checklist.sections.getOrNull(it)?.type
-                            val isNewSectionEmergencyOrRef = newSectionType?.equals("emergency", ignoreCase = true) == true ||
-                                                            newSectionType?.equals("reference", ignoreCase = true) == true
-                            if (isNewSectionEmergencyOrRef) {
+                            // Normal sections don't force tile view
+                        },
+                        onSpecialSectionSelected = {
+                            // Check if we're clicking the same section we're already on
+                            val isSameSection = it == uiState.selectedSectionIndex
+
+                            // If it's the same section and we're in emergency/reference,
+                            // reset to tile view without changing the section
+                            if (isSameSection && isEmergencyOrRef) {
+                                // Reset to tile view (this will be applied even if already in tile view)
                                 isViewingListTiles.value = true
+                                isViewingSpecificList.value = false
+                            } else {
+                                // Different section, perform normal selection
+                                viewModel.selectSection(it)
+                                // Always force tile view for emergency/reference sections
+                                isViewingListTiles.value = true
+                                isViewingSpecificList.value = false
                             }
                         }
                     )
@@ -247,6 +265,25 @@ fun DetailsScreen(
                                 // Track if we're viewing a specific list or the list of lists
                                 val isViewingList = remember { mutableStateOf(false) }
                                 val selectedListIndex = remember { mutableIntStateOf(0) }
+
+                                // Keep the local and shared states in sync
+                                LaunchedEffect(isViewingSpecificList.value) {
+                                    isViewingList.value = isViewingSpecificList.value
+                                }
+
+                                // And sync in the other direction too
+                                LaunchedEffect(isViewingList.value) {
+                                    isViewingSpecificList.value = isViewingList.value
+                                }
+
+                                // Store isViewingList in a higher scope so it can be reset by section selector
+                                LaunchedEffect(uiState.selectedSectionIndex, isViewingListTiles.value) {
+                                    // Reset to tile view when section changes or when isViewingListTiles is set to true
+                                    if (isViewingListTiles.value) {
+                                        isViewingList.value = false
+                                        isViewingSpecificList.value = false
+                                    }
+                                }
 
                                 if (!isViewingList.value) {
                                     // Show the tile view of all lists in this section

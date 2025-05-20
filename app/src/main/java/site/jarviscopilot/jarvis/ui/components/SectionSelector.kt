@@ -32,10 +32,11 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun SectionSelector(
+    modifier: Modifier = Modifier,
     sections: List<ChecklistSection>,
     selectedIndex: Int,
     onSectionSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    onSpecialSectionSelected: (Int) -> Unit = {}
 ) {
     val aviationColors = LocalAviationColors.current
     val scrollState = rememberScrollState()
@@ -64,6 +65,8 @@ fun SectionSelector(
     ) {
         sections.forEachIndexed { index, section ->
             val isSelected = index == selectedIndex
+            val isEmergencyOrRef = section.type.equals("emergency", ignoreCase = true) ||
+                                   section.type.equals("reference", ignoreCase = true)
             val backgroundColor = when {
                 isSelected -> aviationColors.avGreen
                 section.type == "reference" -> aviationColors.avBlue
@@ -81,7 +84,13 @@ fun SectionSelector(
                         color = if (isSelected) Color.White else Color.Gray,
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .clickable { onSectionSelected(index) }
+                    .clickable {
+                        if (isEmergencyOrRef) {
+                            onSpecialSectionSelected(index)
+                        } else {
+                            onSectionSelected(index)
+                        }
+                    }
                     .onGloballyPositioned { coordinates ->
                         // Save the item's x position and width
                         itemPositions[index] = coordinates.positionInParent().x
@@ -143,7 +152,8 @@ fun ChecklistSelectorPreview() {
         SectionSelector(
             sections = demoSections,
             selectedIndex = 1,
-            onSectionSelected = {}
+            onSectionSelected = {},
+            onSpecialSectionSelected = {}
         )
     }
 }
