@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,7 +41,7 @@ fun Item(
     sectionType: String = "normal" // Add parameter for section type
 ) {
     val aviationColors = LocalAviationColors.current
-    
+
     val backgroundColor = when {
         isSelected -> aviationColors.selectedItemBackground
         item.checked -> aviationColors.itemBackground
@@ -60,6 +61,9 @@ fun Item(
     val isNoteItem = item.type == "note"
     val isLabelItem = item.type == "label"
     
+    // Special types that need different layout
+    val isSpecialType = isWarningItem || isCautionItem || isNoteItem
+
     // Determine if we should show check circles based on section type
     val showCheckCircle = isNormalItem && sectionType != "reference"
 
@@ -89,42 +93,13 @@ fun Item(
             .clickable { onClick() }
             .padding(8.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Status indicator - only show for normal items in non-reference sections
-            if (showCheckCircle) {
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .background(
-                            color = if (item.checked) aviationColors.avGreen else aviationColors.avWhite,
-                            shape = CircleShape
-                        )
-                        .border(
-                            width = 1.dp,
-                            color = aviationColors.avBlack,
-                            shape = CircleShape
-                        ),
-                    contentAlignment = Alignment.Center
+        if (isSpecialType) {
+            // For warning, caution, and note items - use vertical layout with response below challenge
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    if (item.checked) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Completed",
-                            tint = aviationColors.avWhite,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-                }
-                
-                Spacer(modifier = Modifier.width(12.dp))
-            }
-            
-            // Item content
-            Column(modifier = Modifier.weight(1f)) {
-                if (item.challenge.isNotBlank()) {
                     Text(
                         text = item.challenge.trim(),
                         style = MaterialTheme.typography.bodyLarge,
@@ -133,16 +108,87 @@ fun Item(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                
+
                 if (item.response.isNotBlank()) {
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     Text(
                         text = item.response.trim(),
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = if (isNormalItem) FontWeight.Bold else fontWeight,
                         color = textColor,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(start = if (isNormalItem) 8.dp else 0.dp)
+                        overflow = TextOverflow.Ellipsis
                     )
+                }
+            }
+        } else {
+            // Normal item layout with challenge and response side by side
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Status indicator - only show for normal items in non-reference sections
+                if (showCheckCircle) {
+                    Box(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .background(
+                                color = if (item.checked) aviationColors.avGreen else aviationColors.avWhite,
+                                shape = CircleShape
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = aviationColors.avBlack,
+                                shape = CircleShape
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (item.checked) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "Completed",
+                                tint = aviationColors.avWhite,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
+
+                // Challenge text on the left (max 48% width)
+                if (item.challenge.isNotBlank()) {
+                    Box(
+                        modifier = Modifier
+                            .weight(0.48f)
+                            .wrapContentWidth(Alignment.Start)
+                    ) {
+                        Text(
+                            text = item.challenge.trim(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = fontWeight,
+                            color = textColor,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+
+                // Flexible spacer in the middle
+                Spacer(modifier = Modifier.weight(0.04f))
+
+                // Response text on the right (max 48% width)
+                if (item.response.isNotBlank()) {
+                    Box(
+                        modifier = Modifier
+                            .weight(0.48f)
+                            .wrapContentWidth(Alignment.End)
+                    ) {
+                        Text(
+                            text = item.response.trim(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (isNormalItem) FontWeight.Bold else fontWeight,
+                            color = textColor,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
         }
@@ -167,25 +213,39 @@ fun ChecklistItemComponentPreview() {
                 onClick = {}
             )
             
+
             Item(
                 item = ChecklistItem(
-                    type = "warning",
-                    challenge = "WARNING: Do not operate heater on the ground for more than 30 seconds",
+                    type = "note",
+                    challenge = "Wait for at least 2 minutes between cranking attempts",
                     challengeAudio = "",
-                    response = "",
+                    response = "second line",
                     responseAudio = "",
                     mandatory = false
                 ),
                 isSelected = false,
                 onClick = {}
             )
-            
+
             Item(
                 item = ChecklistItem(
-                    type = "note",
-                    challenge = "Note: Wait for at least 2 minutes between cranking attempts",
+                    type = "warning",
+                    challenge = "Do not operate heater on the ground for more than 30 seconds",
                     challengeAudio = "",
-                    response = "",
+                    response = "second line",
+                    responseAudio = "",
+                    mandatory = false
+                ),
+                isSelected = false,
+                onClick = {}
+            )
+
+            Item(
+                item = ChecklistItem(
+                    type = "caution",
+                    challenge = "Do not operate heater on the ground for more than 30 seconds",
+                    challengeAudio = "",
+                    response = "second line",
                     responseAudio = "",
                     mandatory = false
                 ),
@@ -196,3 +256,63 @@ fun ChecklistItemComponentPreview() {
     }
 }
 
+@Preview(apiLevel = 35)
+@Composable
+fun ChecklistItemComponentPreviewDark() {
+    JarvisTheme(darkTheme = true) {
+        Column {
+            Item(
+                item = ChecklistItem(
+                    type = "item",
+                    challenge = "Pitot Heat",
+                    challengeAudio = "",
+                    response = "TEST",
+                    responseAudio = "",
+                    mandatory = true
+                ),
+                isSelected = true,
+                onClick = {}
+            )
+
+
+            Item(
+                item = ChecklistItem(
+                    type = "note",
+                    challenge = "Wait for at least 2 minutes between cranking attempts",
+                    challengeAudio = "",
+                    response = "second line",
+                    responseAudio = "",
+                    mandatory = false
+                ),
+                isSelected = false,
+                onClick = {}
+            )
+
+            Item(
+                item = ChecklistItem(
+                    type = "warning",
+                    challenge = "Do not operate heater on the ground for more than 30 seconds",
+                    challengeAudio = "",
+                    response = "second line",
+                    responseAudio = "",
+                    mandatory = false
+                ),
+                isSelected = false,
+                onClick = {}
+            )
+
+            Item(
+                item = ChecklistItem(
+                    type = "caution",
+                    challenge = "Do not operate heater on the ground for more than 30 seconds",
+                    challengeAudio = "",
+                    response = "second line",
+                    responseAudio = "",
+                    mandatory = false
+                ),
+                isSelected = false,
+                onClick = {}
+            )
+        }
+    }
+}
