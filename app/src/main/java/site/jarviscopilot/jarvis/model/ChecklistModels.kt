@@ -33,13 +33,13 @@ data class ChecklistList(
 
 data class ChecklistItem(
     val type: String = "item",
-    val label1: String = "",
-    val label1Audio: String = "",
-    val label2: String = "",
-    val label2Audio: String = "",
+    val challenge: String = "",
+    val challengeAudio: String = "",
+    val response: String = "",
+    val responseAudio: String = "",
     val mandatory: Boolean = false,
-    val suppressAudioLabel1: Boolean = false,
-    val suppressAudioLabel2: Boolean = false,
+    val suppressAudioChallenge: Boolean = false,
+    val suppressAudioResponse: Boolean = false,
     val startNamedTimers: List<String> = emptyList(),
     val stopNamedTimers: List<String> = emptyList(),
     var checked: Boolean = false

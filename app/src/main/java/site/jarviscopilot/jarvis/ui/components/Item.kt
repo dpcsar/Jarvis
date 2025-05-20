@@ -124,9 +124,9 @@ fun Item(
             
             // Item content
             Column(modifier = Modifier.weight(1f)) {
-                if (item.label1.isNotBlank()) {
+                if (item.challenge.isNotBlank()) {
                     Text(
-                        text = item.label1.trim(),
+                        text = item.challenge.trim(),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = fontWeight,
                         color = textColor,
@@ -134,9 +134,9 @@ fun Item(
                     )
                 }
                 
-                if (item.label2.isNotBlank()) {
+                if (item.response.isNotBlank()) {
                     Text(
-                        text = item.label2.trim(),
+                        text = item.response.trim(),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = if (isNormalItem) FontWeight.Bold else fontWeight,
                         color = textColor,
@@ -157,10 +157,10 @@ fun ChecklistItemComponentPreview() {
             Item(
                 item = ChecklistItem(
                     type = "item",
-                    label1 = "Pitot Heat",
-                    label1Audio = "",
-                    label2 = "TEST",
-                    label2Audio = "",
+                    challenge = "Pitot Heat",
+                    challengeAudio = "",
+                    response = "TEST",
+                    responseAudio = "",
                     mandatory = true
                 ),
                 isSelected = true,
@@ -170,10 +170,10 @@ fun ChecklistItemComponentPreview() {
             Item(
                 item = ChecklistItem(
                     type = "warning",
-                    label1 = "WARNING: Do not operate heater on the ground for more than 30 seconds",
-                    label1Audio = "",
-                    label2 = "",
-                    label2Audio = "",
+                    challenge = "WARNING: Do not operate heater on the ground for more than 30 seconds",
+                    challengeAudio = "",
+                    response = "",
+                    responseAudio = "",
                     mandatory = false
                 ),
                 isSelected = false,
@@ -183,10 +183,10 @@ fun ChecklistItemComponentPreview() {
             Item(
                 item = ChecklistItem(
                     type = "note",
-                    label1 = "Note: Wait for at least 2 minutes between cranking attempts",
-                    label1Audio = "",
-                    label2 = "",
-                    label2Audio = "",
+                    challenge = "Note: Wait for at least 2 minutes between cranking attempts",
+                    challengeAudio = "",
+                    response = "",
+                    responseAudio = "",
                     mandatory = false
                 ),
                 isSelected = false,

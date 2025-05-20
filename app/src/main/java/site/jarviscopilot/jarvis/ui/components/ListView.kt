@@ -73,26 +73,26 @@ fun ItemListViewPreview() {
         items = listOf(
             ChecklistItem(
                 type = "item",
-                label1 = "Preflight Inspection",
-                label1Audio = "",
-                label2 = "COMPLETE",
-                label2Audio = "",
+                challenge = "Preflight Inspection",
+                challengeAudio = "",
+                response = "COMPLETE",
+                responseAudio = "",
                 mandatory = true
             ),
             ChecklistItem(
                 type = "item",
-                label1 = "Control Lock",
-                label1Audio = "",
-                label2 = "REMOVE",
-                label2Audio = "",
+                challenge = "Control Lock",
+                challengeAudio = "",
+                response = "REMOVE",
+                responseAudio = "",
                 mandatory = true
             ),
             ChecklistItem(
                 type = "item",
-                label1 = "Seats & Belts",
-                label1Audio = "",
-                label2 = "ADJUST, SECURE",
-                label2Audio = "",
+                challenge = "Seats & Belts",
+                challengeAudio = "",
+                response = "ADJUST, SECURE",
+                responseAudio = "",
                 mandatory = true
             )
         )
