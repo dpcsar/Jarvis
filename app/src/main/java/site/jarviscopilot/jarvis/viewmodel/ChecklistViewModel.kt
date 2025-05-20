@@ -111,11 +111,46 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             return
         }
         
-        _uiState.update { 
+        val section = checklist.sections[index]
+
+        // Default values in case we don't find anything
+        var targetListIndex = 0
+        var targetItemIndex = 0
+
+        // Only perform special navigation for checklist type sections
+        if (section.type == Constants.SECTION_TYPE_CHECKLIST && section.lists.isNotEmpty()) {
+            var foundUncheckedItem = false
+
+            // First pass: look for the first unchecked item
+            for (listIdx in section.lists.indices) {
+                val list = section.lists[listIdx]
+                for (itemIdx in list.items.indices) {
+                    val item = list.items[itemIdx]
+                    if (!item.checked) {
+                        targetListIndex = listIdx
+                        targetItemIndex = itemIdx
+                        foundUncheckedItem = true
+                        break
+                    }
+                }
+                if (foundUncheckedItem) break
+            }
+
+            // If all items are checked, navigate to the last item in the last list
+            if (!foundUncheckedItem && section.lists.isNotEmpty()) {
+                val lastList = section.lists.last()
+                if (lastList.items.isNotEmpty()) {
+                    targetListIndex = section.lists.size - 1
+                    targetItemIndex = lastList.items.size - 1
+                }
+            }
+        }
+
+        _uiState.update {
             it.copy(
                 selectedSectionIndex = index,
-                selectedListIndex = 0,
-                selectedItemIndex = 0
+                selectedListIndex = targetListIndex,
+                selectedItemIndex = targetItemIndex
             )
         }
     }
