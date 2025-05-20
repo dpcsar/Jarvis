@@ -27,10 +27,10 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            Toast.makeText(this, "Audio permission granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.permission_audio_granted), Toast.LENGTH_SHORT).show()
             // TODO: Initialize wake word detection
         } else {
-            Toast.makeText(this, "Audio permission is required for voice features", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.permission_audio_required), Toast.LENGTH_LONG).show()
         }
     }
     
@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 // Show rationale then request permission
                 Toast.makeText(
                     this,
-                    "Audio permission is needed for wake word detection and voice commands",
+                    getString(R.string.permission_audio_rationale),
                     Toast.LENGTH_LONG
                 ).show()
                 requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)

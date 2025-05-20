@@ -10,11 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import site.jarviscopilot.jarvis.R
 import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.model.Checklist
 import site.jarviscopilot.jarvis.model.ChecklistItem
 import site.jarviscopilot.jarvis.model.ChecklistList
 import site.jarviscopilot.jarvis.model.ChecklistSection
+import site.jarviscopilot.jarvis.util.Constants
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -40,7 +42,7 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     init {
         loadChecklist()
         startTimeUpdates()
-        Log.d("ChecklistViewModel", "ViewModel initialized")
+        Log.d(Constants.LOG_TAG_CHECKLIST_VIEW_MODEL, "ViewModel initialized")
     }
     
     private fun startTimeUpdates() {
@@ -55,8 +57,8 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
     private fun updateTime() {
         val now = LocalDateTime.now()
         val utcNow = LocalDateTime.now(ZoneOffset.UTC)
-        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-        
+        val formatter = DateTimeFormatter.ofPattern(Constants.TIME_FORMAT_PATTERN)
+
         _uiState.update { currentState ->
             currentState.copy(
                 currentLocalTime = formatter.format(now),
@@ -71,8 +73,15 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             
             repository.loadChecklistFromAssets()
                 .onSuccess { checklist ->
-                    Log.d("ChecklistViewModel", "Checklist loaded successfully: ${checklist.name}, ${checklist.sections.size} sections")
-                    _uiState.update { 
+                    Log.d(
+                        Constants.LOG_TAG_CHECKLIST_VIEW_MODEL,
+                        getApplication<Application>().getString(
+                            R.string.log_checklist_loaded,
+                            checklist.name,
+                            checklist.sections.size
+                        )
+                    )
+                    _uiState.update {
                         it.copy(
                             isLoading = false,
                             checklist = checklist,
@@ -81,11 +90,14 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
                     }
                 }
                 .onFailure { exception ->
-                    Log.e("ChecklistViewModel", "Failed to load checklist", exception)
+                    Log.e(Constants.LOG_TAG_CHECKLIST_VIEW_MODEL, "Failed to load checklist", exception)
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            error = "Failed to load checklist: ${exception.message}"
+                            error = getApplication<Application>().getString(
+                                R.string.error_load_checklist,
+                                exception.message ?: ""
+                            )
                         )
                     }
                 }
@@ -177,10 +189,11 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
                         // Find next checklist-type section
                         var foundChecklistSection = false
                         for (i in nextSectionIndex + 1 until checklist.sections.size) {
-                            if (checklist.sections[i].type == "checklist") {
+                            if (checklist.sections[i].type == Constants.SECTION_TYPE_CHECKLIST) {
                                 nextSectionIndex = i
                                 foundChecklistSection = true
-                                Log.d("ChecklistViewModel", "Moving to next checklist section: $i")
+                                Log.d(Constants.LOG_TAG_CHECKLIST_VIEW_MODEL,
+                                    getApplication<Application>().getString(R.string.log_moving_to_section, i))
                                 break
                             }
                         }
