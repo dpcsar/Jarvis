@@ -142,7 +142,30 @@ fun DetailsScreen(
                 // Control buttons
                 BottomBar(
                     onHomeClick = onNavigateUp,
-                    onCheckClick = { viewModel.checkCurrentItem() },
+                    onCheckClick = {
+                        // For emergency sections, check the item and advance to the next unchecked item in the SAME list
+                        val currentSection = uiState.checklist?.sections?.getOrNull(uiState.selectedSectionIndex)
+                        if (currentSection?.type?.equals("emergency", ignoreCase = true) == true) {
+                            // First mark the current item as checked
+                            viewModel.toggleItemChecked()
+
+                            // Then find and move to the next unchecked item in the SAME list
+                            val currentList = currentSection.lists.getOrNull(uiState.selectedListIndex)
+                            if (currentList != null) {
+                                // Start searching from the next item
+                                for (i in uiState.selectedItemIndex + 1 until currentList.items.size) {
+                                    if (!currentList.items[i].checked) {
+                                        // Found the next unchecked item in this list, select it
+                                        viewModel.selectItem(i)
+                                        break
+                                    }
+                                }
+                            }
+                        } else {
+                            // For regular checklists, use the standard check function
+                            viewModel.checkCurrentItem()
+                        }
+                    },
                     onSkipClick = { viewModel.skipCurrentItem() },
                     onMicClick = { /* Implement voice feature later */ },
                     onRepeatClick = { /* Implement repeat feature later */ },
@@ -338,15 +361,44 @@ fun DetailsScreen(
                                                     Item(
                                                         item = item,
                                                         isSelected = if (currentSection.type.equals("reference", ignoreCase = true)) false else isSelected,
-                                                        onClick = {
-                                                            // For reference sections, don't select items or toggle checked state
+                                                        onClick = { /* No longer used directly */ },
+                                                        modifier = Modifier.padding(vertical = 4.dp),
+                                                        sectionType = currentSection.type,
+                                                        onCheckCircleClick = {
+                                                            // For reference sections, don't do anything
                                                             if (!currentSection.type.equals("reference", ignoreCase = true)) {
-                                                                viewModel.selectItem(itemIndex)
-                                                                viewModel.toggleItemChecked()
+                                                                // Make sure this item is selected if it's not already
+                                                                if (currentItemIndex != itemIndex) {
+                                                                    viewModel.selectItem(itemIndex)
+                                                                }
+
+                                                                // For emergency lists, check item and advance to next unchecked in SAME list
+                                                                if (currentSection.type.equals("emergency", ignoreCase = true)) {
+                                                                    // Mark the current item as checked
+                                                                    viewModel.toggleItemChecked()
+
+                                                                    // Then find and move to the next unchecked item in the SAME list
+                                                                    // Start searching from the next item
+                                                                    for (i in itemIndex + 1 until currentList.items.size) {
+                                                                        if (!currentList.items[i].checked) {
+                                                                            // Found the next unchecked item in this list, select it
+                                                                            viewModel.selectItem(i)
+                                                                            break
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    // For regular checklists, use the standard check function
+                                                                    viewModel.checkCurrentItem() // This might advance to next list
+                                                                }
                                                             }
                                                         },
-                                                        modifier = Modifier.padding(vertical = 4.dp),
-                                                        sectionType = currentSection.type
+                                                        onTextClick = {
+                                                            // For reference sections, don't select items
+                                                            if (!currentSection.type.equals("reference", ignoreCase = true)) {
+                                                                // Just select the item without toggling the check state
+                                                                viewModel.selectItem(itemIndex)
+                                                            }
+                                                        }
                                                     )
                                                 }
                                             }
@@ -358,12 +410,16 @@ fun DetailsScreen(
                                 ListView(
                                     list = currentList,
                                     currentItemIndex = currentItemIndex,
-                                    onItemClick = { itemIndex ->
+                                    onItemSelect = { itemIndex ->
+                                        // Just select the item without toggling the check state
                                         viewModel.selectItem(itemIndex)
-                                        viewModel.toggleItemChecked()
                                     },
                                     listState = listState,
-                                    sectionType = currentSection.type
+                                    sectionType = currentSection.type,
+                                    onCheckCircleClick = {
+                                        // Check current item and move to next unchecked item
+                                        viewModel.checkCurrentItem()
+                                    }
                                 )
                             }
                         }
@@ -380,12 +436,6 @@ fun DetailsScreen(
             }
         }
     }
-}
-
-private fun isLastItemChecked(currentList: ChecklistList?, currentItemIndex: Int): Boolean {
-    return currentList?.items?.let { items ->
-        currentItemIndex == items.lastIndex && items[currentItemIndex].checked
-    } ?: false
 }
 
 private fun isCurrentItemChecked(currentList: ChecklistList?, currentItemIndex: Int): Boolean {

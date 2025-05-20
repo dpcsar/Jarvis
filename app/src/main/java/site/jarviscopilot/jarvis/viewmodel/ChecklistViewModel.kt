@@ -319,7 +319,7 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun checkCurrentItem() {
         val currentSection = getCurrentSection() ?: return
-        val isEmergencySection = currentSection.type?.equals("emergency", ignoreCase = true) == true
+        val isEmergencySection = currentSection.type.equals("emergency", ignoreCase = true) == true
 
         // Use the efficient update function
         val updatedChecklist = updateItemInChecklist(
@@ -330,12 +330,119 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             item.copy(checked = true)
         } ?: return
 
-        // For emergency checklists, we don't want to advance to the next section
-        // Calculate next navigation indices
-        val (nextItemIndex, nextListIndex, nextSectionIndex) = calculateNextIndices(
-            advanceToNextSection = !isEmergencySection,
-            isEmergencySection = isEmergencySection
-        )
+        // Find the next unchecked item
+        var nextItemIndex = _uiState.value.selectedItemIndex
+        var nextListIndex = _uiState.value.selectedListIndex
+        var nextSectionIndex = _uiState.value.selectedSectionIndex
+
+        if (!isEmergencySection) {
+            // For non-emergency sections, find the next unchecked item (which could be in a different list or section)
+            val checklist = updatedChecklist
+            var foundUncheckedItem = false
+
+            // First look in the current list for unchecked items after the current one
+            val currentList = currentSection.lists[nextListIndex]
+            for (i in nextItemIndex + 1 until currentList.items.size) {
+                if (!currentList.items[i].checked) {
+                    nextItemIndex = i
+                    foundUncheckedItem = true
+                    break
+                }
+            }
+
+            // If not found, look in subsequent lists in this section
+            if (!foundUncheckedItem) {
+                for (listIdx in nextListIndex + 1 until currentSection.lists.size) {
+                    val list = currentSection.lists[listIdx]
+                    for (itemIdx in list.items.indices) {
+                        if (!list.items[itemIdx].checked) {
+                            nextListIndex = listIdx
+                            nextItemIndex = itemIdx
+                            foundUncheckedItem = true
+                            break
+                        }
+                    }
+                    if (foundUncheckedItem) break
+                }
+            }
+
+            // If still not found and we're allowed to advance to next section, look in subsequent sections
+            if (!foundUncheckedItem) {
+                for (sectionIdx in nextSectionIndex + 1 until checklist.sections.size) {
+                    val section = checklist.sections[sectionIdx]
+                    // Only consider checklist-type sections
+                    if (section.type == Constants.SECTION_TYPE_CHECKLIST) {
+                        for (listIdx in section.lists.indices) {
+                            val list = section.lists[listIdx]
+                            for (itemIdx in list.items.indices) {
+                                if (!list.items[itemIdx].checked) {
+                                    nextSectionIndex = sectionIdx
+                                    nextListIndex = listIdx
+                                    nextItemIndex = itemIdx
+                                    foundUncheckedItem = true
+                                    break
+                                }
+                            }
+                            if (foundUncheckedItem) break
+                        }
+                    }
+                    if (foundUncheckedItem) break
+                }
+            }
+
+            // If still haven't found an unchecked item, fall back to the default behavior
+            // which is to move to the next item in sequence
+            if (!foundUncheckedItem) {
+                val (nextItem, nextList, nextSection) = calculateNextIndices(
+                    advanceToNextSection = true,
+                    isEmergencySection = false
+                )
+                nextItemIndex = nextItem
+                nextListIndex = nextList
+                nextSectionIndex = nextSection
+            }
+        } else {
+            // For emergency sections, find the next unchecked item but stay within the section
+            var foundUncheckedItem = false
+
+            // First look in the current list for unchecked items after the current one
+            val currentList = currentSection.lists[nextListIndex]
+            for (i in nextItemIndex + 1 until currentList.items.size) {
+                if (!currentList.items[i].checked) {
+                    nextItemIndex = i
+                    foundUncheckedItem = true
+                    break
+                }
+            }
+
+            // If not found, look in subsequent lists in this emergency section
+            if (!foundUncheckedItem) {
+                for (listIdx in nextListIndex + 1 until currentSection.lists.size) {
+                    val list = currentSection.lists[listIdx]
+                    for (itemIdx in list.items.indices) {
+                        if (!list.items[itemIdx].checked) {
+                            nextListIndex = listIdx
+                            nextItemIndex = itemIdx
+                            foundUncheckedItem = true
+                            break
+                        }
+                    }
+                    if (foundUncheckedItem) break
+                }
+            }
+
+            // If still haven't found an unchecked item in this emergency section,
+            // fall back to the default sequential behavior but stay within the section
+            if (!foundUncheckedItem) {
+                val (nextItem, nextList, _) = calculateNextIndices(
+                    advanceToNextSection = false,
+                    isEmergencySection = true
+                )
+                nextItemIndex = nextItem
+                nextListIndex = nextList
+                // Don't change section for emergency checklists
+            }
+        }
 
         _uiState.update {
             it.copy(

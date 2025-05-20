@@ -19,19 +19,21 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
  *
  * @param list The list of checklist items to display
  * @param currentItemIndex The index of the currently selected item
- * @param onItemClick Callback for when an item is clicked
+ * @param onItemSelect Callback for when an item should only be selected without toggling check state
  * @param listState The state of the lazy list for controlling scroll position
  * @param sectionType The type of section (e.g., "emergency", "reference", or "checklist")
  * @param modifier Modifier for customizing the layout
+ * @param onCheckCircleClick Callback for when the check circle is clicked
  */
 @Composable
 fun ListView(
     list: ChecklistList?,
     currentItemIndex: Int,
-    onItemClick: (Int) -> Unit,
+    onItemSelect: (Int) -> Unit,
     listState: LazyListState,
     sectionType: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCheckCircleClick: () -> Unit = {}, // For check circle clicks
 ) {
     if (list == null) {
         Text(
@@ -55,9 +57,23 @@ fun ListView(
             Item(
                 item = item,
                 isSelected = isSelected,
-                onClick = { onItemClick(itemIndex) },
+                onClick = { /* No longer used directly */ },
                 modifier = Modifier.padding(vertical = 4.dp),
-                sectionType = sectionType // Pass section type
+                sectionType = sectionType, // Pass section type
+                onCheckCircleClick = {
+                    // First make sure this item is selected (if it's not already)
+                    if (currentItemIndex != itemIndex) {
+                        onItemSelect(itemIndex) // Just select without toggling
+                    }
+                    // Then use the check button functionality directly
+                    onCheckCircleClick()
+                },
+                onTextClick = {
+                    // Just select the item without toggling the check
+                    if (currentItemIndex != itemIndex) {
+                        onItemSelect(itemIndex) // Use the new parameter that only selects
+                    }
+                }
             )
         }
     }
@@ -102,7 +118,7 @@ fun ItemListViewPreview() {
         ListView(
             list = sampleList,
             currentItemIndex = 1,  // Second item selected
-            onItemClick = { },      // No-op for preview
+            onItemSelect = { },    // No-op for preview
             listState = rememberLazyListState(),
             sectionType = "checklist"
         )

@@ -36,9 +36,11 @@ import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 fun Item(
     item: ChecklistItem,
     isSelected: Boolean,
-    onClick: () -> Unit,
+    onClick: () -> Unit, // This will be used only for the check circle
     modifier: Modifier = Modifier,
-    sectionType: String = "normal" // Add parameter for section type
+    sectionType: String = "normal",
+    onCheckCircleClick: () -> Unit = onClick, // For toggling the check
+    onTextClick: () -> Unit = {} // New parameter for text click that just focuses without toggling
 ) {
     val aviationColors = LocalAviationColors.current
 
@@ -90,6 +92,7 @@ fun Item(
                 shape = RoundedCornerShape(8.dp)
             )
             .clip(RoundedCornerShape(8.dp))
+            .clickable(enabled = sectionType != "reference") { onTextClick() }  // Text click only focuses item without toggling check
             .padding(8.dp)
     ) {
         if (isSpecialType) {
@@ -138,7 +141,7 @@ fun Item(
                                 color = aviationColors.avBlack,
                                 shape = CircleShape
                             )
-                            .clickable { onClick() }, // Added clickable here to only toggle when the circle is clicked
+                            .clickable { onCheckCircleClick() }, // Use the dedicated check circle handler
                         contentAlignment = Alignment.Center
                     ) {
                         if (item.checked) {
@@ -210,7 +213,9 @@ fun ChecklistItemComponentPreview() {
                     mandatory = true
                 ),
                 isSelected = true,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
             
 
@@ -224,7 +229,9 @@ fun ChecklistItemComponentPreview() {
                     mandatory = false
                 ),
                 isSelected = false,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
 
             Item(
@@ -237,7 +244,9 @@ fun ChecklistItemComponentPreview() {
                     mandatory = false
                 ),
                 isSelected = false,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
 
             Item(
@@ -250,7 +259,9 @@ fun ChecklistItemComponentPreview() {
                     mandatory = false
                 ),
                 isSelected = false,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
         }
     }
@@ -271,7 +282,9 @@ fun ChecklistItemComponentPreviewDark() {
                     mandatory = true
                 ),
                 isSelected = true,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
 
 
@@ -285,7 +298,9 @@ fun ChecklistItemComponentPreviewDark() {
                     mandatory = false
                 ),
                 isSelected = false,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
 
             Item(
@@ -298,7 +313,9 @@ fun ChecklistItemComponentPreviewDark() {
                     mandatory = false
                 ),
                 isSelected = false,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
 
             Item(
@@ -311,7 +328,9 @@ fun ChecklistItemComponentPreviewDark() {
                     mandatory = false
                 ),
                 isSelected = false,
-                onClick = {}
+                onClick = {},
+                onCheckCircleClick = {}, // Add the parameter to preview
+                onTextClick = {} // Add the parameter to preview
             )
         }
     }
