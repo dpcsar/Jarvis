@@ -50,12 +50,6 @@ fun Item(
         else -> aviationColors.itemBackground
     }
     
-    val borderColor = when {
-        isSelected -> aviationColors.avBlack
-        item.mandatory -> aviationColors.avRed
-        else -> Color.Transparent
-    }
-    
     // Use different styling for non-standard item types
     val isNormalItem = item.type == "item" 
     val isWarningItem = item.type == "warning"
@@ -64,10 +58,17 @@ fun Item(
     val isLabelItem = item.type == "label"
     
     // Special types that need different layout
-    val isSpecialType = isWarningItem || isCautionItem || isNoteItem
+    val isSpecialType = isWarningItem || isCautionItem || isNoteItem || isLabelItem
 
     // Determine if we should show check circles based on section type
     val showCheckCircle = isNormalItem && sectionType != "reference"
+
+    val borderColor = when {
+        isSelected -> aviationColors.avBlack
+        // Only show mandatory styling for normal items, not for special types (labels, cautions, warnings, notes)
+        item.mandatory && isNormalItem -> aviationColors.avRed
+        else -> Color.Transparent
+    }
 
     val textColor = when {
         isWarningItem -> aviationColors.avRed
