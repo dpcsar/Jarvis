@@ -1,6 +1,7 @@
 package site.jarviscopilot.jarvis.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +27,8 @@ fun ViewHeader(
     sectionType: String? = null,
     backgroundColor: Color? = null,
     textColor: Color? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLongClick: (() -> Unit)? = null
 ) {
     val aviationColors = LocalAviationColors.current
 
@@ -47,6 +50,14 @@ fun ViewHeader(
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp))
             .background(headerBackgroundColor)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        // Call the long click handler if provided
+                        onLongClick?.invoke()
+                    }
+                )
+            }
             .padding(vertical = 12.dp, horizontal = 16.dp),
         contentAlignment = Alignment.Center
     ) {

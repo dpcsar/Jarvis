@@ -48,6 +48,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.mutableIntStateOf
 import site.jarviscopilot.jarvis.ui.components.ListTileView
+import site.jarviscopilot.jarvis.util.Constants
 
 @Composable
 fun DetailsScreen(
@@ -276,7 +277,12 @@ fun DetailsScreen(
                                     ViewHeader(
                                         title = headerTitle,
                                         sectionType = sectionType,
-                                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
+                                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp),
+                                        // Add onLongClick handler to check all items in list and move to next list
+                                        // Only enable for normal checklists (not emergency or reference)
+                                        onLongClick = if (currentSection.type == Constants.SECTION_TYPE_CHECKLIST && !isViewingListTiles.value) {
+                                            { viewModel.checkAllItemsInListAndMoveToNext() }
+                                        } else null
                                     )
                                 }
                             )

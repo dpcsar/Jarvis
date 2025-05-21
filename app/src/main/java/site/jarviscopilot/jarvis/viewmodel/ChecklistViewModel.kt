@@ -593,6 +593,58 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    /**
+     * Checks all items in the current list and moves to the next list
+     */
+    fun checkAllItemsInListAndMoveToNext() {
+        val currentSection = getCurrentSection() ?: return
+        val currentListIndex = _uiState.value.selectedListIndex
+        currentSection.lists.getOrNull(currentListIndex) ?: return
+
+        // Create a mutable copy of the checklist so we can update it
+        val currentChecklist = _uiState.value.checklist ?: return
+
+        // Make a new checklist with all items in the current list checked
+        val updatedChecklist = currentChecklist.copy(
+            sections = currentChecklist.sections.toMutableList().apply {
+                this[_uiState.value.selectedSectionIndex] = this[_uiState.value.selectedSectionIndex].copy(
+                    lists = this[_uiState.value.selectedSectionIndex].lists.toMutableList().apply {
+                        this[currentListIndex] = this[currentListIndex].copy(
+                            items = this[currentListIndex].items.map { item ->
+                                // Only mark actual items as checked (not notes, cautions, warnings)
+                                if (item.type.lowercase() == "item") {
+                                    item.copy(checked = true)
+                                } else {
+                                    item
+                                }
+                            }
+                        )
+                    }
+                )
+            }
+        )
+
+        // Update the state with the new checklist
+        _uiState.update { it.copy(checklist = updatedChecklist) }
+
+        // Move to the next list if available
+        if (currentListIndex < currentSection.lists.size - 1) {
+            selectList(currentListIndex + 1)
+        } else {
+            // If this was the last list in the section, try to move to the next section
+            val nextSectionIndex = _uiState.value.selectedSectionIndex + 1
+            if (nextSectionIndex < (updatedChecklist.sections.size)) {
+                // Find the next checklist-type section
+                for (i in nextSectionIndex until updatedChecklist.sections.size) {
+                    if (updatedChecklist.sections[i].type == Constants.SECTION_TYPE_CHECKLIST) {
+                        selectSection(i)
+                        break
+                    }
+                }
+            }
+        }
+    }
+
     private fun getCurrentSection(): ChecklistSection? {
         val checklist = _uiState.value.checklist ?: return null
         val index = _uiState.value.selectedSectionIndex
