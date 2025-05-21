@@ -343,6 +343,11 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             // First look in the current list for unchecked items after the current one
             val currentList = currentSection.lists[nextListIndex]
             for (i in nextItemIndex + 1 until currentList.items.size) {
+                val itemType = currentList.items[i].type.lowercase()
+                // Skip items that are labels, notes, cautions, or warnings
+                if (itemType == "label" || itemType == "note" || itemType == "caution" || itemType == "warning") {
+                    continue
+                }
                 if (!currentList.items[i].checked) {
                     nextItemIndex = i
                     foundUncheckedItem = true
@@ -352,46 +357,53 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
 
             // If not found, look in subsequent lists in this section
             if (!foundUncheckedItem) {
-                for (listIdx in nextListIndex + 1 until currentSection.lists.size) {
+                listLoop@ for (listIdx in nextListIndex + 1 until currentSection.lists.size) {
                     val list = currentSection.lists[listIdx]
                     for (itemIdx in list.items.indices) {
+                        val itemType = list.items[itemIdx].type.lowercase()
+                        // Skip items that are labels, notes, cautions, or warnings
+                        if (itemType == "label" || itemType == "note" || itemType == "caution" || itemType == "warning") {
+                            continue
+                        }
                         if (!list.items[itemIdx].checked) {
                             nextListIndex = listIdx
                             nextItemIndex = itemIdx
                             foundUncheckedItem = true
-                            break
+                            break@listLoop
                         }
                     }
-                    if (foundUncheckedItem) break
                 }
             }
 
             // If still not found and we're allowed to advance to next section, look in subsequent sections
             if (!foundUncheckedItem) {
-                for (sectionIdx in nextSectionIndex + 1 until checklist.sections.size) {
+                sectionLoop@ for (sectionIdx in nextSectionIndex + 1 until checklist.sections.size) {
                     val section = checklist.sections[sectionIdx]
                     // Only consider checklist-type sections
                     if (section.type == Constants.SECTION_TYPE_CHECKLIST) {
                         for (listIdx in section.lists.indices) {
                             val list = section.lists[listIdx]
                             for (itemIdx in list.items.indices) {
+                                val itemType = list.items[itemIdx].type.lowercase()
+                                // Skip items that are labels, notes, cautions, or warnings
+                                if (itemType == "label" || itemType == "note" || itemType == "caution" || itemType == "warning") {
+                                    continue
+                                }
                                 if (!list.items[itemIdx].checked) {
                                     nextSectionIndex = sectionIdx
                                     nextListIndex = listIdx
                                     nextItemIndex = itemIdx
                                     foundUncheckedItem = true
-                                    break
+                                    break@sectionLoop
                                 }
                             }
-                            if (foundUncheckedItem) break
                         }
                     }
-                    if (foundUncheckedItem) break
                 }
             }
 
             // If still haven't found an unchecked item, fall back to the default behavior
-            // which is to move to the next item in sequence
+            // which is to move to the next item in sequence, but skip labels, notes, cautions, and warnings
             if (!foundUncheckedItem) {
                 val (nextItem, nextList, nextSection) = calculateNextIndices(
                     advanceToNextSection = true,
@@ -400,6 +412,63 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
                 nextItemIndex = nextItem
                 nextListIndex = nextList
                 nextSectionIndex = nextSection
+
+                // If the item we're navigating to is a label/note/caution/warning, try to find the next actionable item
+                var foundActionableItem = false
+                if (nextSectionIndex < updatedChecklist.sections.size) {
+                    val nextSectionRef = updatedChecklist.sections[nextSectionIndex]
+                    if (nextListIndex < nextSectionRef.lists.size) {
+                        val nextListRef = nextSectionRef.lists[nextListIndex]
+                        // Try to find next actionable item in this list
+                        for (i in nextItemIndex until nextListRef.items.size) {
+                            val itemType = nextListRef.items[i].type.lowercase()
+                            if (itemType != "label" && itemType != "note" && itemType != "caution" && itemType != "warning") {
+                                nextItemIndex = i
+                                foundActionableItem = true
+                                break
+                            }
+                        }
+
+                        // If not found in this list, try in subsequent lists and sections
+                        if (!foundActionableItem) {
+                            // Search in remaining lists of this section
+                            listLoop@ for (listIdx in nextListIndex + 1 until nextSectionRef.lists.size) {
+                                val list = nextSectionRef.lists[listIdx]
+                                for (itemIdx in list.items.indices) {
+                                    val itemType = list.items[itemIdx].type.lowercase()
+                                    if (itemType != "label" && itemType != "note" && itemType != "caution" && itemType != "warning") {
+                                        nextListIndex = listIdx
+                                        nextItemIndex = itemIdx
+                                        foundActionableItem = true
+                                        break@listLoop
+                                    }
+                                }
+                            }
+
+                            // If still not found, look in subsequent sections
+                            if (!foundActionableItem) {
+                                sectionLoop@ for (sectionIdx in nextSectionIndex + 1 until updatedChecklist.sections.size) {
+                                    val section = updatedChecklist.sections[sectionIdx]
+                                    if (section.type == Constants.SECTION_TYPE_CHECKLIST) {
+                                        for (listIdx in section.lists.indices) {
+                                            val list = section.lists[listIdx]
+                                            for (itemIdx in list.items.indices) {
+                                                val itemType = list.items[itemIdx].type.lowercase()
+                                                if (itemType != "label" && itemType != "note" && itemType != "caution" && itemType != "warning") {
+                                                    nextSectionIndex = sectionIdx
+                                                    nextListIndex = listIdx
+                                                    nextItemIndex = itemIdx
+                                                    foundActionableItem = true
+                                                    break@sectionLoop
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         } else {
             // For emergency sections, find the next unchecked item but stay within the section
@@ -408,6 +477,11 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
             // First look in the current list for unchecked items after the current one
             val currentList = currentSection.lists[nextListIndex]
             for (i in nextItemIndex + 1 until currentList.items.size) {
+                val itemType = currentList.items[i].type.lowercase()
+                // Skip items that are labels, notes, cautions, or warnings
+                if (itemType == "label" || itemType == "note" || itemType == "caution" || itemType == "warning") {
+                    continue
+                }
                 if (!currentList.items[i].checked) {
                     nextItemIndex = i
                     foundUncheckedItem = true
@@ -417,17 +491,21 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
 
             // If not found, look in subsequent lists in this emergency section
             if (!foundUncheckedItem) {
-                for (listIdx in nextListIndex + 1 until currentSection.lists.size) {
+                listLoop@ for (listIdx in nextListIndex + 1 until currentSection.lists.size) {
                     val list = currentSection.lists[listIdx]
                     for (itemIdx in list.items.indices) {
+                        val itemType = list.items[itemIdx].type.lowercase()
+                        // Skip items that are labels, notes, cautions, or warnings
+                        if (itemType == "label" || itemType == "note" || itemType == "caution" || itemType == "warning") {
+                            continue
+                        }
                         if (!list.items[itemIdx].checked) {
                             nextListIndex = listIdx
                             nextItemIndex = itemIdx
                             foundUncheckedItem = true
-                            break
+                            break@listLoop
                         }
                     }
-                    if (foundUncheckedItem) break
                 }
             }
 
@@ -441,6 +519,38 @@ class ChecklistViewModel(application: Application) : AndroidViewModel(applicatio
                 nextItemIndex = nextItem
                 nextListIndex = nextList
                 // Don't change section for emergency checklists
+
+                // If the next item is a label/note/caution/warning, try to find the next actionable item
+                var foundActionableItem = false
+                val nextSectionRef = updatedChecklist.sections[nextSectionIndex]
+                if (nextListIndex < nextSectionRef.lists.size) {
+                    val nextListRef = nextSectionRef.lists[nextListIndex]
+                    // Try to find next actionable item in this list
+                    for (i in nextItemIndex until nextListRef.items.size) {
+                        val itemType = nextListRef.items[i].type.lowercase()
+                        if (itemType != "label" && itemType != "note" && itemType != "caution" && itemType != "warning") {
+                            nextItemIndex = i
+                            foundActionableItem = true
+                            break
+                        }
+                    }
+
+                    // If not found in this list, try in subsequent lists (staying within section)
+                    if (!foundActionableItem) {
+                        listLoop@ for (listIdx in nextListIndex + 1 until nextSectionRef.lists.size) {
+                            val list = nextSectionRef.lists[listIdx]
+                            for (itemIdx in list.items.indices) {
+                                val itemType = list.items[itemIdx].type.lowercase()
+                                if (itemType != "label" && itemType != "note" && itemType != "caution" && itemType != "warning") {
+                                    nextListIndex = listIdx
+                                    nextItemIndex = itemIdx
+                                    foundActionableItem = true
+                                    break@listLoop
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
