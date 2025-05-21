@@ -52,8 +52,7 @@ fun HomeScreen(
         topBar = {
             TopBar(
                 localTime = uiState.currentLocalTime,
-                utcTime = uiState.currentUtcTime,
-                onMenuClick = { /* Open menu - implement later */ }
+                utcTime = uiState.currentUtcTime
             )
         }
     ) { paddingValues ->
@@ -187,8 +186,7 @@ private fun HomeScreenPreviewContent(checklist: Checklist) {
         topBar = {
             TopBar(
                 localTime = "12:34:56",
-                utcTime = "16:34:56",
-                onMenuClick = { }
+                utcTime = "16:34:56"
             )
         }
     ) { paddingValues ->

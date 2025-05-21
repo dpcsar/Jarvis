@@ -87,8 +87,7 @@ fun DetailsScreen(
         topBar = {
             TopBar(
                 localTime = uiState.currentLocalTime,
-                utcTime = uiState.currentUtcTime,
-                onMenuClick = { /* Open menu - implement later */ }
+                utcTime = uiState.currentUtcTime
             )
         },
         bottomBar = {
@@ -541,8 +540,7 @@ private fun ChecklistDetailScreenPreviewContent(checklist: Checklist) {
         topBar = {
             TopBar(
                 localTime = "12:34:56",
-                utcTime = "16:34:56",
-                onMenuClick = { }
+                utcTime = "16:34:56"
             )
         },
         bottomBar = {

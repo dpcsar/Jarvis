@@ -1,14 +1,13 @@
 package site.jarviscopilot.jarvis.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,7 +30,6 @@ import site.jarviscopilot.jarvis.ui.theme.LocalAviationColors
 fun TopBar(
     localTime: String,
     utcTime: String,
-    onMenuClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val aviationColors = LocalAviationColors.current
@@ -44,19 +42,9 @@ fun TopBar(
                 .background(aviationColors.avDarkBlue)
                 .statusBarsPadding()
                 .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
         ) {
-            // Menu button
-            IconButton(onClick = onMenuClick) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Menu",
-                    tint = aviationColors.avTextWhite
-                )
-            }
-            
-            Spacer(modifier = Modifier.weight(1f))
-            
             // Time displays aligned to end
             Column(
                 modifier = Modifier.padding(bottom = 4.dp),
@@ -128,8 +116,7 @@ fun TopBarPreview() {
     JarvisTheme {
         TopBar(
             localTime = "12:34:56",
-            utcTime = "16:34:56",
-            onMenuClick = {}
+            utcTime = "16:34:56"
         )
     }
 }
