@@ -17,7 +17,7 @@ class ChecklistRepository(private val context: Context) {
                 ?.filter { it.startsWith("cl_") && it.endsWith(".json") }
                 ?.map { it.substringAfter("cl_").substringBefore(".json").replace("_", " ").capitalize() }
                 ?: emptyList()
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             emptyList()
         }
     }
@@ -26,7 +26,7 @@ class ChecklistRepository(private val context: Context) {
         try {
             val jsonString = context.assets.open(filename).bufferedReader().use { it.readText() }
             gson.fromJson(jsonString, Checklist::class.java)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

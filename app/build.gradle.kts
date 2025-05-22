@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "site.jarviscopilot.jarvis"
         minSdk = 34
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -51,19 +51,19 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // Navigation Component
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.navigation.compose)
 
     // Gson for JSON parsing
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.gson)
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // Accompanist for permissions handling
-    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+    implementation(libs.accompanist.permissions)
 
     // For date and time formatting
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+    implementation(libs.kotlinx.datetime)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
