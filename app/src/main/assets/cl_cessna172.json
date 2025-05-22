@@ -1,0 +1,88 @@
+{
+  "title": "Cessna 172 Checklist",
+  "aircraft": "Cessna 172",
+  "sections": [
+    {
+      "title": "Pre-Flight",
+      "items": [
+        {
+          "type": "checkbox",
+          "text": "Aircraft Documents",
+          "description": "ARROW - Airworthiness, Registration, Radio License, Operating Limitations, Weight and Balance",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Fuel Quantity",
+          "description": "Check visually",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Control Surfaces",
+          "description": "Check for free and correct movement",
+          "mandatory": true
+        }
+      ]
+    },
+    {
+      "title": "Engine Start",
+      "items": [
+        {
+          "type": "checkbox",
+          "text": "Parking Brake",
+          "description": "SET",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Circuit Breakers",
+          "description": "CHECK IN",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Beacon",
+          "description": "ON",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Mixture",
+          "description": "RICH",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Throttle",
+          "description": "OPEN 1/4 INCH",
+          "mandatory": true
+        }
+      ]
+    },
+    {
+      "title": "Taxi",
+      "items": [
+        {
+          "type": "checkbox",
+          "text": "Brakes",
+          "description": "TEST",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Flight Instruments",
+          "description": "CHECK",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Altimeter",
+          "description": "SET",
+          "mandatory": true
+        }
+      ]
+    }
+  ]
+}
+

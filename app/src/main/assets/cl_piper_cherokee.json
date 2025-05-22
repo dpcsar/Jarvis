@@ -1,0 +1,84 @@
+{
+  "title": "Piper Cherokee Checklist",
+  "aircraft": "Piper PA-28 Cherokee",
+  "sections": [
+    {
+      "title": "Pre-Flight Inspection",
+      "items": [
+        {
+          "type": "checkbox",
+          "text": "Documentation",
+          "description": "Check for airworthiness certificate, registration, operating handbook",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Control Lock",
+          "description": "REMOVE",
+          "mandatory": true
+        },
+        {
+          "type": "warning",
+          "text": "Ensure all covers and tie-downs are removed before proceeding"
+        }
+      ]
+    },
+    {
+      "title": "Before Starting Engine",
+      "items": [
+        {
+          "type": "checkbox",
+          "text": "Seat Belts and Harnesses",
+          "description": "FASTEN/ADJUST",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Fuel Selector",
+          "description": "FULLEST TANK",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "All Switches",
+          "description": "OFF",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Brakes",
+          "description": "TEST and SET",
+          "mandatory": true
+        }
+      ]
+    },
+    {
+      "title": "Starting Engine",
+      "items": [
+        {
+          "type": "checkbox",
+          "text": "Mixture",
+          "description": "FULL RICH",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Carburetor Heat",
+          "description": "OFF",
+          "mandatory": true
+        },
+        {
+          "type": "checkbox",
+          "text": "Prime",
+          "description": "AS REQUIRED",
+          "mandatory": true
+        },
+        {
+          "type": "note",
+          "text": "In cold weather, additional priming may be necessary"
+        }
+      ]
+    }
+  ]
+}
+
