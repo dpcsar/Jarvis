@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.text.SimpleDateFormat
@@ -141,3 +142,33 @@ fun MainScreen(
     }
 }
 
+// Preview with lite mode
+@Preview(
+    name = "Main Screen Preview",
+    showBackground = true,
+    showSystemUi = true,
+    apiLevel = 35,
+)
+@Composable
+fun MainScreenPreview() {
+    MainScreen(
+        onChecklistSelected = {},
+        onSettingsClick = {}
+    )
+}
+
+// Preview with dark mode
+@Preview(
+    name = "Main Screen Preview - Dark",
+    showBackground = true,
+    showSystemUi = true,
+    apiLevel = 35,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun MainScreenPreviewDark() {
+    MainScreen(
+        onChecklistSelected = {},
+        onSettingsClick = {}
+    )
+}
