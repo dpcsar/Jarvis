@@ -54,10 +54,11 @@
 ## Screen layout
 
 * **Main screen:**
-    * **Top Ribbon first level:** Hamburger menu for settings, flight plan, local time, UTC time.
-    * **Top Ribbon second level:** Indicate the current phase of flight.
+    * **Top Ribbon first level:** flight plan, local time, UTC time.
+    * **Top Ribbon second level:** settings button.
     * **List of checklist:** A list of checklists. Ability to select new or return.
 * **After selecting the checklist:**
+    * **Top Ribbon first level:** flight plan, local time, UTC time.
     * **Bottom Ribbon (Checklist Screen):** Home, Check (larger), Skip (larger, greyed out if not permitted), Mic for listen again (change color if listening), Repeat item.
     * **Bottom Ribbon One Level Up (Checklist Selection):** Grey out checklists requiring previous ones to be completed. Different colors for normal, abnormal, emergency, reference checklists.
     * **Top Ribbon first level:** Hamburger menu for settings, flight plan, local time, UTC time.
@@ -130,26 +131,22 @@
 
 This stage is foundational. Breaking it down can help ensure all initial configurations are correctly handled.
 
-* **Project Initialization:**
-    * Create a new Android Studio project using Kotlin as the programming language.
-    * Set the minimum Android version to API level 34 or higher as specified.
-* **Core Dependencies:**
-    * Integrate the TensorFlow Lite library for Android. Follow the setup guide from the provided Google AI Edge link: https://ai.google.dev/edge/mediapipe/solutions/setup_android.
-    * Add any other essential libraries you anticipate needing early on (e.g., for UI elements, navigation).
 * **Basic UI Shell:**
-    * Design the initial main screen layout, including the top ribbons (hamburger menu, flight plan, time) and the area for listing checklists as described in "Screen layout".
+    * Design the initial main screen layout, including the top ribbons (flight plan, time) and the area for listing checklists as described in "Screen layout".
     * Set up basic navigation between initial screens (if any beyond the main screen are immediately necessary).
 * **Permissions:**
     * Declare the `<uses-permission android:name="android.permission.RECORD_AUDIO" />` permission in the `AndroidManifest.xml`.
     * Implement the runtime permission request flow for audio recording.
 * **Asset Integration (Initial):**
-    * Include the sample `checklist.json` in the `assets` folder.
-    * Place the LiteRT model (`jarvis_model.tflite`) in the `assets` folder.
+    * Include the sample checklists `cl_*.json` in the `assets` folder.
 
 ### Stage 2: Implementing the "Checklist Display and Interaction" Feature
 
 This stage focuses on the core functionality of displaying and interacting with checklists.
 
+* **Core Dependencies:**
+    * Integrate the TensorFlow Lite library for Android. Follow the setup guide from the provided Google AI Edge link: https://ai.google.dev/edge/mediapipe/solutions/setup_android.
+    * Add any other essential libraries you anticipate needing early on (e.g., for UI elements, navigation).
 * **Data Loading and Parsing:**
     * Implement logic to load and parse the `checklist.json` file from the assets.
     * Develop data models (e.g., Kotlin data classes) to represent checklists, sections, and individual checklist items with their various types (tasks, notes, warnings, information, checkboxes, Yes/No, text input, pickers, labels).

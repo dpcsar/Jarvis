@@ -29,7 +29,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Aircraft & Pilot Documents",
                      "challengeAudio": "",
                      "response": "",
@@ -41,7 +41,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fire Extinguisher",
                      "challengeAudio": "",
                      "response": "",
@@ -53,7 +53,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "DOWN",
@@ -65,7 +65,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Carb Heat",
                      "challengeAudio": "",
                      "response": "COLD",
@@ -77,7 +77,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ignition Switch",
                      "challengeAudio": "",
                      "response": "OFF, KEY OUT",
@@ -89,7 +89,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Avionics Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -101,7 +101,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master Switch",
                      "challengeAudio": "",
                      "response": "ON",
@@ -113,7 +113,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Lights - Position, Strobe, Land, Taxi",
                      "challengeAudio": "",
                      "response": "ON",
@@ -125,7 +125,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Position & Strobe - Left Wing",
                      "challengeAudio": "",
                      "response": "",
@@ -137,7 +137,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Landing Light - Left Wing",
                      "challengeAudio": "",
                      "response": "",
@@ -149,7 +149,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Taxi Light - Right Wing",
                      "challengeAudio": "",
                      "response": "",
@@ -161,7 +161,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Position & Strobe - Right Wing",
                      "challengeAudio": "",
                      "response": "",
@@ -173,7 +173,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Lights - Position, Strobe, Land, Taxi",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -185,7 +185,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -209,7 +209,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Static Sources",
                      "challengeAudio": "",
                      "response": "LEFT SIDE",
@@ -221,7 +221,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tail Tie Down",
                      "challengeAudio": "",
                      "response": "",
@@ -233,7 +233,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Elevator Trim",
                      "challengeAudio": "",
                      "response": "NEUTRAL",
@@ -245,7 +245,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Rudder Gust Lock",
                      "challengeAudio": "",
                      "response": "",
@@ -257,7 +257,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Control Surfaces",
                      "challengeAudio": "",
                      "response": "",
@@ -269,7 +269,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Static Sources",
                      "challengeAudio": "",
                      "response": "RIGHT SIDE",
@@ -281,7 +281,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "All Antennas",
                      "challengeAudio": "",
                      "response": "",
@@ -305,7 +305,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flap",
                      "challengeAudio": "",
                      "response": "",
@@ -317,7 +317,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Aileron",
                      "challengeAudio": "",
                      "response": "",
@@ -329,7 +329,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tie Down & Chocks",
                      "challengeAudio": "",
                      "response": "",
@@ -341,7 +341,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tire & Brake",
                      "challengeAudio": "",
                      "response": "",
@@ -353,7 +353,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Tank",
                      "challengeAudio": "",
                      "response": "CHECK QUANTITY & SECURE CAP",
@@ -365,7 +365,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Sump",
                      "challengeAudio": "",
                      "response": "SAMPLE & CHECK FOR WATER",
@@ -389,7 +389,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Engine Oil",
                      "challengeAudio": "",
                      "response": "5.5 Quarts Minimum - SECURE CAP",
@@ -401,7 +401,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Propeller & Spinner",
                      "challengeAudio": "",
                      "response": "",
@@ -413,7 +413,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Intake",
                      "challengeAudio": "",
                      "response": "",
@@ -425,7 +425,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tire & Nose Gear",
                      "challengeAudio": "",
                      "response": "",
@@ -437,7 +437,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Chocks",
                      "challengeAudio": "",
                      "response": "",
@@ -449,7 +449,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Sump",
                      "challengeAudio": "",
                      "response": "SAMPLE & CHECK FOR WATER",
@@ -473,7 +473,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Tank",
                      "challengeAudio": "",
                      "response": "CHECK QUANTITY & SECURE CAP",
@@ -485,7 +485,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Sump",
                      "challengeAudio": "",
                      "response": "SAMPLE & CHECK FOR WATER",
@@ -497,7 +497,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tire & Brake",
                      "challengeAudio": "",
                      "response": "",
@@ -509,7 +509,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tie Down & Chocks",
                      "challengeAudio": "",
                      "response": "",
@@ -521,7 +521,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Pitot Tube",
                      "challengeAudio": "",
                      "response": "REMOVE COVER",
@@ -533,7 +533,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Aileron",
                      "challengeAudio": "",
                      "response": "",
@@ -545,7 +545,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flap",
                      "challengeAudio": "",
                      "response": "",
@@ -564,7 +564,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Seat Belts",
                      "challengeAudio": "",
                      "response": "FASTEN",
@@ -576,7 +576,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector",
                      "challengeAudio": "",
                      "response": "DESIRED TANK",
@@ -588,7 +588,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Avionics & Electrical",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -600,7 +600,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Brakes",
                      "challengeAudio": "",
                      "response": "SET",
@@ -612,7 +612,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Circuit Breakers",
                      "challengeAudio": "",
                      "response": "IN",
@@ -624,7 +624,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Canopy",
                      "challengeAudio": "",
                      "response": "ADJUST",
@@ -636,7 +636,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tach Time  on MyFlightBook",
                      "challengeAudio": "",
                      "response": "",
@@ -648,7 +648,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Passenger",
                      "challengeAudio": "",
                      "response": "BRIEF",
@@ -667,7 +667,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "RICH",
@@ -679,7 +679,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "1/4",
@@ -691,7 +691,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master & Alternator Switch",
                      "challengeAudio": "",
                      "response": "ON",
@@ -703,7 +703,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Boost Pump",
                      "challengeAudio": "",
                      "response": "ON",
@@ -715,7 +715,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Prime",
                      "challengeAudio": "",
                      "response": "AS REQUIRED (3 to 4 seconds when cold)",
@@ -727,7 +727,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Prop",
                      "challengeAudio": "",
                      "response": "CLEAR",
@@ -751,7 +751,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Start Switch",
                      "challengeAudio": "",
                      "response": "START position - release to BOTH position when engine starts",
@@ -763,7 +763,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Boost Pump",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -775,7 +775,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Oil Pressure",
                      "challengeAudio": "",
                      "response": "CHECK 25 psi at idle",
@@ -787,7 +787,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Warm-up",
                      "challengeAudio": "",
                      "response": "1200 RPM",
@@ -799,7 +799,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Engine Instruments",
                      "challengeAudio": "",
                      "response": "",
@@ -811,7 +811,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Voltage",
                      "challengeAudio": "",
                      "response": "",
@@ -823,7 +823,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "1000 RPM",
@@ -835,7 +835,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "UP",
@@ -847,7 +847,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flight Controls",
                      "challengeAudio": "",
                      "response": "FREE & CORRECT",
@@ -859,7 +859,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Click engine start on MyFlightBook",
                      "challengeAudio": "",
                      "response": "",
@@ -878,7 +878,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Avionics",
                      "challengeAudio": "",
                      "response": "ON",
@@ -890,7 +890,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Transponder",
                      "challengeAudio": "",
                      "response": "ON & ALT",
@@ -902,7 +902,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Position Lights",
                      "challengeAudio": "",
                      "response": "ON",
@@ -914,7 +914,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Taxi Light",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -926,7 +926,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Strobe Lights",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -938,7 +938,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Weather",
                      "challengeAudio": "",
                      "response": "Note",
@@ -950,7 +950,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "**Class D**\nCall Ground\n\n**Class B, C**\nCall Clearance\nCall Ground",
@@ -962,7 +962,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "LEAN",
@@ -981,7 +981,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Brakes",
                      "challengeAudio": "",
                      "response": "TEST",
@@ -1000,7 +1000,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Brakes",
                      "challengeAudio": "",
                      "response": "SET",
@@ -1012,7 +1012,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Canopy",
                      "challengeAudio": "",
                      "response": "SECURE",
@@ -1024,7 +1024,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Seat Belts",
                      "challengeAudio": "",
                      "response": "",
@@ -1036,7 +1036,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flight Controls",
                      "challengeAudio": "",
                      "response": "FREE & CORRECT",
@@ -1048,7 +1048,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Avionics",
                      "challengeAudio": "",
                      "response": "",
@@ -1060,7 +1060,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Engine Instruments",
                      "challengeAudio": "",
                      "response": "",
@@ -1072,7 +1072,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flight Instruments",
                      "challengeAudio": "",
                      "response": "",
@@ -1084,7 +1084,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector",
                      "challengeAudio": "",
                      "response": "DESIRED TANK",
@@ -1096,7 +1096,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "RICH (below 3000)",
@@ -1108,7 +1108,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "1700 RPM",
@@ -1120,7 +1120,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Magnetos (Right & Left)",
                      "challengeAudio": "",
                      "response": "A maximum drop of 150 rpm on each magneto, variance between individual magnetos not to exceed 50 rpm.",
@@ -1132,7 +1132,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Carb Heat",
                      "challengeAudio": "",
                      "response": "CHECK FOR DROP",
@@ -1144,7 +1144,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Alternator",
                      "challengeAudio": "",
                      "response": "CHECK",
@@ -1156,7 +1156,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "CLOSED TEST",
@@ -1168,7 +1168,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "1000 RPM",
@@ -1180,7 +1180,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Instruments",
                      "challengeAudio": "",
                      "response": "CHECK",
@@ -1208,7 +1208,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "SET",
@@ -1220,7 +1220,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "RICH (below 3000’)",
@@ -1232,7 +1232,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Taxi Light",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -1244,7 +1244,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Boost Pump",
                      "challengeAudio": "",
                      "response": "ON",
@@ -1256,7 +1256,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Review Speeds",
                      "challengeAudio": "",
                      "response": "",
@@ -1268,7 +1268,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Abort Plan",
                      "challengeAudio": "",
                      "response": "READY",
@@ -1280,7 +1280,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "",
@@ -1299,7 +1299,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "FULL",
@@ -1311,7 +1311,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed Alive",
                      "challengeAudio": "",
                      "response": "ACCELERATE to and maintain take-off speed",
@@ -1323,7 +1323,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Rotate",
                      "challengeAudio": "",
                      "response": "55 KIAS",
@@ -1335,7 +1335,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vx",
                      "challengeAudio": "V X",
                      "response": "62 KIAS",
@@ -1347,7 +1347,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vy",
                      "challengeAudio": "V Y",
                      "response": "75 KIAS",
@@ -1359,7 +1359,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "UP when clear of obstacles",
@@ -1378,7 +1378,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "110-130 KIAS",
@@ -1390,7 +1390,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "FULL",
@@ -1402,7 +1402,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Boost Pump",
                      "challengeAudio": "",
                      "response": "OFF @ 1000 AGL",
@@ -1414,7 +1414,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pressure",
                      "challengeAudio": "",
                      "response": "",
@@ -1426,7 +1426,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Temperature",
                      "challengeAudio": "",
                      "response": "MONITOR",
@@ -1438,7 +1438,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "LEAN",
@@ -1450,7 +1450,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Instruments",
                      "challengeAudio": "",
                      "response": "",
@@ -1469,7 +1469,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Airspeed",
                      "challengeAudio": "",
                      "response": "110-175 KIAS",
@@ -1481,7 +1481,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "SET AS DESIRED",
@@ -1493,7 +1493,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "LEAN",
@@ -1505,7 +1505,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Oil Pressure & Temperature",
                      "challengeAudio": "",
                      "response": "",
@@ -1517,7 +1517,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Volts & Amps",
                      "challengeAudio": "",
                      "response": "",
@@ -1529,7 +1529,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector",
                      "challengeAudio": "",
                      "response": "Switch Every 30 Minutes",
@@ -1541,7 +1541,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Review Emergency Procedures",
                      "challengeAudio": "",
                      "response": "",
@@ -1560,7 +1560,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio",
                      "challengeAudio": "",
                      "response": "SET",
@@ -1572,7 +1572,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Weather",
                      "challengeAudio": "",
                      "response": "Note",
@@ -1584,7 +1584,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Altimeter",
                      "challengeAudio": "",
                      "response": "SET",
@@ -1596,7 +1596,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Oil Pressure & Temperature",
                      "challengeAudio": "",
                      "response": "",
@@ -1608,7 +1608,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Volts & Amps",
                      "challengeAudio": "",
                      "response": "",
@@ -1620,7 +1620,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "ENRICH AS REQUIRED",
@@ -1632,7 +1632,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "AS REQUIRED - avoid prolonged idle settings which may cause low cylinder head temperatures",
@@ -1644,7 +1644,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Instruments",
                      "challengeAudio": "",
                      "response": "",
@@ -1656,7 +1656,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "",
@@ -1684,7 +1684,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Seat Belts",
                      "challengeAudio": "",
                      "response": "",
@@ -1696,7 +1696,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector Valve",
                      "challengeAudio": "",
                      "response": "FULLEST TANK",
@@ -1708,7 +1708,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "RICH",
@@ -1720,7 +1720,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Boost Pump",
                      "challengeAudio": "",
                      "response": "ON",
@@ -1732,7 +1732,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Landing & Taxi Lights",
                      "challengeAudio": "",
                      "response": "ON",
@@ -1744,7 +1744,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Carb Heat",
                      "challengeAudio": "",
                      "response": "ON",
@@ -1756,7 +1756,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "DOWN @ less than 96 KIAS",
@@ -1768,7 +1768,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Speed",
                      "challengeAudio": "",
                      "response": "Flaps Down - 63 KIAS, Flaps Up - 68 KIAS",
@@ -1780,7 +1780,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "",
@@ -1799,7 +1799,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -1811,7 +1811,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Speed",
                      "challengeAudio": "",
                      "response": "Flaps Down - 63 KIAS, Flaps Up - 68 KIAS",
@@ -1823,7 +1823,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "",
@@ -1842,7 +1842,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -1854,7 +1854,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Speed",
                      "challengeAudio": "",
                      "response": "Flaps Down - 63 KIAS, Flaps Up - 68 KIAS",
@@ -1866,7 +1866,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "",
@@ -1878,7 +1878,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Final Decision",
                      "challengeAudio": "",
                      "response": "",
@@ -1897,7 +1897,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Power",
                      "challengeAudio": "",
                      "response": "FULL",
@@ -1909,7 +1909,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps Up",
                      "challengeAudio": "",
                      "response": "RETRACT SLOWLY",
@@ -1921,7 +1921,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Positive Rate Climb",
                      "challengeAudio": "",
                      "response": "CONFIRM",
@@ -1933,7 +1933,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Trim",
                      "challengeAudio": "",
                      "response": "AS NEEDED",
@@ -1945,7 +1945,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "",
@@ -1973,7 +1973,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "UP",
@@ -1985,7 +1985,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Call",
                      "challengeAudio": "",
                      "response": "",
@@ -1997,7 +1997,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Strobe",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2009,7 +2009,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Landing & Taxi Lights",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -2028,7 +2028,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Landing & Taxi Lights",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2040,7 +2040,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Position Lights",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2052,7 +2052,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Avionics Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2064,7 +2064,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "1000 RPM",
@@ -2076,7 +2076,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "IDLE CUT-OFF",
@@ -2088,7 +2088,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master & Alternator Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2100,7 +2100,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Start Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2112,7 +2112,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "DOWN",
@@ -2124,7 +2124,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Click engine stop on MyFlightBook",
                      "challengeAudio": "",
                      "response": "",
@@ -2136,7 +2136,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tach Time on MyFlightBook",
                      "challengeAudio": "",
                      "response": "",
@@ -2148,7 +2148,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Canopy",
                      "challengeAudio": "",
                      "response": "SECURE",
@@ -2160,7 +2160,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Pitot Cover",
                      "challengeAudio": "",
                      "response": "",
@@ -2172,7 +2172,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Chocks",
                      "challengeAudio": "",
                      "response": "",
@@ -2184,7 +2184,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Tie Downs",
                      "challengeAudio": "",
                      "response": "",
@@ -2196,7 +2196,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Cover",
                      "challengeAudio": "",
                      "response": "",
@@ -2208,7 +2208,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flight Plan",
                      "challengeAudio": "",
                      "response": "CLOSE",
@@ -2220,7 +2220,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Be Safe!!!",
                      "challengeAudio": "",
                      "response": "",
@@ -2232,7 +2232,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "**FLIGHT COMPLETE**",
                      "challengeAudio": "",
                      "response": "",
@@ -2260,7 +2260,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Emergency Descent Speed",
                      "challengeAudio": "",
                      "response": "180 KIAS",
@@ -2272,7 +2272,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Best Glide Speed",
                      "challengeAudio": "",
                      "response": "80 KIAS",
@@ -2284,7 +2284,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Emergency Landing Approach",
                      "challengeAudio": "",
                      "response": "80 KIAS",
@@ -2303,7 +2303,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "CLOSED",
@@ -2315,7 +2315,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Braking",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -2327,7 +2327,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "UP",
@@ -2339,7 +2339,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "IDLE CUT-OFF",
@@ -2351,7 +2351,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2363,7 +2363,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pump",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2375,7 +2375,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ignition Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2387,7 +2387,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2399,7 +2399,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fire Extinguisher",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -2418,7 +2418,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "Best Glide 80 KIAS",
@@ -2430,7 +2430,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Carb Heat",
                      "challengeAudio": "",
                      "response": "ON",
@@ -2442,7 +2442,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pump",
                      "challengeAudio": "",
                      "response": "ON",
@@ -2454,7 +2454,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "RICH",
@@ -2466,7 +2466,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector",
                      "challengeAudio": "",
                      "response": "SWITCH TANKS",
@@ -2478,7 +2478,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ignition Switch",
                      "challengeAudio": "",
                      "response": "LEFT, RIGHT, BOTH",
@@ -2490,7 +2490,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Engine Gauges",
                      "challengeAudio": "",
                      "response": "CHECK",
@@ -2502,7 +2502,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "**If No Restart**",
                      "challengeAudio": "",
                      "response": "Commit to Power Off Landing",
@@ -2521,7 +2521,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2533,7 +2533,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "IDLE CUT-OFF",
@@ -2545,7 +2545,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pump",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2557,7 +2557,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "CLOSED",
@@ -2569,7 +2569,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ignition Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2581,7 +2581,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Declare Emergency",
                      "challengeAudio": "",
                      "response": "TWR, APP, 121.5",
@@ -2593,7 +2593,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Squawk",
                      "challengeAudio": "",
                      "response": "7700",
@@ -2605,7 +2605,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2617,7 +2617,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Seat Belts",
                      "challengeAudio": "",
                      "response": "TIGHT",
@@ -2641,7 +2641,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "Best Glide 80 KIAS",
@@ -2653,7 +2653,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -2672,7 +2672,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Starter",
                      "challengeAudio": "",
                      "response": "CRANK ENGINE",
@@ -2684,7 +2684,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "IDLE CUT-OFF",
@@ -2696,7 +2696,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "OPEN",
@@ -2708,7 +2708,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pump",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2720,7 +2720,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2732,7 +2732,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2744,7 +2744,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Evacuate",
                      "challengeAudio": "",
                      "response": "ASAP",
@@ -2756,7 +2756,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fire Extinguisher",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -2775,7 +2775,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Selector",
                      "challengeAudio": "",
                      "response": " OFF",
@@ -2787,7 +2787,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "CLOSE",
@@ -2799,7 +2799,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "IDLE CUT-OFF",
@@ -2811,7 +2811,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pump",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2823,7 +2823,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Cabin Heat",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2835,7 +2835,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ignition Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2859,7 +2859,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "140 KIAS",
@@ -2890,7 +2890,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "180 KIAS",
@@ -2902,7 +2902,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "CLOSE",
@@ -2921,7 +2921,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "Best Glide 80 KIAS",
@@ -2933,7 +2933,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "ELT",
                      "challengeAudio": "E L T",
                      "response": "ACTIVATE",
@@ -2945,7 +2945,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Declare Emergency",
                      "challengeAudio": "",
                      "response": "TWR, APP, or 121.5",
@@ -2957,7 +2957,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Squawk",
                      "challengeAudio": "",
                      "response": "7700",
@@ -2969,7 +2969,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Master",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -2981,7 +2981,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Seat Belts",
                      "challengeAudio": "",
                      "response": "TIGHT",
@@ -3005,7 +3005,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "Best Glide 80 KIAS",
@@ -3017,7 +3017,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Flaps",
                      "challengeAudio": "",
                      "response": "AS REQUIRED",
@@ -3036,7 +3036,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Carb Heat",
                      "challengeAudio": "",
                      "response": "ON",
@@ -3060,7 +3060,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Carb Heat",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -3072,7 +3072,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "ADJUST SMOOTH",
@@ -3084,7 +3084,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pump",
                      "challengeAudio": "",
                      "response": "ON",
@@ -3096,7 +3096,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel",
                      "challengeAudio": "",
                      "response": "CHANGE TANKS",
@@ -3108,7 +3108,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ignition Switch",
                      "challengeAudio": "",
                      "response": "LEFT, RIGHT, BOTH",
@@ -3151,7 +3151,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel Pump",
                      "challengeAudio": "",
                      "response": "ON",
@@ -3163,7 +3163,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Fuel",
                      "challengeAudio": "",
                      "response": "CHANGE TANKS IF FUELLED",
@@ -3182,7 +3182,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Land",
                      "challengeAudio": "",
                      "response": "ASAP",
@@ -3194,7 +3194,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "_Prepare Power off Landing_",
                      "challengeAudio": "",
                      "response": "",
@@ -3213,7 +3213,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Land",
                      "challengeAudio": "",
                      "response": "ASAP",
@@ -3225,7 +3225,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "_Prepare Power off Landing_",
                      "challengeAudio": "",
                      "response": "",
@@ -3244,7 +3244,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "Best Glide 80 KIAS",
@@ -3256,7 +3256,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Canopy",
                      "challengeAudio": "",
                      "response": "CLOSE",
@@ -3280,7 +3280,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Land",
                      "challengeAudio": "",
                      "response": "ASAP",
@@ -3299,7 +3299,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Masters",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -3311,7 +3311,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Cabin Heat",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -3335,7 +3335,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Vents",
                      "challengeAudio": "",
                      "response": "OPEN",
@@ -3347,7 +3347,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Electrical Switches",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -3390,7 +3390,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Vents",
                      "challengeAudio": "",
                      "response": "CLOSE",
@@ -3414,7 +3414,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Vents",
                      "challengeAudio": "",
                      "response": "OPEN",
@@ -3457,7 +3457,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Reduce Electrical Load",
                      "challengeAudio": "",
                      "response": "CHECK",
@@ -3469,7 +3469,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Circuit Breakers",
                      "challengeAudio": "",
                      "response": "CHECK",
@@ -3481,7 +3481,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Alternator Switch",
                      "challengeAudio": "",
                      "response": "OFF 1 second then ON (Resets voltage regulator)",
@@ -3505,7 +3505,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Alternator Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -3517,7 +3517,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Reduce Electrical Load",
                      "challengeAudio": "",
                      "response": "CHECK",
@@ -3529,7 +3529,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Land",
                      "challengeAudio": "",
                      "response": "ASAP",
@@ -3548,7 +3548,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio",
                      "challengeAudio": "",
                      "response": "CHECK ON",
@@ -3560,7 +3560,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Radio Master",
                      "challengeAudio": "",
                      "response": "CHECK ON",
@@ -3572,7 +3572,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Volume",
                      "challengeAudio": "",
                      "response": "TURNED UP",
@@ -3584,7 +3584,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Squelch",
                      "challengeAudio": "",
                      "response": "TURNED DOWN",
@@ -3596,7 +3596,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Headset",
                      "challengeAudio": "",
                      "response": "PLUGGED IN",
@@ -3608,7 +3608,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Circuit Breaker",
                      "challengeAudio": "",
                      "response": "CHECK",
@@ -3620,7 +3620,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Frequency",
                      "challengeAudio": "",
                      "response": "SELECTED",
@@ -3644,7 +3644,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Squawk",
                      "challengeAudio": "",
                      "response": "7600",
@@ -3668,7 +3668,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Land",
                      "challengeAudio": "",
                      "response": "ASAP",
@@ -3699,7 +3699,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "CLOSE",
@@ -3723,7 +3723,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Mixture",
                      "challengeAudio": "",
                      "response": "IDLE CUT-OFF",
@@ -3735,7 +3735,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ignition Switch",
                      "challengeAudio": "",
                      "response": "OFF",
@@ -3747,7 +3747,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Advise ATC",
                      "challengeAudio": "",
                      "response": "",
@@ -3814,7 +3814,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Air Speed",
                      "challengeAudio": "",
                      "response": "Best Glide 80 KIAS",
@@ -3826,7 +3826,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Landing",
                      "challengeAudio": "",
                      "response": "ALONG SWELL or NO SWELL INTO WIND",
@@ -3838,7 +3838,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Check Failure",
                      "challengeAudio": "",
                      "response": "ATTEMPT CORRECTION",
@@ -3850,7 +3850,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Declare Emergency",
                      "challengeAudio": "",
                      "response": "TWR, APP, 121.5",
@@ -3862,7 +3862,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Engine",
                      "challengeAudio": "",
                      "response": "SHUTDOWN PROCEDURE",
@@ -3874,7 +3874,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Seat Belts",
                      "challengeAudio": "",
                      "response": "TIGHT",
@@ -3886,7 +3886,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Canopy Latch",
                      "challengeAudio": "",
                      "response": "UNLOCK. BUT NOT OPEN",
@@ -3898,7 +3898,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Final Approach",
                      "challengeAudio": "",
                      "response": "MASTER OFF",
@@ -3946,7 +3946,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Seat Belts",
                      "challengeAudio": "",
                      "response": "RELEASE",
@@ -3958,7 +3958,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Canopy",
                      "challengeAudio": "",
                      "response": "OPEN",
@@ -4013,7 +4013,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Ailerons",
                      "challengeAudio": "",
                      "response": "NEUTRAL",
@@ -4025,7 +4025,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Elevator",
                      "challengeAudio": "",
                      "response": "NEUTRAL",
@@ -4037,7 +4037,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Rudder",
                      "challengeAudio": "",
                      "response": "APPLY FULL OPPOSITE DIRECTION OF ROTATION",
@@ -4049,7 +4049,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Throttle",
                      "challengeAudio": "",
                      "response": "IDLE",
@@ -4077,7 +4077,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Takeoff Rotation",
                      "challengeAudio": "",
                      "response": "**55 KIAS**",
@@ -4089,7 +4089,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Normal Climb",
                      "challengeAudio": "",
                      "response": "**110-130 KIAS**",
@@ -4101,7 +4101,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Normal Approach, Flaps Up",
                      "challengeAudio": "",
                      "response": "**68 KIAS**",
@@ -4113,7 +4113,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Normal Approach, Flaps 45°",
                      "challengeAudio": "",
                      "response": "**63 KIAS**",
@@ -4125,7 +4125,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Go-Around, Max Power, Flaps 20°",
                      "challengeAudio": "",
                      "response": "**63 KIAS**",
@@ -4144,7 +4144,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Rotation",
                      "challengeAudio": "",
                      "response": "**55 KIAS**",
@@ -4156,7 +4156,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Normal Climb",
                      "challengeAudio": "",
                      "response": "**110-130 KIAS**",
@@ -4168,7 +4168,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Short Field Takeoff, Flaps 20°, Speed at 50 Feet",
                      "challengeAudio": "",
                      "response": "**80 KIAS**",
@@ -4180,7 +4180,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "En Route Climb Flaps Up",
                      "challengeAudio": "",
                      "response": "110-130 KIAS",
@@ -4192,7 +4192,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Best Rate of Climb, Sea Level",
                      "challengeAudio": "",
                      "response": "**75 KIAS**",
@@ -4204,7 +4204,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Best Angle of Climb, Sea Level",
                      "challengeAudio": "",
                      "response": "**63 KIAS**",
@@ -4216,7 +4216,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Approach, Flaps Up",
                      "challengeAudio": "",
                      "response": "**68-70 KIAS**",
@@ -4228,7 +4228,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Approach, Flaps 45°",
                      "challengeAudio": "",
                      "response": "**63-65 KIAS**",
@@ -4240,7 +4240,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Short Field Approach, Flaps 45°",
                      "challengeAudio": "",
                      "response": "**63 KIAS**",
@@ -4252,7 +4252,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Go-Around, Max Power, Flaps 20°",
                      "challengeAudio": "",
                      "response": "**63 KIAS**",
@@ -4264,7 +4264,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Max in Turbulence 1800 lbs.",
                      "challengeAudio": "",
                      "response": "115 KIAS",
@@ -4283,7 +4283,7 @@
                "nameAudio": "",
                "items": [
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Emergency Descent",
                      "challengeAudio": "",
                      "response": "180 KIAS",
@@ -4295,7 +4295,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Landing Approach",
                      "challengeAudio": "",
                      "response": "63-65 KIAS",
@@ -4307,7 +4307,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vne (Never Exceed)",
                      "challengeAudio": "V N E (Never Exceed)",
                      "response": "184 KIAS",
@@ -4319,7 +4319,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vno (Maximum structural)",
                      "challengeAudio": "V N O (Maximum structural)",
                      "response": "156 KIAS (1800 lbs), 135 KIAS (1650 lbs)",
@@ -4331,7 +4331,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Va (Maneuvering)",
                      "challengeAudio": "V A Maneuvering",
                      "response": "115 KIAS",
@@ -4343,7 +4343,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vfe (Flaps Extended)",
                      "challengeAudio": "V F E Flaps Extended)",
                      "response": "96 KIAS (20°), 87 KIAS (full)",
@@ -4355,7 +4355,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vg (Best Glide)",
                      "challengeAudio": "V G (Best Glide)",
                      "response": "80 KIAS",
@@ -4367,7 +4367,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vr (Rotation)",
                      "challengeAudio": "V R (Rotation)",
                      "response": "55 KIAS",
@@ -4379,7 +4379,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vs0 (Stall Landing)",
                      "challengeAudio": "V S zero (Stall Landing)",
                      "response": "48 KIAS",
@@ -4391,7 +4391,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vs1 (Stall Clean)",
                      "challengeAudio": "V S one (Stall Clean)",
                      "response": "52 KIAS",
@@ -4403,7 +4403,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vx (Best Angle of Climb)",
                      "challengeAudio": "V X (Best Angle of Climb)",
                      "response": "63 KIAS",
@@ -4415,7 +4415,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vy (Best Rate of Climb)",
                      "challengeAudio": "V Y (Best Rate of Climb)",
                      "response": "75 KIAS",
@@ -4427,7 +4427,7 @@
                      "stopNamedTimers": []
                   },
                   {
-                     "type": "item",
+                     "type": "task",
                      "challenge": "Vy (Cruise Climb)",
                      "challengeAudio": "V Y (Cruise Climb)",
                      "response": "110-130 KIAS",
