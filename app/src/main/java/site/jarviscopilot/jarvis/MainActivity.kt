@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import site.jarviscopilot.jarvis.ui.screens.ChecklistScreen
 import site.jarviscopilot.jarvis.ui.screens.MainScreen
+import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.PermissionHandler
 import site.jarviscopilot.jarvis.util.RequestAudioPermission
@@ -60,8 +61,7 @@ class MainActivity : ComponentActivity() {
                                         currentScreen = "checklist"
                                     },
                                     onSettingsClick = {
-                                        // Settings functionality to be implemented later
-                                        Toast.makeText(this@MainActivity, "Settings clicked", Toast.LENGTH_SHORT).show()
+                                        currentScreen = "settings"
                                     }
                                 )
                             }
@@ -69,6 +69,13 @@ class MainActivity : ComponentActivity() {
                                 ChecklistScreen(
                                     checklistName = selectedChecklist,
                                     onNavigateHome = {
+                                        currentScreen = "main"
+                                    }
+                                )
+                            }
+                            "settings" -> {
+                                SettingsScreen(
+                                    onBackClick = {
                                         currentScreen = "main"
                                     }
                                 )
