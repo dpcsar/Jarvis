@@ -7,7 +7,10 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-.idea/ChatHistory_schema_v2.xml
+/.idea/ChatHistory_schema_v2.xml
+/.idea/gradle.xml
+/.idea/misc.xml
+/.idea/appInsightsSettings.xml
 .DS_Store
 /build
 /captures

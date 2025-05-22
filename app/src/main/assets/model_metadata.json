@@ -1,0 +1,37 @@
+{
+  "models": [
+    {
+      "name": "hey_jarvisoptimized",
+      "keywords": [
+        "hey jarvis"
+      ],
+      "input_shape": [
+        100,
+        39
+      ],
+      "num_classes": 2,
+      "validation_accuracy": 0.9993472099304199,
+      "validation_loss": 0.002368248999118805,
+      "feature_params": {
+        "n_mfcc": 13,
+        "n_fft": 512,
+        "hop_length": 160,
+        "window_length_ms": 30,
+        "window_step_ms": 10
+      },
+      "training_params": {
+        "epochs": 50,
+        "batch_size": 32,
+        "learning_rate": 0.001
+      },
+      "optimized_tflite_file": "hey_jarvis_optimized.tflite"
+    }
+  ],
+  "feature_params": {
+    "n_mfcc": 13,
+    "n_fft": 512,
+    "hop_length": 160,
+    "window_length_ms": 30,
+    "window_step_ms": 10
+  }
+}
