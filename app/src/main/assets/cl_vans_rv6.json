@@ -14,7 +14,7 @@
                "listTitle": "Pilot currency and proficiency",
                "listTitleAudio": "",
                "listSelectorName": "Pilot",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Pilot Certificate",
@@ -120,7 +120,7 @@
                "listTitle": "Aircraft",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Airworthiness Certificate",
@@ -208,7 +208,7 @@
                "listTitle": "Environment",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Crosswinds",
@@ -332,7 +332,7 @@
                "listTitle": "External Pressures",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Time Pressure",
@@ -375,7 +375,7 @@
                "listTitle": "Go No-Go",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "If two or more areas of concern - don't go",
@@ -409,7 +409,7 @@
                "listTitle": "Flight Plan",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "File Flight Plan?",
@@ -443,7 +443,7 @@
                "listTitle": "Preflight Inspection",
                "listTitleAudio": "",
                "listSelectorName": "Preflight",
-               "items": [
+               "tasks": [
                   {
                      "type": "label",
                      "challenge": "CABIN",
@@ -855,7 +855,7 @@
                "listTitle": "Before Start",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Seat Belts",
@@ -934,7 +934,7 @@
                "listTitle": "Start Engine",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Mixture",
@@ -1094,7 +1094,7 @@
                "listTitle": "Before Taxi",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Avionics",
@@ -1173,7 +1173,7 @@
                "listTitle": "Taxi",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Brakes",
@@ -1189,7 +1189,7 @@
                "listTitle": "Run-Up",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Brakes",
@@ -1349,7 +1349,7 @@
                "listTitle": "Pre-Takeoff",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Flaps",
@@ -1419,7 +1419,7 @@
                "listTitle": "Takeoff",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Throttle",
@@ -1480,7 +1480,7 @@
                "listTitle": "Climb",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Air Speed",
@@ -1550,7 +1550,7 @@
                "listTitle": "Cruise",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Airspeed",
@@ -1620,7 +1620,7 @@
                "listTitle": "Descent",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Radio",
@@ -1717,7 +1717,7 @@
                "listTitle": "Before Landing",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Seat Belts",
@@ -1805,7 +1805,7 @@
                "listTitle": "Landing",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Flaps",
@@ -1839,7 +1839,7 @@
                "listTitle": "Final",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Flaps",
@@ -1882,7 +1882,7 @@
                "listTitle": "Go-Around",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Power",
@@ -1943,7 +1943,7 @@
                "listTitle": "After Landing",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Flaps",
@@ -1986,7 +1986,7 @@
                "listTitle": "Shutdown",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Landing & Taxi Lights",
@@ -2164,7 +2164,7 @@
                "listTitle": "Air Speeds",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Emergency Descent Speed",
@@ -2198,7 +2198,7 @@
                "listTitle": "Engine Failure On Ground | On Ground Engine Failure",
                "listTitleAudio": "",
                "listSelectorName": "Ground Engine Failure",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Throttle",
@@ -2286,7 +2286,7 @@
                "listTitle": "Engine Failure In Flight | In Flight Engine Failure",
                "listTitleAudio": "",
                "listSelectorName": "In Flight Engine Failure",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Air Speed",
@@ -2365,7 +2365,7 @@
                "listTitle": "Power Off Landing",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Fuel",
@@ -2480,7 +2480,7 @@
                "listTitle": "Engine Fire On Startup | Startup Engine Fire",
                "listTitleAudio": "",
                "listSelectorName": "Startup Engine Fire",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Starter",
@@ -2559,7 +2559,7 @@
                "listTitle": "Engine Fire In Flight | In Flight Engine Fire",
                "listTitleAudio": "",
                "listSelectorName": "In Flight Engine Fire",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Fuel Selector",
@@ -2647,7 +2647,7 @@
                "listTitle": "Emergency Decent",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Air Speed",
@@ -2672,7 +2672,7 @@
                "listTitle": "Emergency Landing",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Air Speed",
@@ -2760,7 +2760,7 @@
                "listTitle": "Engine Power Loss in Flight",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Carb Heat",
@@ -2848,7 +2848,7 @@
                "listTitle": "Fuel Pressure Loss",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Fuel Pump",
@@ -2873,7 +2873,7 @@
                "listTitle": "Oil Pressure Loss",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Land",
@@ -2898,7 +2898,7 @@
                "listTitle": "High Oil Pressure",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Land",
@@ -2923,7 +2923,7 @@
                "listTitle": "In Flight Canopy Opening",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Air Speed",
@@ -2966,7 +2966,7 @@
                "listTitle": "Electrical Fire",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Masters",
@@ -3036,7 +3036,7 @@
                "listTitle": "Cabin Fire",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Air Vents",
@@ -3079,7 +3079,7 @@
                "listTitle": "Alternator Failure",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "note",
                      "challenge": "Verify failure from instruments",
@@ -3158,7 +3158,7 @@
                "listTitle": "Radio Out | Lost Radio",
                "listTitleAudio": "",
                "listSelectorName": "Radio Out",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Radio",
@@ -3273,7 +3273,7 @@
                "listTitle": "Brake Failure on Ground",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Throttle",
@@ -3334,7 +3334,7 @@
                "listTitle": "Ditching Procedure",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "caution",
                      "challenge": "Ditching in water - Life jackets to be worn for Sea Crossing",
@@ -3503,7 +3503,7 @@
                "listTitle": "Spins",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "warning",
                      "challenge": "Vans aircraft does not consider spins to be a recreational aerobatic maneuver, and does not recommend that they be casually undertaken in the aircraft.",
@@ -3564,7 +3564,7 @@
                "listTitle": "Quick Speeds",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Takeoff Rotation",
@@ -3616,7 +3616,7 @@
                "listTitle": "Normal Operations",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Rotation",
@@ -3722,7 +3722,7 @@
                "listTitle": "All Speeds",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Emergency Descent",
@@ -3855,7 +3855,7 @@
                "listTitle": "Engine",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "What do I do if the engine runs rough during run-up?",
@@ -3952,7 +3952,7 @@
                "listTitle": "Specs",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Engine",
@@ -4040,7 +4040,7 @@
                "listTitle": "Transponder Codes",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Transponder Codes",
@@ -4056,7 +4056,7 @@
                "listTitle": "ATC Light Gun Signals",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "ATC Light Gun Signals",
@@ -4072,7 +4072,7 @@
                "listTitle": "Class C & D",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Arrival or Through Flight",
@@ -4106,7 +4106,7 @@
                "listTitle": "Class B",
                "listTitleAudio": "",
                "listSelectorName": "",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Arrival or Through Flight",

@@ -14,7 +14,7 @@
                "listTitle": "Pre-Flight Inspection",
                "listTitleAudio": "",
                "listSelectorName": "Pre-Flight",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Documentation",
@@ -60,7 +60,7 @@
                "listTitle": "Before Starting Engine",
                "listTitleAudio": "",
                "listSelectorName": "Before Start",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Seat Belts and Harnesses",
@@ -107,7 +107,7 @@
                "listTitle": "Starting Engine",
                "listTitleAudio": "",
                "listSelectorName": "Start Engine",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Mixture",

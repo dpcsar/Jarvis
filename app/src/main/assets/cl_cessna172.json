@@ -14,7 +14,7 @@
                "listTitle": "Pre-Flight",
                "listTitleAudio": "",
                "listSelectorName": "Pre-Flight",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Aircraft Documents",
@@ -60,7 +60,7 @@
                "listTitle": "Engine Start",
                "listTitleAudio": "",
                "listSelectorName": "Engine Start",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Parking Brake",
@@ -126,7 +126,7 @@
                "listTitle": "Taxi",
                "listTitleAudio": "",
                "listSelectorName": "Taxi",
-               "items": [
+               "tasks": [
                   {
                      "type": "task",
                      "challenge": "Brakes",
