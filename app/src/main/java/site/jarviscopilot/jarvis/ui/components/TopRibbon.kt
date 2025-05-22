@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,16 +21,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import site.jarviscopilot.jarvis.util.TimeUtil
 
 @Composable
 fun TopRibbon(
+    modifier: Modifier = Modifier,
     flightPlan: String? = null,
-    currentPhase: String? = null,
-    onSettingsClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onSettingsClick: () -> Unit
 ) {
     var localTime by remember { mutableStateOf(TimeUtil.getCurrentLocalTime()) }
     var utcTime by remember { mutableStateOf(TimeUtil.getCurrentUtcTime()) }
@@ -58,9 +57,9 @@ fun TopRibbon(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { /* Menu action */ }) {
-                    Icon(Icons.Default.Menu, contentDescription = "Menu")
-                }
+                // TODO: IconButton(onClick = { /* Menu action */ }) {
+                //    Icon(Icons.Default.Menu, contentDescription = "Menu")
+                //}
                 Text(
                     text = flightPlan ?: "No Flight Plan",
                     style = MaterialTheme.typography.bodyLarge
@@ -68,18 +67,22 @@ fun TopRibbon(
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(
-                    text = "Local: $localTime",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = utcTime,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                Column(
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Text(
+                        text = "Local: $localTime",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = "UTC: $utcTime",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         }
 
-        Divider()
+        HorizontalDivider()
 
         // Second level: Settings button and current phase
         Row(
@@ -89,16 +92,45 @@ fun TopRibbon(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (currentPhase != null) {
-                Text(
-                    text = "Current Phase: $currentPhase",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+            // Left side content can go here
+            Text("", modifier = Modifier.weight(1f))
 
+            // Settings button moved to the right
             IconButton(onClick = onSettingsClick) {
                 Icon(Icons.Default.Settings, contentDescription = "Settings")
             }
         }
     }
 }
+
+// Preview with lite mode
+@Preview(
+    showBackground = true,
+    apiLevel = 35
+)
+@Composable
+fun TopRibbonPreview() {
+    MaterialTheme {
+        TopRibbon(
+            flightPlan = "KDEN - KLAX",
+            onSettingsClick = {}
+        )
+    }
+}
+
+// Preview with dark mode
+@Preview(
+    showBackground = true,
+    apiLevel = 35,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun TopRibbonPreviewDark() {
+    MaterialTheme {
+        TopRibbon(
+            flightPlan = "KDEN - KLAX",
+            onSettingsClick = {}
+        )
+    }
+}
+

@@ -25,7 +25,7 @@ object TimeUtil {
     fun getCurrentUtcTime(): String {
         val currentMoment = Clock.System.now()
         val utcDateTime = currentMoment.toLocalDateTime(TimeZone.UTC)
-        return DateTimeFormatter.ofPattern("HH:mm:ss 'UTC'").format(
+        return DateTimeFormatter.ofPattern("HH:mm:ss").format(
             java.time.LocalDateTime.of(
                 utcDateTime.year,
                 utcDateTime.monthNumber,

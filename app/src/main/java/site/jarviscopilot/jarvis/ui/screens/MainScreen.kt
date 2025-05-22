@@ -27,8 +27,6 @@ fun MainScreen(
     ) {
         // Using the TopRibbon component instead of the hardcoded implementation
         TopRibbon(
-            flightPlan = "N/A",
-            currentPhase = null,
             onSettingsClick = onSettingsClick
         )
 
@@ -88,9 +86,7 @@ fun MainScreen(
 
 // Preview with lite mode
 @Preview(
-    name = "Main Screen Preview",
     showBackground = true,
-    showSystemUi = true,
     apiLevel = 35,
 )
 @Composable
@@ -103,9 +99,7 @@ fun MainScreenPreview() {
 
 // Preview with dark mode
 @Preview(
-    name = "Main Screen Preview - Dark",
     showBackground = true,
-    showSystemUi = true,
     apiLevel = 35,
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
 )
