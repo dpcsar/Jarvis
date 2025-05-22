@@ -24,7 +24,7 @@
     * Implement on-device keyword spotting using a pre-trained Google LiteRT model.
     * Continuously listen to audio from the device's microphone and process the audio data.
     * Use the liteRT audio model for the 'hey jarvis' wake word. When enabled in the GUI, it should listen for the wake word and then initiate native Speech-to-Text (STT) to navigate to a checklist.
-    * Include the ability to "Transfer Learn" the 'hey jarvis' wake word to tune it to the user's voice.
+    * Include the ability to "Transfer Learn" the 'hey jarvis' wake word to tune it to the user's voice. This will involve the user providing voice samples to refine the model's recognition for their specific voice.
     * Identify if a specific keyword is spoken using the LiteRT model.
     * Upon detection of a designated keyword, the app will trigger the native STT and a predefined action (e.g., mark item complete, search for the closet matching check list, provide flight information, etc.)
     * Designed for efficient, on-device machine learning for always-on audio processing with minimal latency.
@@ -120,17 +120,16 @@
 * Add airport information, GPS information/geo tracking, Top of Climb (TOC), Top of Descent (TOD), and flight level.
 * Add history information, possibly with tags for geo tracking.
 * Start the flight timer when speed exceeds a specified value in the settings.
- or request flight information (future feature).
+* Consider robust error handling for data loading, voice recognition failures, and unexpected states.
+* Implement unit and integration testing, especially for critical features like wake word detection and checklist logic.
 
-
- ##################
-
- Okay, here is the breakdown of the development stages for your Android Aviation Checklist and Virtual Copilot App in Markdown format. This structure can help in managing complexity and addressing potential token limitations by focusing on smaller, incremental tasks.
+##################
 
 ### Stage 1: Setting up the Basic Android Project Structure
 
 This stage is foundational. Breaking it down can help ensure all initial configurations are correctly handled.
 
+* **Priority:** High - Essential for starting development.
 * **Basic UI Shell:**
     * Design the initial main screen layout, including the top ribbons (flight plan, time) and the area for listing checklists as described in "Screen layout".
     * Set up basic navigation between initial screens (if any beyond the main screen are immediately necessary).
@@ -144,53 +143,69 @@ This stage is foundational. Breaking it down can help ensure all initial configu
 
 This stage focuses on the core functionality of displaying and interacting with checklists.
 
+* **Priority:** High - Forms the core user interaction.
 * **Core Dependencies:**
     * Integrate the TensorFlow Lite library for Android. Follow the setup guide from the provided Google AI Edge link: https://ai.google.dev/edge/mediapipe/solutions/setup_android.
     * Add any other essential libraries you anticipate needing early on (e.g., for UI elements, navigation).
 * **Data Loading and Parsing:**
+    * **Priority:** Critical - This must work before UI rendering.
     * Implement logic to load and parse the `checklist.json` file from the assets.
     * Develop data models (e.g., Kotlin data classes) to represent checklists, sections, and individual checklist items with their various types (tasks, notes, warnings, information, checkboxes, Yes/No, text input, pickers, labels).
 * **Checklist UI Rendering:**
+    * **Priority:** Critical - Displays the loaded data.
     * Develop the UI to display the parsed checklist data.
     * Implement different layout views like vertical scrolling and horizontal sections for checklist items.
     * Visually indicate completion status for items, sections, and lists.
     * Highlight mandatory items.
 * **Basic Interaction:**
+    * **Priority:** Critical - Enables basic user control.
     * Allow users to select a specific aircraft checklist.
-    * Enable users to navigate and manually mark checklist items as complete (e.g., via button press).
+    * Enable users to manually mark checklist items as complete (e.g., via button press).
     * Implement the bottom ribbon for the checklist screen with "Home," "Check," "Skip," "Mic," and "Repeat item" buttons.
     * Implement the checklist selection ribbon, greying out checklists that require prerequisites and using different colors for checklist types.
 * **Rich Content (Initial Pass - Optional, can be deferred):**
+    * **Priority:** Medium - Can be enhanced later.
     * If simpler item types are working, you can start exploring how to integrate support for rich content like images, videos, and links within checklist items. This might be a good point to assess token usage before adding more complex features.
 
 ### Stage 3: Tackling the "Wake Word Detection" Functionality
 
 This is a complex feature involving machine learning and audio processing. Breaking it down is crucial.
 
+* **Priority:** High - Core differentiator of the app.
 * **Audio Capture Module:**
+    * **Priority:** Critical - Foundation for audio processing.
     * Implement the `AudioRecord` class to access the microphone.
     * Manage audio recording parameters (sample rate, channel configuration) according to the LiteRT model's requirements.
 * **LiteRT Model Loading and Initialization:**
+    * **Priority:** Critical - Enables ML inference.
     * Implement the logic to load the `jarvis_model.tflite` model from assets.
     * Initialize and configure the TensorFlow Lite interpreter.
 * **Audio Preprocessing Module (Stub/Basic):**
+    * **Priority:** High - Required input format for the model.
     * Initially, you might focus on getting raw audio data to the model.
     * Later, implement the necessary algorithms to transform audio data into the input format expected by the LiteRT model (e.g., spectrograms, MFCCs). This step can be iterative.
 * **LiteRT Inference Module:**
+    * **Priority:** High - Executes the ML model.
     * Feed preprocessed audio data (as tensors) to the interpreter.
     * Retrieve output tensors.
 * **Keyword Detection Module (Basic):**
+    * **Priority:** High - Core detection logic.
     * Analyze the model's output.
     * Implement a basic thresholding mechanism to determine if the "hey jarvis" wake word has been detected.
 * **Event Handling (Basic):**
+    * **Priority:** High - Verifies detection.
     * Upon wake word detection, trigger a simple action (e.g., log a message, display a toast) to verify functionality.
 * **UI for Wake Word Control:**
+    * **Priority:** Medium - User control for the feature.
     * Add UI elements to start and stop the keyword spotting service.
 * **Background Service (Iterative Improvement):**
+    * **Priority:** Medium - Improves user experience for continuous listening.
     * Once basic detection works, consider moving the audio capture, preprocessing, and inference to a background Service (potentially a ForegroundService) for continuous listening. This will likely require careful management of resources and battery life.
-* **Transfer Learning (Advanced - Likely Later):**
-    * The ability to "Transfer Learn" the 'hey jarvis' wake word to tune it to the user's voice is a more advanced feature. This would likely come after the core wake word detection is functional.
 * **Native Speech-to-Text (STT) Integration:**
+    * **Priority:** High - Enables voice commands post-wake word.
     * After wake word detection is reliable, integrate native STT to process commands following the wake word.
+* **Transfer Learning (Advanced - Likely Later):**
+    * **Priority:** Low - Enhancement for personalization.
+    * The ability to "Transfer Learn" the 'hey jarvis' wake word to tune it to the user's voice is a more advanced feature. This would likely come after the core wake word detection is functional and stable. This process would involve the user providing multiple voice samples of the wake word, which would then be used to fine-tune the LiteRT model's recognition for their unique voice characteristics.
 
 Remember to consult the "High-Level Architecture for Wake Word Detection" and "Workflow for Wake Word Detection" sections in your `jarvisDescription.md` document for detailed guidance on that specific feature.
