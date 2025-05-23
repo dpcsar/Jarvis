@@ -57,9 +57,6 @@ fun TopRibbon(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                // TODO: IconButton(onClick = { /* Menu action */ }) {
-                //    Icon(Icons.Default.Menu, contentDescription = "Menu")
-                //}
                 Text(
                     text = flightPlan ?: "No Flight Plan",
                     style = MaterialTheme.typography.bodyLarge
