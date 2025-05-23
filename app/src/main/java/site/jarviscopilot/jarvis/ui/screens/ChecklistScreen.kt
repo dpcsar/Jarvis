@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -37,6 +39,11 @@ fun ChecklistScreen(
 
     // Track which items are completed
     val completedItems = remember { mutableStateListOf<Int>() }
+
+    // Function to find the first unchecked item
+    val findFirstUnchecked = {
+        checklistItems.indices.firstOrNull { it !in completedItems }
+    }
 
     Scaffold(
         topBar = {
@@ -79,7 +86,7 @@ fun ChecklistScreen(
                             Icon(
                                 imageVector = Icons.Default.Home,
                                 contentDescription = "Home",
-                                modifier = Modifier.size(28.dp)
+                                modifier = Modifier.size(24.dp)
                             )
                             Text("Home", fontSize = 12.sp)
                         }
@@ -88,44 +95,71 @@ fun ChecklistScreen(
                     // Check button
                     Button(
                         onClick = {
-                            // Simulate marking the current item as complete
-                            val nextItemToComplete = checklistItems.indices.firstOrNull { it !in completedItems }
+                            // Mark the next unchecked item as complete
+                            val nextItemToComplete = findFirstUnchecked()
                             if (nextItemToComplete != null) {
                                 completedItems.add(nextItemToComplete)
                             }
                         },
-                        modifier = Modifier.size(width = 100.dp, height = 60.dp)
+                        modifier = Modifier.size(width = 80.dp, height = 60.dp)
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = "Check",
-                                modifier = Modifier.size(28.dp)
+                                modifier = Modifier.size(24.dp)
                             )
-                            Text("Check", fontSize = 14.sp)
+                            Text("Check", fontSize = 12.sp)
                         }
                     }
 
-                    // Skip button (greyed out if not permitted)
+                    // Skip button
                     OutlinedButton(
-                        onClick = { /* Skip logic would go here */ },
-                        modifier = Modifier.size(width = 100.dp, height = 60.dp),
-                        enabled = false // greyed out as per requirements
+                        onClick = { /* Skip the current task */ },
+                        modifier = Modifier.size(width = 80.dp, height = 60.dp)
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("Skip", fontSize = 14.sp)
+                            Text("Skip", fontSize = 12.sp)
                         }
                     }
 
                     // Mic button
-                    IconButton(onClick = { /* Mic logic would go here */ }) {
+                    IconButton(onClick = { /* Enable voice listening */ }) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 imageVector = Icons.Filled.Call,
-                                contentDescription = "Microphone",
-                                modifier = Modifier.size(28.dp)
+                                contentDescription = "Listen",
+                                modifier = Modifier.size(24.dp)
                             )
                             Text("Listen", fontSize = 12.sp)
+                        }
+                    }
+
+                    // Search button - find first unchecked task
+                    IconButton(onClick = { /* Find first unchecked task */ }) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Find",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text("Find", fontSize = 12.sp)
+                        }
+                    }
+
+                    // Emergency button
+                    IconButton(
+                        onClick = { /* Navigate to emergency checklists */ },
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Emergency",
+                                modifier = Modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                            Text("Emergency", fontSize = 10.sp, color = MaterialTheme.colorScheme.error)
                         }
                     }
                 }
