@@ -32,6 +32,7 @@ fun TopRibbon(
     flightPlan: String? = null,
     onSettingsClick: () -> Unit
 ) {
+
     var localTime by remember { mutableStateOf(TimeUtil.getCurrentLocalTime()) }
     var utcTime by remember { mutableStateOf(TimeUtil.getCurrentUtcTime()) }
 

@@ -9,28 +9,29 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlinx.coroutines.delay
+import site.jarviscopilot.jarvis.util.TimeUtil
 
 @Composable
 fun ChecklistScreen(
     checklistName: String,
     onNavigateHome: () -> Unit
 ) {
-    val currentTime = remember { mutableLongStateOf(System.currentTimeMillis()) }
-    val localTimeFormat = remember { SimpleDateFormat("HH:mm:ss", Locale.getDefault()) }
-    val utcTimeFormat = remember { SimpleDateFormat("HH:mm:ss 'UTC'", Locale.getDefault()) }
 
-    // Update the time every second
-    LaunchedEffect(key1 = true) {
-        while(true) {
-            currentTime.longValue = System.currentTimeMillis()
-            kotlinx.coroutines.delay(1000)
+    var localTime by remember { mutableStateOf(TimeUtil.getCurrentLocalTime()) }
+    var utcTime by remember { mutableStateOf(TimeUtil.getCurrentUtcTime()) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            localTime = TimeUtil.getCurrentLocalTime()
+            utcTime = TimeUtil.getCurrentUtcTime()
+            delay(1000) // Update every second
         }
     }
 
@@ -70,13 +71,13 @@ fun ChecklistScreen(
 
                     Row {
                         Text(
-                            text = "Local: ${localTimeFormat.format(Date(currentTime.longValue))}",
+                            text = "Local: $localTime",
                             color = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier.padding(end = 16.dp)
                         )
 
                         Text(
-                            text = utcTimeFormat.format(Date(currentTime.longValue)),
+                            text = "UTC: $utcTime",
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
@@ -216,3 +217,13 @@ fun ChecklistScreen(
     }
 }
 
+@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
+@Composable
+fun ChecklistScreenPreview() {
+    MaterialTheme {
+        ChecklistScreen(
+            checklistName = "Pre-Flight Checklist",
+            onNavigateHome = {}
+        )
+    }
+}
