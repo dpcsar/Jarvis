@@ -15,8 +15,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import site.jarviscopilot.jarvis.data.repository.ChecklistInfo
-import site.jarviscopilot.jarvis.data.repository.ChecklistRepository
+import site.jarviscopilot.jarvis.data.ChecklistInfo
+import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
 
 @Composable

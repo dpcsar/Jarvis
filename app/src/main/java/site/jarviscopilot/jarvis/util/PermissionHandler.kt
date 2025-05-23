@@ -17,14 +17,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 
-class PermissionHandler {
-    companion object {
-        fun hasAudioPermission(context: Context): Boolean {
-            return ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.RECORD_AUDIO
-            ) == PackageManager.PERMISSION_GRANTED
-        }
+object PermissionHandler {
+    fun hasAudioPermission(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
     }
 }
 
@@ -50,6 +48,8 @@ fun RequestAudioPermission(
             onPermissionGranted()
         } else {
             showRationale = true
+            // Call onPermissionDenied if user denied the permission
+            onPermissionDenied()
         }
     }
 
