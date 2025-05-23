@@ -1,12 +1,15 @@
 package site.jarviscopilot.jarvis.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.MicOff
+import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,191 +17,231 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import site.jarviscopilot.jarvis.ui.components.*
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onBackClick: () -> Unit
+    onNavigateBack: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        // Header with back button
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
+    // State for settings
+    var useVoiceControl by remember { mutableStateOf(true) }
+    var useNightMode by remember { mutableStateOf(false) }
+    var showAudioPermissionDialog by remember { mutableStateOf(false) }
+    var showToast by remember { mutableStateOf(false) }
+    var toastMessage by remember { mutableStateOf("") }
+
+    Scaffold(
+        topBar = {
+            Column {
+                TopRibbon()
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+
+                    Text(
+                        text = "Settings",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
-
-            Text(
-                text = "Settings",
-                style = MaterialTheme.typography.titleLarge
-            )
         }
-
-        // Settings content
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            // App Settings Section
-            SettingsSection(title = "App Settings") {
-                // Toggle for dark mode
-                var darkMode by remember { mutableStateOf(false) }
-                SettingsSwitchItem(
-                    title = "Dark Mode",
-                    description = "Enable dark theme",
-                    checked = darkMode,
-                    onCheckedChange = { darkMode = it }
-                )
-
-                // Toggle for notifications
-                var notifications by remember { mutableStateOf(true) }
-                SettingsSwitchItem(
-                    title = "Notifications",
-                    description = "Enable push notifications",
-                    checked = notifications,
-                    onCheckedChange = { notifications = it }
-                )
-            }
-
-            // Account Settings Section
-            SettingsSection(title = "Account Settings") {
-                // Simple clickable settings items
-                SettingsClickableItem(
-                    title = "Profile",
-                    description = "Manage your profile information",
-                    onClick = { /* Handle profile click */ }
-                )
-
-                SettingsClickableItem(
-                    title = "Privacy",
-                    description = "Manage privacy settings",
-                    onClick = { /* Handle privacy click */ }
-                )
-            }
-
-            // About Section
-            SettingsSection(title = "About") {
-                SettingsClickableItem(
-                    title = "Version",
-                    description = "1.0.0",
-                    onClick = { /* Handle version click */ }
-                )
-
-                SettingsClickableItem(
-                    title = "Terms & Conditions",
-                    description = "Read our terms and conditions",
-                    onClick = { /* Handle terms click */ }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingsSection(
-    title: String,
-    content: @Composable () -> Unit
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = title,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
+            // Voice Control Setting
+            SettingSwitchItem(
+                title = "Voice Control",
+                description = "Enable voice commands and responses",
+                icon = if (useVoiceControl) Icons.Default.Mic else Icons.Default.MicOff,
+                isChecked = useVoiceControl,
+                onCheckedChange = { isChecked ->
+                    if (isChecked) {
+                        // Would need permission check here in real implementation
+                        showAudioPermissionDialog = true
+                    } else {
+                        useVoiceControl = false
+                        toastMessage = "Voice control disabled"
+                        showToast = true
+                    }
+                }
             )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+            // Night Mode Setting
+            SettingSwitchItem(
+                title = "Night Mode",
+                description = "Enable dark theme optimized for night flying",
+                icon = Icons.Default.NightlightRound,
+                isChecked = useNightMode,
+                onCheckedChange = { isChecked ->
+                    useNightMode = isChecked
+                    toastMessage = if (isChecked) "Night mode enabled" else "Night mode disabled"
+                    showToast = true
+                }
+            )
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+            // Voice Training Section
+            SettingsSectionHeader(title = "Voice Training")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Train the 'Hey Jarvis' wake word to better recognize your voice",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            JarvisButton(
+                onClick = {
+                    toastMessage = "Voice training started"
+                    showToast = true
+                }
             ) {
-                content()
+                Text("Start Voice Training")
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Checklist Import Section
+            SettingsSectionHeader(title = "Checklist Management")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Import custom checklists from JSON file",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            JarvisButton(
+                onClick = {
+                    toastMessage = "Checklist import started"
+                    showToast = true
+                }
+            ) {
+                Text("Import Checklist")
             }
         }
+
+        // Audio Permission Dialog
+        if (showAudioPermissionDialog) {
+            JarvisConfirmationDialog(
+                title = "Audio Permission Required",
+                message = "Voice control requires microphone access. Would you like to grant this permission?",
+                onConfirmClick = {
+                    // In real implementation, would request permission here
+                    useVoiceControl = true
+                    showAudioPermissionDialog = false
+                    toastMessage = "Voice control enabled"
+                    showToast = true
+                },
+                onDismissClick = {
+                    showAudioPermissionDialog = false
+                },
+                onDismissRequest = {
+                    showAudioPermissionDialog = false
+                },
+                confirmText = "Grant",
+                dismissText = "Cancel"
+            )
+        }
+
+        // Custom Toast
+        JarvisToast(
+            message = toastMessage,
+            isShowing = showToast,
+            onDismiss = { showToast = false }
+        )
     }
 }
 
 @Composable
-fun SettingsSwitchItem(
+fun SettingSwitchItem(
     title: String,
     description: String,
-    checked: Boolean,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(end = 16.dp)
+        )
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
             Text(
                 text = title,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
+
             Text(
                 text = description,
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+
         Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange
+            checked = isChecked,
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                uncheckedThumbColor = MaterialTheme.colorScheme.surfaceVariant,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            )
         )
     }
 }
 
 @Composable
-fun SettingsClickableItem(
-    title: String,
-    description: String,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = description,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
+fun SettingsSectionHeader(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleLarge,
+        color = MaterialTheme.colorScheme.primary,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(vertical = 8.dp)
+    )
 }
 
 // Preview composable that shows the UI in both light and dark modes
@@ -215,5 +258,5 @@ fun SettingsClickableItem(
 )
 @Composable
 fun SettingsScreenPreviewDark() {
-    SettingsScreen(onBackClick = {})
+    SettingsScreen(onNavigateBack =  {})
 }

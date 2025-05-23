@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import site.jarviscopilot.jarvis.util.TimeUtil
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun TopRibbon(
@@ -84,15 +85,23 @@ fun TopRibbon(
     apiLevel = 35,
     showBackground = true
 )
+@Composable
+fun TopRibbonPreview() {
+    JarvisTheme(darkTheme = false) {
+        TopRibbon(
+            flightPlan = "KDEN - KLAX"
+        )
+    }
+}
+
 @Preview(
     name = "Dark Mode",
     apiLevel = 35,
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    showBackground = true
 )
 @Composable
 fun TopRibbonPreviewDark() {
-    MaterialTheme {
+    JarvisTheme(darkTheme = true) {
         TopRibbon(
             flightPlan = "KDEN - KLAX"
         )

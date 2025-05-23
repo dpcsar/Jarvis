@@ -74,7 +74,7 @@ fun JarvisNavHost(
         // Settings screen
         composable(JarvisDestinations.SETTINGS_ROUTE) {
             SettingsScreen(
-                onBackClick = {
+                onNavigateBack = {
                     navController.navigateUp()
                 }
             )

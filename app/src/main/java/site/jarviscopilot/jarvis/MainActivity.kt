@@ -1,7 +1,6 @@
 package site.jarviscopilot.jarvis
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,9 +10,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import site.jarviscopilot.jarvis.ui.components.JarvisToast
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.PermissionHandler
@@ -35,6 +37,8 @@ class MainActivity : ComponentActivity() {
 fun JarvisApp(activity: ComponentActivity? = null) {
     JarvisTheme {
         val navController = rememberNavController()
+        val showToast = remember { mutableStateOf(false) }
+        val toastMessage = remember { mutableStateOf("") }
 
         Scaffold { paddingValues ->
             Surface(
@@ -43,20 +47,28 @@ fun JarvisApp(activity: ComponentActivity? = null) {
                     .padding(paddingValues),
                 color = MaterialTheme.colorScheme.background
             ) {
-                // Handle permissions using the PermissionHandler utility
                 if (activity != null && !PermissionHandler.hasAudioPermission(activity)) {
                     RequestAudioPermission(
                         onPermissionGranted = {
-                            Toast.makeText(activity, "Audio recording permission granted", Toast.LENGTH_SHORT).show()
+                            toastMessage.value = "Audio recording permission granted"
+                            showToast.value = true
                         },
                         onPermissionDenied = {
-                            Toast.makeText(activity, "Audio recording permission denied", Toast.LENGTH_SHORT).show()
+                            toastMessage.value = "Audio recording permission denied"
+                            showToast.value = true
                         }
                     )
                 }
 
                 // Use the JarvisNavHost for navigation
                 JarvisNavHost(navController = navController)
+
+                // Custom Jarvis-themed toast
+                JarvisToast(
+                    message = toastMessage.value,
+                    isShowing = showToast.value,
+                    onDismiss = { showToast.value = false }
+                )
             }
         }
     }
@@ -75,6 +87,8 @@ fun JarvisApp(activity: ComponentActivity? = null) {
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun JarvisAppPreview() {
-    JarvisApp() // Preview without activity context
+fun JarvisAppPreviewDark() {
+    JarvisTheme {
+        JarvisApp()
+    }
 }

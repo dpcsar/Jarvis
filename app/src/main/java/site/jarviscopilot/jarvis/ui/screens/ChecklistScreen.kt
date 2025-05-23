@@ -1,23 +1,39 @@
 package site.jarviscopilot.jarvis.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
+import site.jarviscopilot.jarvis.ui.components.JarvisChecklistItem
+import site.jarviscopilot.jarvis.ui.components.JarvisConfirmationDialog
+import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun ChecklistScreen(
@@ -40,6 +56,15 @@ fun ChecklistScreen(
     // Track which items are completed
     val completedItems = remember { mutableStateListOf<Int>() }
 
+    // Track the currently active item
+    val activeItemIndex = remember { mutableIntStateOf(0) }
+
+    // Track whether the mic is active
+    val isMicActive = remember { mutableStateOf(false) }
+
+    // Track if a dialog is showing
+    val showDialog = remember { mutableStateOf(false) }
+
     // Function to find the first unchecked item
     val findFirstUnchecked = {
         checklistItems.indices.firstOrNull { it !in completedItems }
@@ -48,32 +73,13 @@ fun ChecklistScreen(
     Scaffold(
         topBar = {
             Column {
-                // Use the reusable TopRibbon component
                 TopRibbon()
-
-                // Top Ribbon - Second Level (Current phase of flight)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = checklistName,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                }
             }
         },
         bottomBar = {
-            // Bottom Ribbon with action buttons
             BottomAppBar(
-                modifier = Modifier.height(80.dp),
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -81,152 +87,117 @@ fun ChecklistScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Home button
-                    IconButton(onClick = onNavigateHome) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = "Home",
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Text("Home", fontSize = 12.sp)
-                        }
-                    }
+                    JarvisIconButton(
+                        text = "Home",
+                        icon = Icons.Default.Home,
+                        onClick = onNavigateHome
+                    )
 
-                    // Check button
-                    Button(
+                    // Check button - mark current item as complete
+                    JarvisIconButton(
+                        text = "Check",
+                        icon = Icons.Default.Check,
                         onClick = {
-                            // Mark the next unchecked item as complete
-                            val nextItemToComplete = findFirstUnchecked()
-                            if (nextItemToComplete != null) {
-                                completedItems.add(nextItemToComplete)
+                            if (activeItemIndex.intValue < checklistItems.size &&
+                                activeItemIndex.intValue !in completedItems
+                            ) {
+                                completedItems.add(activeItemIndex.intValue)
+                                // Move to next item if available
+                                findFirstUnchecked()?.let {
+                                    activeItemIndex.intValue = it
+                                }
                             }
+                        }
+                    )
+
+                    // Skip button - skip current item if allowed
+                    JarvisIconButton(
+                        text = "Skip",
+                        icon = Icons.Default.SkipNext,
+                        onClick = {
+                            showDialog.value = true
                         },
-                        modifier = Modifier.size(width = 80.dp, height = 60.dp)
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = "Check",
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Text("Check", fontSize = 12.sp)
-                        }
-                    }
+                        enabled = activeItemIndex.intValue < checklistItems.size
+                    )
 
-                    // Skip button
-                    OutlinedButton(
-                        onClick = { /* Skip the current task */ },
-                        modifier = Modifier.size(width = 80.dp, height = 60.dp)
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("Skip", fontSize = 12.sp)
-                        }
-                    }
-
-                    // Mic button
-                    IconButton(onClick = { /* Enable voice listening */ }) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Filled.Mic,
-                                contentDescription = "Listen",
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Text("Listen", fontSize = 12.sp)
-                        }
-                    }
-
-                    // Search button - find first unchecked task
-                    IconButton(onClick = { /* Find first unchecked task */ }) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "Find",
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Text("Find", fontSize = 12.sp)
-                        }
-                    }
-
-                    // Emergency button
-                    IconButton(
-                        onClick = { /* Navigate to emergency checklists */ },
-                        modifier = Modifier.padding(horizontal = 4.dp)
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.Warning,
-                                contentDescription = "Emergency",
-                                modifier = Modifier.size(24.dp),
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                            Text("Emergency", fontSize = 10.sp, color = MaterialTheme.colorScheme.error)
-                        }
-                    }
+                    // Mic button - toggles listening for voice commands
+                    JarvisIconButton(
+                        text = "Listen",
+                        icon = Icons.Default.Mic,
+                        onClick = {
+                            isMicActive.value = !isMicActive.value
+                        },
+                        iconTint = if (isMicActive.value)
+                            MaterialTheme.colorScheme.tertiary
+                        else
+                            MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
-    ) { innerPadding ->
-        // Checklist content
-        LazyColumn(
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(paddingValues)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
-            items(checklistItems.size) { index ->
-                val isCompleted = index in completedItems
+            // Checklist title
+            Text(
+                text = checklistName,
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        checked = isCompleted,
-                        onCheckedChange = { checked ->
-                            if (checked) {
-                                completedItems.add(index)
-                            } else {
-                                completedItems.remove(index)
-                            }
+            // Checklist items
+            LazyColumn {
+                itemsIndexed(checklistItems) { index, item ->
+                    JarvisChecklistItem(
+                        text = item,
+                        isCompleted = index in completedItems,
+                        type = if (index % 3 == 0) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
+                        isActive = index == activeItemIndex.intValue,
+                        onItemClick = {
+                            activeItemIndex.intValue = index
                         }
-                    )
-
-                    Text(
-                        text = checklistItems[index],
-                        fontSize = 16.sp,
-                        fontWeight = if (isCompleted) FontWeight.Normal else FontWeight.Bold,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-
-                if (index < checklistItems.size - 1) {
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 4.dp),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
                     )
                 }
             }
+        }
+
+        // Skip confirmation dialog
+        if (showDialog.value) {
+            JarvisConfirmationDialog(
+                title = "Skip Item",
+                message = "Are you sure you want to skip this item?",
+                onConfirmClick = {
+                    // Skip the current item and move to next
+                    val nextUncheckedItem = checklistItems.indices
+                        .filter { it > activeItemIndex.intValue && it !in completedItems }
+                        .firstOrNull() ?: activeItemIndex.intValue
+                    activeItemIndex.intValue = nextUncheckedItem
+                    showDialog.value = false
+                },
+                onDismissClick = {
+                    showDialog.value = false
+                },
+                onDismissRequest = {
+                    showDialog.value = false
+                },
+                confirmText = "Skip",
+                dismissText = "Cancel"
+            )
         }
     }
 }
 
-// Preview composable that shows the UI in both light and dark modes
-@Preview(
-    name = "Light Mode",
-    apiLevel = 35,
-    showBackground = true
-)
-@Preview(
-    name = "Dark Mode",
-    apiLevel = 35,
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
-)
+@Preview
 @Composable
-fun ChecklistScreenPreviewDark() {
-    MaterialTheme {
+fun ChecklistScreenPreview() {
+    JarvisTheme {
         ChecklistScreen(
             checklistName = "Pre-Flight Checklist",
             onNavigateHome = {}

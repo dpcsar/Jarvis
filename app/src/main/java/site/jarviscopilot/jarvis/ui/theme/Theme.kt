@@ -7,34 +7,38 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val JarvisLightColorScheme = lightColorScheme(
+    primary = JarvisLightBlue,
+    secondary = JarvisLightTeal,
+    tertiary = JarvisLightAccent,
+    background = JarvisLightBackground,
+    surface = JarvisLightSurface,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onTertiary = Color.Black,
+    onBackground = JarvisDarkGray,
+    onSurface = JarvisDarkGray
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+private val JarvisDarkColorScheme = darkColorScheme(
+    primary = JarvisBlue,
+    secondary = JarvisTeal,
+    tertiary = JarvisAccent,
+    background = JarvisDarkBackground,
+    surface = JarvisDarkSurface,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    onSecondary = Color.Black,
+    onTertiary = Color.Black,
+    onBackground = JarvisAccent,
+    onSurface = JarvisGray
 )
 
 @Composable
 fun JarvisTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -44,8 +48,8 @@ fun JarvisTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> JarvisDarkColorScheme
+        else -> JarvisLightColorScheme
     }
 
     MaterialTheme(
