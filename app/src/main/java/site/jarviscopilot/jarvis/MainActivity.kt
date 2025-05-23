@@ -8,16 +8,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import site.jarviscopilot.jarvis.ui.screens.ChecklistScreen
-import site.jarviscopilot.jarvis.ui.screens.MainScreen
-import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.PermissionHandler
 import site.jarviscopilot.jarvis.util.RequestAudioPermission
@@ -29,61 +27,44 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            JarvisTheme {
-                Scaffold { paddingValues ->
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        // Using a simple navigation approach for now
-                        var currentScreen by remember { mutableStateOf("main") }
-                        var selectedChecklist by remember { mutableStateOf("") }
+            JarvisApp(activity = this)
+        }
+    }
+}
 
-                        // Handle permissions using the PermissionHandler utility
-                        if (!PermissionHandler.hasAudioPermission(this@MainActivity)) {
-                            RequestAudioPermission(
-                                onPermissionGranted = {
-                                    Toast.makeText(this@MainActivity, "Audio recording permission granted", Toast.LENGTH_SHORT).show()
-                                },
-                                onPermissionDenied = {
-                                    Toast.makeText(this@MainActivity, "Audio recording permission denied", Toast.LENGTH_SHORT).show()
-                                }
-                            )
-                        }
+@Composable
+fun JarvisApp(activity: ComponentActivity? = null) {
+    JarvisTheme {
+        val navController = rememberNavController()
 
-                        when (currentScreen) {
-                            "main" -> {
-                                MainScreen(
-                                    onChecklistSelected = { checklist ->
-                                        selectedChecklist = checklist
-                                        currentScreen = "checklist"
-                                    },
-                                    onSettingsClick = {
-                                        currentScreen = "settings"
-                                    }
-                                )
-                            }
-                            "checklist" -> {
-                                ChecklistScreen(
-                                    checklistName = selectedChecklist,
-                                    onNavigateHome = {
-                                        currentScreen = "main"
-                                    }
-                                )
-                            }
-                            "settings" -> {
-                                SettingsScreen(
-                                    onBackClick = {
-                                        currentScreen = "main"
-                                    }
-                                )
-                            }
+        Scaffold { paddingValues ->
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                // Handle permissions using the PermissionHandler utility
+                if (activity != null && !PermissionHandler.hasAudioPermission(activity)) {
+                    RequestAudioPermission(
+                        onPermissionGranted = {
+                            Toast.makeText(activity, "Audio recording permission granted", Toast.LENGTH_SHORT).show()
+                        },
+                        onPermissionDenied = {
+                            Toast.makeText(activity, "Audio recording permission denied", Toast.LENGTH_SHORT).show()
                         }
-                    }
+                    )
                 }
+
+                // Use the JarvisNavHost for navigation
+                JarvisNavHost(navController = navController)
             }
         }
     }
+}
+
+@Preview(showBackground = true, name = "Jarvis App Preview")
+@Composable
+fun JarvisAppPreview() {
+    JarvisApp() // Preview without activity context
 }
