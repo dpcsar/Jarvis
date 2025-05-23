@@ -178,26 +178,19 @@ fun ChecklistScreen(
     }
 }
 
-// Preview with lite mode
+// Preview composable that shows the UI in both light and dark modes
 @Preview(
-    showBackground = true,
+    name = "Light Mode",
     apiLevel = 35,
-)@Composable
-fun ChecklistScreenPreview() {
-    MaterialTheme {
-        ChecklistScreen(
-            checklistName = "Pre-Flight Checklist",
-            onNavigateHome = {}
-        )
-    }
-}
-
-// Preview with lite mode
+    showBackground = true
+)
 @Preview(
-    showBackground = true,
+    name = "Dark Mode",
     apiLevel = 35,
+    showBackground = true,
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
-)@Composable
+)
+@Composable
 fun ChecklistScreenPreviewDark() {
     MaterialTheme {
         ChecklistScreen(

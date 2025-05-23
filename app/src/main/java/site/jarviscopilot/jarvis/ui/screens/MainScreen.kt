@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import site.jarviscopilot.jarvis.data.ChecklistInfo
 import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun MainScreen(
@@ -104,173 +105,31 @@ fun MainScreen(
     }
 }
 
-// Preview with lite mode
-@Preview(
-    showBackground = true,
-    apiLevel = 35,
+// Mock data for previews
+private val mockChecklistInfoList = listOf(
+    ChecklistInfo("Cessna 172", "Checklist for Cessna 172", "cl_cessna172.json"),
+    ChecklistInfo("Piper Cherokee", "Checklist for Piper Cherokee", "cl_piper_cherokee.json"),
+    ChecklistInfo("Vans RV6", "Checklist for Vans RV6", "cl_vans_rv6.json")
 )
-@Composable
-fun MainScreenPreview() {
-    // Create a preview version that uses mock data instead of the real repository
-    val mockChecklistInfoList = listOf(
-        ChecklistInfo("Cessna 172", "Checklist for Cessna 172", "cl_cessna172.json"),
-        ChecklistInfo("Piper Cherokee", "Checklist for Piper Cherokee", "cl_piper_cherokee.json"),
-        ChecklistInfo("Vans RV6", "Checklist for Vans RV6", "cl_vans_rv6.json")
-    )
 
-    CompositionLocalProvider(
-        LocalContext provides LocalContext.current
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            // Using the TopRibbon component
-            TopRibbon()
-
-            // Title row with Settings button
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Available Checklists",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-
-                // Settings button
-                IconButton(onClick = {}) {
-                    Icon(Icons.Default.Settings, contentDescription = "Settings")
-                }
-            }
-
-            // List of checklists with mock data
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                items(mockChecklistInfoList) { checklistInfo ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                            .clickable { },
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = checklistInfo.name,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = checklistInfo.description,
-                                fontSize = 14.sp,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Preview with dark mode
+// Preview composable that shows the UI in both light and dark modes
 @Preview(
-    showBackground = true,
+    name = "Light Mode",
     apiLevel = 35,
+    showBackground = true
+)
+@Preview(
+    name = "Dark Mode",
+    apiLevel = 35,
+    showBackground = true,
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun MainScreenPreviewDark() {
-    // Create a preview version that uses mock data instead of the real repository
-    val mockChecklistInfoList = listOf(
-        ChecklistInfo("Cessna 172", "Checklist for Cessna 172", "cl_cessna172.json"),
-        ChecklistInfo("Piper Cherokee", "Checklist for Piper Cherokee", "cl_piper_cherokee.json"),
-        ChecklistInfo("Vans RV6", "Checklist for Vans RV6", "cl_vans_rv6.json")
-    )
-
-    CompositionLocalProvider(
-        LocalContext provides LocalContext.current
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            // Using the TopRibbon component
-            TopRibbon()
-
-            // Title row with Settings button
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Available Checklists",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-
-                // Settings button
-                IconButton(onClick = {}) {
-                    Icon(Icons.Default.Settings, contentDescription = "Settings")
-                }
-            }
-
-            // List of checklists with mock data
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                items(mockChecklistInfoList) { checklistInfo ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                            .clickable { },
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = checklistInfo.name,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = checklistInfo.description,
-                                fontSize = 14.sp,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-            }
-        }
+fun MainScreenPreview() {
+    JarvisTheme {
+        MainScreen(
+            onChecklistSelected = {},
+            onSettingsClick = {}
+        )
     }
 }

@@ -62,7 +62,18 @@ fun JarvisApp(activity: ComponentActivity? = null) {
     }
 }
 
-@Preview(showBackground = true, name = "Jarvis App Preview")
+// Preview composable that shows the UI in both light and dark modes
+@Preview(
+    name = "Light Mode",
+    apiLevel = 35,
+    showBackground = true
+)
+@Preview(
+    name = "Dark Mode",
+    apiLevel = 35,
+    showBackground = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun JarvisAppPreview() {
     JarvisApp() // Preview without activity context

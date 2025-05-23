@@ -78,24 +78,16 @@ fun TopRibbon(
     }
 }
 
-// Preview with lite mode
+// Preview composable that shows the UI in both light and dark modes
 @Preview(
-    showBackground = true,
-    apiLevel = 35
-)
-@Composable
-fun TopRibbonPreview() {
-    MaterialTheme {
-        TopRibbon(
-            flightPlan = "KDEN - KLAX"
-        )
-    }
-}
-
-// Preview with dark mode
-@Preview(
-    showBackground = true,
+    name = "Light Mode",
     apiLevel = 35,
+    showBackground = true
+)
+@Preview(
+    name = "Dark Mode",
+    apiLevel = 35,
+    showBackground = true,
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
