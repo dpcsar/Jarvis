@@ -50,6 +50,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // Icons
+    implementation(libs.androidx.material.icons.extended)
+
     // Navigation Component
     implementation(libs.androidx.navigation.compose)
 
