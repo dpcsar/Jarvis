@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,20 +41,28 @@ fun MainScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         // Using the TopRibbon component
-        TopRibbon(
-            onSettingsClick = onSettingsClick
-        )
+        TopRibbon()
 
-        // Checklist Title
-        Text(
-            text = "Available Checklists",
+        // Title row with Settings button
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Available Checklists",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+
+            // Settings button
+            IconButton(onClick = onSettingsClick) {
+                Icon(Icons.Default.Settings, contentDescription = "Settings")
+            }
+        }
 
         // List of checklists from repository
         LazyColumn(
@@ -117,20 +127,28 @@ fun MainScreenPreview() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             // Using the TopRibbon component
-            TopRibbon(
-                onSettingsClick = {}
-            )
+            TopRibbon()
 
-            // Checklist Title
-            Text(
-                text = "Available Checklists",
+            // Title row with Settings button
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Available Checklists",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                // Settings button
+                IconButton(onClick = {}) {
+                    Icon(Icons.Default.Settings, contentDescription = "Settings")
+                }
+            }
 
             // List of checklists with mock data
             LazyColumn(
@@ -195,20 +213,28 @@ fun MainScreenPreviewDark() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             // Using the TopRibbon component
-            TopRibbon(
-                onSettingsClick = {}
-            )
+            TopRibbon()
 
-            // Checklist Title
-            Text(
-                text = "Available Checklists",
+            // Title row with Settings button
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Available Checklists",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                // Settings button
+                IconButton(onClick = {}) {
+                    Icon(Icons.Default.Settings, contentDescription = "Settings")
+                }
+            }
 
             // List of checklists with mock data
             LazyColumn(

@@ -6,11 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,8 +25,7 @@ import site.jarviscopilot.jarvis.util.TimeUtil
 @Composable
 fun TopRibbon(
     modifier: Modifier = Modifier,
-    flightPlan: String? = null,
-    onSettingsClick: () -> Unit
+    flightPlan: String? = null
 ) {
 
     var localTime by remember { mutableStateOf(TimeUtil.getCurrentLocalTime()) }
@@ -49,7 +44,6 @@ fun TopRibbon(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
-        // First level: Flight plan, local time, UTC time
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,23 +75,6 @@ fun TopRibbon(
         }
 
         HorizontalDivider()
-
-        // Second level: Settings button and current phase
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Left side content can go here
-            Text("", modifier = Modifier.weight(1f))
-
-            // Settings button moved to the right
-            IconButton(onClick = onSettingsClick) {
-                Icon(Icons.Default.Settings, contentDescription = "Settings")
-            }
-        }
     }
 }
 
@@ -110,8 +87,7 @@ fun TopRibbon(
 fun TopRibbonPreview() {
     MaterialTheme {
         TopRibbon(
-            flightPlan = "KDEN - KLAX",
-            onSettingsClick = {}
+            flightPlan = "KDEN - KLAX"
         )
     }
 }
@@ -126,8 +102,7 @@ fun TopRibbonPreview() {
 fun TopRibbonPreviewDark() {
     MaterialTheme {
         TopRibbon(
-            flightPlan = "KDEN - KLAX",
-            onSettingsClick = {}
+            flightPlan = "KDEN - KLAX"
         )
     }
 }
