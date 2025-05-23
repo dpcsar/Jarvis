@@ -66,7 +66,6 @@ fun JarvisApp(activity: ComponentActivity? = null) {
                 // Custom Jarvis-themed toast
                 JarvisToast(
                     message = toastMessage.value,
-                    isShowing = showToast.value,
                     onDismiss = { showToast.value = false }
                 )
             }

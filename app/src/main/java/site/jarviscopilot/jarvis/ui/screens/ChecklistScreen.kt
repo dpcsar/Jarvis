@@ -175,9 +175,9 @@ fun ChecklistScreen(
                 message = "Are you sure you want to skip this item?",
                 onConfirmClick = {
                     // Skip the current item and move to next
-                    val nextUncheckedItem = checklistItems.indices
-                        .filter { it > activeItemIndex.intValue && it !in completedItems }
-                        .firstOrNull() ?: activeItemIndex.intValue
+                    val nextUncheckedItem =
+                        checklistItems.indices.firstOrNull { it > activeItemIndex.intValue && it !in completedItems }
+                            ?: activeItemIndex.intValue
                     activeItemIndex.intValue = nextUncheckedItem
                     showDialog.value = false
                 },

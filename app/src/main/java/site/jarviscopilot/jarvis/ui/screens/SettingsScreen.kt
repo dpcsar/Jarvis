@@ -6,7 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicOff
 import androidx.compose.material.icons.filled.NightlightRound
@@ -18,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.ui.components.*
-import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun SettingsScreen(
@@ -177,7 +175,6 @@ fun SettingsScreen(
         // Custom Toast
         JarvisToast(
             message = toastMessage,
-            isShowing = showToast,
             onDismiss = { showToast = false }
         )
     }
