@@ -11,12 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
-/**
- * A customized Dialog component that uses the Jarvis theme colors
- */
+// A customized Dialog component that uses the Jarvis theme colors
 @Composable
 fun JarvisDialog(
     title: String,
@@ -65,9 +65,7 @@ fun JarvisDialog(
     }
 }
 
-/**
- * A customized confirmation dialog that uses the Jarvis theme
- */
+// A customized confirmation dialog that uses the Jarvis theme
 @Composable
 fun JarvisConfirmationDialog(
     title: String,
@@ -104,3 +102,106 @@ fun JarvisConfirmationDialog(
         }
     )
 }
+
+@Preview(
+    name = "JarvisDialog Light Theme",
+    showBackground = true,
+    apiLevel = 35
+)
+@Composable
+fun JarvisDialogPreviewLight() {
+    JarvisTheme(darkTheme = false) {
+        JarvisDialog(
+            title = "Light Theme Dialog",
+            onDismissRequest = { },
+            content = {
+                Text(
+                    "This is a preview of the JarvisDialog component in light theme.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            buttons = {
+                JarvisOutlinedButton(onClick = { }) {
+                    Text("Cancel")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                JarvisButton(onClick = { }) {
+                    Text("Confirm")
+                }
+            }
+        )
+    }
+}
+
+@Preview(
+    name = "JarvisDialog Dark Theme",
+    showBackground = true,
+    apiLevel = 35
+)
+@Composable
+fun JarvisDialogPreviewDark() {
+    JarvisTheme(darkTheme = true) {
+        JarvisDialog(
+            title = "Dark Theme Dialog",
+            onDismissRequest = { },
+            content = {
+                Text(
+                    "This is a preview of the JarvisDialog component in dark theme.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            buttons = {
+                JarvisOutlinedButton(onClick = { }) {
+                    Text("Cancel")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                JarvisButton(onClick = { }) {
+                    Text("Confirm")
+                }
+            }
+        )
+    }
+}
+
+@Preview(
+    name = "JarvisConfirmationDialog Light Theme",
+    showBackground = true,
+    apiLevel = 35
+)
+@Composable
+fun JarvisConfirmationDialogPreviewLight() {
+    JarvisTheme(darkTheme = false) {
+        JarvisConfirmationDialog(
+            title = "Light Theme Confirmation",
+            message = "This is a preview of the JarvisConfirmationDialog in light theme.",
+            onConfirmClick = { },
+            onDismissClick = { },
+            onDismissRequest = { },
+            confirmText = "Confirm",
+            dismissText = "Cancel"
+        )
+    }
+}
+
+@Preview(
+    name = "JarvisConfirmationDialog Dark Theme",
+    showBackground = true,
+    apiLevel = 35
+)
+@Composable
+fun JarvisConfirmationDialogPreviewDark() {
+    JarvisTheme(darkTheme = true) {
+        JarvisConfirmationDialog(
+            title = "Dark Theme Confirmation",
+            message = "This is a preview of the JarvisConfirmationDialog in dark theme.",
+            onConfirmClick = { },
+            onDismissClick = { },
+            onDismissRequest = { },
+            confirmText = "Confirm",
+            dismissText = "Cancel"
+        )
+    }
+}
+

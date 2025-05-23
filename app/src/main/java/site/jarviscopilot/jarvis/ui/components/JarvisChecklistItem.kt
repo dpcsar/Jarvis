@@ -20,18 +20,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
-/**
- * Represents the different types of checklist items
- */
+// Represents the different types of checklist items
 enum class ChecklistItemType {
     NORMAL, WARNING, MANDATORY
 }
 
-/**
- * A customized checklist item that uses the Jarvis theme colors
- */
+// A customized checklist item that uses the Jarvis theme colors
 @Composable
 fun JarvisChecklistItem(
     text: String,
@@ -112,6 +113,59 @@ fun JarvisChecklistItem(
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
+        }
+    }
+}
+
+// Parameter provider for JarvisChecklistItem previews
+class ChecklistItemParameterProvider : PreviewParameterProvider<ChecklistItemType> {
+    @Suppress("unused")
+    override val values = sequenceOf(
+        ChecklistItemType.NORMAL,
+        ChecklistItemType.WARNING,
+        ChecklistItemType.MANDATORY
+    )
+}
+
+// Preview for JarvisChecklistItem in both light and dark themes
+@PreviewLightDark
+@Preview(
+    name = "Jarvis Checklist Item",
+    showBackground = true,
+    apiLevel = 35
+)
+@Composable
+fun JarvisChecklistItemPreview(
+    @PreviewParameter(ChecklistItemParameterProvider::class) type: ChecklistItemType
+) {
+    JarvisTheme {
+        Column(Modifier.padding(8.dp)) {
+            // Normal item
+            JarvisChecklistItem(
+                text = "Uncompleted ${type.name.lowercase()} item",
+                isCompleted = false,
+                type = type,
+                onItemClick = {}
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Completed item
+            JarvisChecklistItem(
+                text = "Completed ${type.name.lowercase()} item",
+                isCompleted = true,
+                type = type,
+                onItemClick = {}
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Active item
+            JarvisChecklistItem(
+                text = "Active ${type.name.lowercase()} item",
+                isCompleted = false,
+                type = type,
+                isActive = true,
+                onItemClick = {}
+            )
         }
     }
 }

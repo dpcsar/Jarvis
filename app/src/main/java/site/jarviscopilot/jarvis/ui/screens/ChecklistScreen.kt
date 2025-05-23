@@ -194,9 +194,9 @@ fun ChecklistScreen(
     }
 }
 
-@Preview
+@Preview( name = "Light Mode", apiLevel = 35, showBackground = true )
 @Composable
-fun ChecklistScreenPreview() {
+fun ChecklistScreenLightPreview() {
     JarvisTheme {
         ChecklistScreen(
             checklistName = "Pre-Flight Checklist",
@@ -205,3 +205,13 @@ fun ChecklistScreenPreview() {
     }
 }
 
+@Preview( name = "Dark Mode", apiLevel = 35, showBackground = true )
+@Composable
+fun ChecklistScreenDarkPreview() {
+    JarvisTheme(darkTheme = true) {
+        ChecklistScreen(
+            checklistName = "Pre-Flight Checklist",
+            onNavigateHome = {}
+        )
+    }
+}

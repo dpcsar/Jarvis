@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import site.jarviscopilot.jarvis.util.TimeUtil
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.util.TimeUtil
 
 @Composable
 fun TopRibbon(
@@ -80,27 +80,19 @@ fun TopRibbon(
 }
 
 // Preview composable that shows the UI in both light and dark modes
-@Preview(
-    name = "Light Mode",
-    apiLevel = 35,
-    showBackground = true
-)
+@Preview( name = "Light Mode", apiLevel = 35, showBackground = true )
 @Composable
-fun TopRibbonPreview() {
-    JarvisTheme(darkTheme = false) {
+fun TopRibbonLightPreview() {
+    JarvisTheme {
         TopRibbon(
             flightPlan = "KDEN - KLAX"
         )
     }
 }
 
-@Preview(
-    name = "Dark Mode",
-    apiLevel = 35,
-    showBackground = true
-)
+@Preview( name = "Dark Mode", apiLevel = 35, showBackground = true )
 @Composable
-fun TopRibbonPreviewDark() {
+fun TopRibbonDarkPreview() {
     JarvisTheme(darkTheme = true) {
         TopRibbon(
             flightPlan = "KDEN - KLAX"

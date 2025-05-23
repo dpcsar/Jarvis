@@ -14,11 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
-/**
- * A customized Button component that uses the Jarvis theme colors
- */
+// A customized Button component that uses the Jarvis theme colors
 @Composable
 fun JarvisButton(
     onClick: () -> Unit,
@@ -43,9 +47,7 @@ fun JarvisButton(
     )
 }
 
-/**
- * A customized OutlinedButton component that uses the Jarvis theme colors
- */
+// A customized OutlinedButton component that uses the Jarvis theme colors
 @Composable
 fun JarvisOutlinedButton(
     onClick: () -> Unit,
@@ -68,9 +70,7 @@ fun JarvisOutlinedButton(
     )
 }
 
-/**
- * A button with both text and icon that uses the Jarvis theme
- */
+// A button with both text and icon that uses the Jarvis theme
 @Composable
 fun JarvisIconButton(
     text: String,
@@ -96,3 +96,62 @@ fun JarvisIconButton(
         )
     }
 }
+
+// Preview of all Jarvis button variants in light theme
+@Preview(name = "Light Theme", showBackground = true, apiLevel = 35)
+@Composable
+fun JarvisButtonLightPreview() {
+    JarvisTheme(darkTheme = false) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            JarvisButton(
+                onClick = {},
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text("Standard Button")
+            }
+
+            JarvisOutlinedButton(
+                onClick = {},
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text("Outlined Button")
+            }
+
+            JarvisIconButton(
+                text = "Icon Button",
+                icon = Icons.Default.Add,
+                onClick = {},
+            )
+        }
+    }
+}
+
+// Preview of all Jarvis button variants in dark theme
+@Preview(name = "Dark Theme", showBackground = true, apiLevel = 35, backgroundColor = 0xFF121212)
+@Composable
+fun JarvisButtonDarkPreview() {
+    JarvisTheme(darkTheme = true) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            JarvisButton(
+                onClick = {},
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text("Standard Button")
+            }
+
+            JarvisOutlinedButton(
+                onClick = {},
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text("Outlined Button")
+            }
+
+            JarvisIconButton(
+                text = "Icon Button",
+                icon = Icons.Default.Add,
+                onClick = {},
+            )
+        }
+    }
+}
+

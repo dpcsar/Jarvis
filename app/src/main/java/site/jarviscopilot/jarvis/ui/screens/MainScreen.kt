@@ -177,9 +177,9 @@ fun ChecklistCard(
     }
 }
 
-@Preview
+@Preview( name = "Light Mode", apiLevel = 35, showBackground = true )
 @Composable
-fun MainScreenPreview() {
+fun MainScreenLightPreview() {
     JarvisTheme {
         MainScreen(
             onChecklistSelected = {},
@@ -188,3 +188,13 @@ fun MainScreenPreview() {
     }
 }
 
+@Preview( name = "Dark Mode", apiLevel = 35, showBackground = true )
+@Composable
+fun MainScreenDarkPreview() {
+    JarvisTheme (darkTheme = true) {
+        MainScreen(
+            onChecklistSelected = {},
+            onSettingsClick = {}
+        )
+    }
+}
