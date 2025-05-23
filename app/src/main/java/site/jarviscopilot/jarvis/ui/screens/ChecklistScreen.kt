@@ -9,32 +9,19 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
-import site.jarviscopilot.jarvis.util.TimeUtil
+import site.jarviscopilot.jarvis.ui.components.TopRibbon
 
 @Composable
 fun ChecklistScreen(
     checklistName: String,
     onNavigateHome: () -> Unit
 ) {
-
-    var localTime by remember { mutableStateOf(TimeUtil.getCurrentLocalTime()) }
-    var utcTime by remember { mutableStateOf(TimeUtil.getCurrentUtcTime()) }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            localTime = TimeUtil.getCurrentLocalTime()
-            utcTime = TimeUtil.getCurrentUtcTime()
-            delay(1000) // Update every second
-        }
-    }
-
     // Sample checklist items - would be replaced with data from your JSON file
     val checklistItems = remember {
         listOf(
@@ -54,34 +41,8 @@ fun ChecklistScreen(
     Scaffold(
         topBar = {
             Column {
-                // Top Ribbon - First Level (Flight plan and times)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Flight Plan: N/A",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Row {
-                        Text(
-                            text = "Local: $localTime",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier.padding(end = 16.dp)
-                        )
-
-                        Text(
-                            text = "UTC: $utcTime",
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                }
+                // Use the reusable TopRibbon component
+                TopRibbon()
 
                 // Top Ribbon - Second Level (Current phase of flight)
                 Row(
@@ -217,8 +178,11 @@ fun ChecklistScreen(
     }
 }
 
-@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
-@Composable
+// Preview with lite mode
+@Preview(
+    showBackground = true,
+    apiLevel = 35,
+)@Composable
 fun ChecklistScreenPreview() {
     MaterialTheme {
         ChecklistScreen(
@@ -227,3 +191,19 @@ fun ChecklistScreenPreview() {
         )
     }
 }
+
+// Preview with lite mode
+@Preview(
+    showBackground = true,
+    apiLevel = 35,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)@Composable
+fun ChecklistScreenPreviewDark() {
+    MaterialTheme {
+        ChecklistScreen(
+            checklistName = "Pre-Flight Checklist",
+            onNavigateHome = {}
+        )
+    }
+}
+
