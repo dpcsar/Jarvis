@@ -1,5 +1,9 @@
 package site.jarviscopilot.jarvis.ui.screens
 
+import android.net.Uri
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,11 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.MicOff
-import androidx.compose.material.icons.filled.NightlightRound
-import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material.icons.filled.BrightnessAuto
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,8 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+import site.jarviscopilot.jarvis.data.ChecklistInfo
+import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.ui.components.*
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.PermissionHandler
@@ -35,8 +39,11 @@ fun SettingsScreen(
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     // Get instance of UserPreferences
     val userPreferences = remember { UserPreferences.getInstance(context) }
+    // Get checklist repository
+    val checklistRepository = remember { ChecklistRepository(context) }
 
     // State for settings - initialize from UserPreferences
     var useVoiceControl by remember { mutableStateOf(userPreferences.isVoiceControlEnabled()) }
@@ -46,6 +53,53 @@ fun SettingsScreen(
 
     // State for permission handling
     var requestVoicePermission by remember { mutableStateOf(false) }
+
+    // State for checklists
+    var checklists by remember { mutableStateOf<List<ChecklistInfo>>(emptyList()) }
+    var isLoadingChecklists by remember { mutableStateOf(true) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var checklistToDelete by remember { mutableStateOf<ChecklistInfo?>(null) }
+
+    // Load checklists when screen is shown
+    LaunchedEffect(Unit) {
+        isLoadingChecklists = true
+        checklists = checklistRepository.loadAllChecklists()
+        isLoadingChecklists = false
+    }
+
+    // File picker for importing checklists
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        uri?.let {
+            // Safely request persist permissions if needed
+            try {
+                // Check the flags to see if permission can be persisted
+                val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                context.contentResolver.takePersistableUriPermission(it, takeFlags)
+            } catch (_: Exception) {
+                // Ignore permission errors - we'll still try to read the file
+            }
+
+            // Import the checklist
+            coroutineScope.launch {
+                val result = checklistRepository.importChecklist(it)
+
+                result.fold(
+                    onSuccess = { checklistInfo ->
+                        toastMessage = "Checklist '${checklistInfo.name}' imported successfully"
+                        showToast = true
+                        // Reload the checklist list
+                        checklists = checklistRepository.loadAllChecklists()
+                    },
+                    onFailure = { exception ->
+                        toastMessage = "Failed to import checklist: ${exception.message}"
+                        showToast = true
+                    }
+                )
+            }
+        }
+    }
 
     // Custom Jarvis-themed toast - only show when showToast is true
     if (showToast) {
@@ -72,6 +126,59 @@ fun SettingsScreen(
                 showToast = true
                 requestVoicePermission = false
             }
+        )
+    }
+
+    // Confirmation dialog for deleting checklists
+    if (showDeleteDialog && checklistToDelete != null) {
+        // Safe-get the checklist name using let to avoid smart cast issues with delegated properties
+        val checklistName = checklistToDelete?.name ?: "Unknown"
+
+        JarvisConfirmationDialog(
+            title = "Delete Checklist",
+            message = "Are you sure you want to delete the checklist '$checklistName'? This action cannot be undone.",
+            onConfirmClick = {
+                // Get a local copy of the checklist to avoid issues with delegated properties
+                val checklistToDeleteCopy = checklistToDelete
+
+                // Only proceed if we have a valid checklist
+                checklistToDeleteCopy?.let { checklist ->
+                    coroutineScope.launch {
+                        try {
+                            val result = checklistRepository.deleteChecklist(checklist)
+                            result.fold(
+                                onSuccess = {
+                                    toastMessage = "Checklist deleted"
+                                    showToast = true
+
+                                    // Reload checklists
+                                    checklists = checklistRepository.loadAllChecklists()
+                                },
+                                onFailure = { exception ->
+                                    toastMessage = "Failed to delete checklist: ${exception.message}"
+                                    showToast = true
+                                }
+                            )
+                        } catch (e: Exception) {
+                            toastMessage = "Error deleting checklist: ${e.message}"
+                            showToast = true
+                        }
+                    }
+                }
+
+                showDeleteDialog = false
+                checklistToDelete = null
+            },
+            onDismissClick = {
+                showDeleteDialog = false
+                checklistToDelete = null
+            },
+            onDismissRequest = {
+                showDeleteDialog = false
+                checklistToDelete = null
+            },
+            confirmText = "Delete",
+            dismissText = "Cancel"
         )
     }
 
@@ -202,7 +309,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Import custom checklists from JSON file",
+                text = "Import custom checklists from your device or cloud storage",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -211,11 +318,112 @@ fun SettingsScreen(
 
             JarvisButton(
                 onClick = {
-                    toastMessage = "Checklist import started"
-                    showToast = true
+                    filePickerLauncher.launch(arrayOf("application/json"))
                 }
             ) {
-                Text("Import Checklist")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FileOpen,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Text("Import Checklist")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // List all available checklists with delete option
+            Text(
+                text = "Available Checklists",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (isLoadingChecklists) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            } else if (checklists.isEmpty()) {
+                Text(
+                    text = "No checklists available",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+            } else {
+                checklists.forEach { checklist ->
+                    ChecklistListItem(
+                        checklistInfo = checklist,
+                        onDeleteClick = {
+                            checklistToDelete = checklist
+                            showDeleteDialog = true
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+        }
+    }
+}
+
+@Composable
+fun ChecklistListItem(
+    checklistInfo: ChecklistInfo,
+    onDeleteClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = checklistInfo.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                if (checklistInfo.description.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = checklistInfo.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = if (checklistInfo.isExample) "Example checklist" else "User checklist",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            IconButton(onClick = onDeleteClick) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete checklist",
+                    tint = MaterialTheme.colorScheme.error
+                )
             }
         }
     }

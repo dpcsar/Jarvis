@@ -51,7 +51,7 @@ fun MainScreen(
     var checklistInfoList by remember { mutableStateOf<List<ChecklistInfo>>(emptyList()) }
 
     LaunchedEffect(key1 = true) {
-        checklistInfoList = repository.loadChecklistInfo()
+        checklistInfoList = repository.loadAllChecklists()
     }
 
     Scaffold(
