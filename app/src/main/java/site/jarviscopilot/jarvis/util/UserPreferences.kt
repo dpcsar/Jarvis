@@ -3,12 +3,19 @@ package site.jarviscopilot.jarvis.util
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 // Handles storing and retrieving user preferences
 class UserPreferences(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context
         .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+    // StateFlow for night mode updates
+    private val _nightModeFlow = MutableStateFlow(isNightModeEnabled())
+    val nightModeFlow: StateFlow<Boolean> = _nightModeFlow.asStateFlow()
 
     fun isVoiceControlEnabled(): Boolean {
         return sharedPreferences.getBoolean(KEY_VOICE_CONTROL_ENABLED, false)
@@ -28,6 +35,8 @@ class UserPreferences(context: Context) {
         sharedPreferences.edit {
             putBoolean(KEY_NIGHT_MODE_ENABLED, enabled)
         }
+        // Update the StateFlow when night mode changes
+        _nightModeFlow.value = enabled
     }
 
     companion object {

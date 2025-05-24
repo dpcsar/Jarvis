@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import site.jarviscopilot.jarvis.ui.components.JarvisToast
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.util.UserPreferences
 
 class MainActivity : ComponentActivity() {
 
@@ -33,7 +35,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JarvisApp() {
-    JarvisTheme {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val userPreferences = remember { UserPreferences.getInstance(context) }
+    val isDarkTheme = userPreferences.nightModeFlow.collectAsState(initial = userPreferences.isNightModeEnabled())
+
+    JarvisTheme(darkTheme = isDarkTheme.value) {
         val navController = rememberNavController()
         val showToast = remember { mutableStateOf(false) }
         val toastMessage = remember { mutableStateOf("") }
