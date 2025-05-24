@@ -7,15 +7,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+// Enum class for theme mode options
+enum class ThemeMode {
+    SYSTEM, LIGHT, DARK
+}
+
 // Handles storing and retrieving user preferences
 class UserPreferences(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context
         .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    // StateFlow for night mode updates
-    private val _nightModeFlow = MutableStateFlow(isNightModeEnabled())
-    val nightModeFlow: StateFlow<Boolean> = _nightModeFlow.asStateFlow()
+    // StateFlow for theme mode updates
+    private val _themeModeFlow = MutableStateFlow(getThemeMode())
+    val themeModeFlow: StateFlow<ThemeMode> = _themeModeFlow.asStateFlow()
 
     fun isVoiceControlEnabled(): Boolean {
         return sharedPreferences.getBoolean(KEY_VOICE_CONTROL_ENABLED, false)
@@ -27,22 +32,27 @@ class UserPreferences(context: Context) {
         }
     }
 
-    fun isNightModeEnabled(): Boolean {
-        return sharedPreferences.getBoolean(KEY_NIGHT_MODE_ENABLED, false)
+    fun getThemeMode(): ThemeMode {
+        val themeModeString = sharedPreferences.getString(KEY_THEME_MODE, ThemeMode.SYSTEM.name)
+        return try {
+            ThemeMode.valueOf(themeModeString ?: ThemeMode.SYSTEM.name)
+        } catch (_: IllegalArgumentException) {
+            ThemeMode.SYSTEM
+        }
     }
 
-    fun setNightModeEnabled(enabled: Boolean) {
+    fun setThemeMode(mode: ThemeMode) {
         sharedPreferences.edit {
-            putBoolean(KEY_NIGHT_MODE_ENABLED, enabled)
+            putString(KEY_THEME_MODE, mode.name)
         }
-        // Update the StateFlow when night mode changes
-        _nightModeFlow.value = enabled
+        // Update the StateFlow when theme mode changes
+        _themeModeFlow.value = mode
     }
 
     companion object {
         private const val PREFS_NAME = "jarvis_preferences"
         private const val KEY_VOICE_CONTROL_ENABLED = "voice_control_enabled"
-        private const val KEY_NIGHT_MODE_ENABLED = "night_mode_enabled"
+        private const val KEY_THEME_MODE = "theme_mode"
 
         // Singleton instance
         @Volatile

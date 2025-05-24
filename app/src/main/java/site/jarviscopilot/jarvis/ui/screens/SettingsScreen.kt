@@ -4,15 +4,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicOff
 import androidx.compose.material.icons.filled.NightlightRound
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +28,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.PermissionHandler
 import site.jarviscopilot.jarvis.util.RequestAudioPermission
 import site.jarviscopilot.jarvis.util.UserPreferences
+import site.jarviscopilot.jarvis.util.ThemeMode
 
 @Composable
 fun SettingsScreen(
@@ -33,7 +40,7 @@ fun SettingsScreen(
 
     // State for settings - initialize from UserPreferences
     var useVoiceControl by remember { mutableStateOf(userPreferences.isVoiceControlEnabled()) }
-    var useNightMode by remember { mutableStateOf(userPreferences.isNightModeEnabled()) }
+    var themeMode by remember { mutableStateOf(userPreferences.getThemeMode()) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
 
@@ -135,21 +142,35 @@ fun SettingsScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-            // Night Mode Setting
-            SettingSwitchItem(
-                title = "Night Mode",
-                description = "Enable dark theme optimized for night flying",
-                icon = Icons.Default.NightlightRound,
-                isChecked = useNightMode,
-                onCheckedChange = { isChecked ->
-                    useNightMode = isChecked
-                    userPreferences.setNightModeEnabled(isChecked)
-                    toastMessage = if (isChecked) "Night mode enabled" else "Night mode disabled"
+            // Theme Mode Selection
+            SettingsSectionHeader(title = "Theme")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Choose your preferred theme mode",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ThemeSelectionItem(
+                selectedTheme = themeMode,
+                onThemeSelected = { newThemeMode ->
+                    themeMode = newThemeMode
+                    userPreferences.setThemeMode(newThemeMode)
+                    val themeName = when(newThemeMode) {
+                        ThemeMode.SYSTEM -> "System default"
+                        ThemeMode.LIGHT -> "Light mode"
+                        ThemeMode.DARK -> "Dark mode"
+                    }
+                    toastMessage = "$themeName selected"
                     showToast = true
                 }
             )
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             // Voice Training Section
             SettingsSectionHeader(title = "Voice Training")
@@ -259,6 +280,102 @@ fun SettingsSectionHeader(title: String) {
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(vertical = 8.dp)
     )
+}
+
+@Composable
+fun ThemeSelectionItem(
+    selectedTheme: ThemeMode,
+    onThemeSelected: (ThemeMode) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        // System Theme Option
+        ThemeOption(
+            title = "System",
+            icon = Icons.Default.BrightnessAuto,
+            isSelected = selectedTheme == ThemeMode.SYSTEM,
+            onClick = { onThemeSelected(ThemeMode.SYSTEM) },
+            modifier = Modifier.weight(1f)
+        )
+
+        // Light Theme Option
+        ThemeOption(
+            title = "Light",
+            icon = Icons.Default.WbSunny,
+            isSelected = selectedTheme == ThemeMode.LIGHT,
+            onClick = { onThemeSelected(ThemeMode.LIGHT) },
+            modifier = Modifier.weight(1f)
+        )
+
+        // Dark Theme Option
+        ThemeOption(
+            title = "Dark",
+            icon = Icons.Default.NightlightRound,
+            isSelected = selectedTheme == ThemeMode.DARK,
+            onClick = { onThemeSelected(ThemeMode.DARK) },
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+fun ThemeOption(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val backgroundColor = if (isSelected) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+
+    val borderColor = if (isSelected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.outline
+    }
+
+    val contentColor = if (isSelected) {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    } else {
+        MaterialTheme.colorScheme.onSurface
+    }
+
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .background(backgroundColor)
+            .clickable(onClick = onClick)
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = "$title theme",
+            tint = contentColor
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium,
+            color = contentColor
+        )
+    }
 }
 
 // Preview composable that shows the UI in both light and dark modes

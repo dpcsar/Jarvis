@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -15,11 +16,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import site.jarviscopilot.jarvis.ui.components.JarvisToast
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.UserPreferences
+import site.jarviscopilot.jarvis.util.ThemeMode
 
 class MainActivity : ComponentActivity() {
 
@@ -35,11 +38,20 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JarvisApp() {
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
     val userPreferences = remember { UserPreferences.getInstance(context) }
-    val isDarkTheme = userPreferences.nightModeFlow.collectAsState(initial = userPreferences.isNightModeEnabled())
 
-    JarvisTheme(darkTheme = isDarkTheme.value) {
+    // Collect the theme mode from UserPreferences
+    val themeMode = userPreferences.themeModeFlow.collectAsState(initial = userPreferences.getThemeMode())
+
+    // Determine if dark theme should be used based on the selected theme mode
+    val isDarkTheme = when (themeMode.value) {
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+    }
+
+    JarvisTheme(darkTheme = isDarkTheme) {
         val navController = rememberNavController()
         val showToast = remember { mutableStateOf(false) }
         val toastMessage = remember { mutableStateOf("") }
