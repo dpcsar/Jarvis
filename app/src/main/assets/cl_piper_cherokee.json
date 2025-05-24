@@ -1,163 +1,163 @@
 {
-   "title": "Piper Cherokee",
-   "titleAudio": "Piper Cherokee",
-   "description": "Checklist for Piper PA-28 Cherokee",
-   "sections": [
-      {
-         "type": "checklist",
-         "sectionTitle": "Pre-Flight",
-         "sectionTitleAudio": "",
-         "sectionSelectorName": "",
-         "defaultView": "checkListView",
-         "lists": [
+  "title": "Piper Cherokee",
+  "titleAudio": "Piper Cherokee",
+  "description": "Checklist for Piper PA-28 Cherokee",
+  "sections": [
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Pre-Flight",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "defaultView": "checkListView",
+      "lists": [
+        {
+          "listTitle": "Pre-Flight Inspection",
+          "listTitleAudio": "",
+          "listSelectorName": "Pre-Flight",
+          "listItems": [
             {
-               "listTitle": "Pre-Flight Inspection",
-               "listTitleAudio": "",
-               "listSelectorName": "Pre-Flight",
-               "tasks": [
-                  {
-                     "type": "task",
-                     "challenge": "Documentation",
-                     "challengeAudio": "",
-                     "response": "Check for airworthiness certificate, registration, operating handbook",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Control Lock",
-                     "challengeAudio": "",
-                     "response": "REMOVE",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "WARNING: Ensure all covers and tie-downs are removed before proceeding",
-                     "challengeAudio": "",
-                     "response": "",
-                     "responseAudio": "",
-                     "mandatory": false,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": true
-                  }
-               ]
-            }
-         ]
-      },
-      {
-         "type": "checklist",
-         "sectionTitle": "Engine Start",
-         "sectionTitleAudio": "",
-         "sectionSelectorName": "",
-         "defaultView": "checkListView",
-         "lists": [
-            {
-               "listTitle": "Before Starting Engine",
-               "listTitleAudio": "",
-               "listSelectorName": "Before Start",
-               "tasks": [
-                  {
-                     "type": "task",
-                     "challenge": "Seat Belts and Harnesses",
-                     "challengeAudio": "",
-                     "response": "FASTEN/ADJUST",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Fuel Selector",
-                     "challengeAudio": "",
-                     "response": "FULLEST TANK",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "All Switches",
-                     "challengeAudio": "",
-                     "response": "OFF",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Brakes",
-                     "challengeAudio": "",
-                     "response": "TEST and SET",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  }
-               ]
+              "listItemType": "task",
+              "challenge": "Documentation",
+              "challengeAudio": "",
+              "response": "Check for airworthiness certificate, registration, operating handbook",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
             },
             {
-               "listTitle": "Starting Engine",
-               "listTitleAudio": "",
-               "listSelectorName": "Start Engine",
-               "tasks": [
-                  {
-                     "type": "task",
-                     "challenge": "Mixture",
-                     "challengeAudio": "",
-                     "response": "FULL RICH",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Carburetor Heat",
-                     "challengeAudio": "",
-                     "response": "OFF",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Prime",
-                     "challengeAudio": "",
-                     "response": "AS REQUIRED",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "NOTE: In cold weather, additional priming may be necessary",
-                     "challengeAudio": "",
-                     "response": "",
-                     "responseAudio": "",
-                     "mandatory": false,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": true
-                  }
-               ]
+              "listItemType": "task",
+              "challenge": "Control Lock",
+              "challengeAudio": "",
+              "response": "REMOVE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "WARNING: Ensure all covers and tie-downs are removed before proceeding",
+              "challengeAudio": "",
+              "response": "",
+              "responseAudio": "",
+              "mandatory": false,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": true
             }
-         ]
-      }
-   ],
-   "contributors": [
-      {
-         "listTitle": "Converted from Piper Cherokee Format",
-         "username": "dpottratz",
-         "nickname": ""
-      }
-   ]
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Engine Start",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "defaultView": "checkListView",
+      "lists": [
+        {
+          "listTitle": "Before Starting Engine",
+          "listTitleAudio": "",
+          "listSelectorName": "Before Start",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Seat Belts and Harnesses",
+              "challengeAudio": "",
+              "response": "FASTEN/ADJUST",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "FULLEST TANK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "All Switches",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Brakes",
+              "challengeAudio": "",
+              "response": "TEST and SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Starting Engine",
+          "listTitleAudio": "",
+          "listSelectorName": "Start Engine",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "FULL RICH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Prime",
+              "challengeAudio": "",
+              "response": "AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "NOTE: In cold weather, additional priming may be necessary",
+              "challengeAudio": "",
+              "response": "",
+              "responseAudio": "",
+              "mandatory": false,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "contributors": [
+    {
+      "listTitle": "Converted from Piper Cherokee Format",
+      "username": "dpottratz",
+      "nickname": ""
+    }
+  ]
 }

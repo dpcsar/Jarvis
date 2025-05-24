@@ -209,3 +209,22 @@ This is a complex feature involving machine learning and audio processing. Break
     * The ability to "Transfer Learn" the 'hey jarvis' wake word to tune it to the user's voice is a more advanced feature. This would likely come after the core wake word detection is functional and stable. This process would involve the user providing multiple voice samples of the wake word, which would then be used to fine-tune the LiteRT model's recognition for their unique voice characteristics.
 
 Remember to consult the "High-Level Architecture for Wake Word Detection" and "Workflow for Wake Word Detection" sections in your `jarvisDescription.md` document for detailed guidance on that specific feature.
+
+## Notes
+
+### Checklist layouts
+
+* Checklist info
+    * sections
+        * sectionTypes
+            * *checklist*
+            * *emergency*
+            * *reference*
+        * lists
+            * listItems
+                * listItemType
+                    * task
+                    * note
+                    * label
+                    * caution
+                    * warning

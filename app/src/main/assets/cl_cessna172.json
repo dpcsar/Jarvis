@@ -1,172 +1,172 @@
 {
-   "title": "Cessna 172",
-   "titleAudio": "Cessna 172",
-   "description": "Checklist for Cessna 172",
-   "sections": [
-      {
-         "type": "checklist",
-         "sectionTitle": "Pre-Flight",
-         "sectionTitleAudio": "",
-         "sectionSelectorName": "",
-         "defaultView": "checkListView",
-         "lists": [
+  "title": "Cessna 172",
+  "titleAudio": "Cessna 172",
+  "description": "Checklist for Cessna 172",
+  "sections": [
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Pre-Flight",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "defaultView": "checkListView",
+      "lists": [
+        {
+          "listTitle": "Pre-Flight",
+          "listTitleAudio": "",
+          "listSelectorName": "Pre-Flight",
+          "listItems": [
             {
-               "listTitle": "Pre-Flight",
-               "listTitleAudio": "",
-               "listSelectorName": "Pre-Flight",
-               "tasks": [
-                  {
-                     "type": "task",
-                     "challenge": "Aircraft Documents",
-                     "challengeAudio": "",
-                     "response": "ARROW - Airworthiness, Registration, Radio License, Operating Limitations, Weight and Balance",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Fuel Quantity",
-                     "challengeAudio": "",
-                     "response": "Check visually",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Control Surfaces",
-                     "challengeAudio": "",
-                     "response": "Check for free and correct movement",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  }
-               ]
-            }
-         ]
-      },
-      {
-         "type": "checklist",
-         "sectionTitle": "Engine Start",
-         "sectionTitleAudio": "",
-         "sectionSelectorName": "",
-         "defaultView": "checkListView",
-         "lists": [
+              "listItemType": "task",
+              "challenge": "Aircraft Documents",
+              "challengeAudio": "",
+              "response": "ARROW - Airworthiness, Registration, Radio License, Operating Limitations, Weight and Balance",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
             {
-               "listTitle": "Engine Start",
-               "listTitleAudio": "",
-               "listSelectorName": "Engine Start",
-               "tasks": [
-                  {
-                     "type": "task",
-                     "challenge": "Parking Brake",
-                     "challengeAudio": "",
-                     "response": "SET",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Circuit Breakers",
-                     "challengeAudio": "",
-                     "response": "CHECK IN",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Beacon",
-                     "challengeAudio": "",
-                     "response": "ON",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Mixture",
-                     "challengeAudio": "",
-                     "response": "RICH",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Throttle",
-                     "challengeAudio": "",
-                     "response": "OPEN 1/4 INCH",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  }
-               ]
-            }
-         ]
-      },
-      {
-         "type": "checklist",
-         "sectionTitle": "Taxi",
-         "sectionTitleAudio": "",
-         "sectionSelectorName": "",
-         "defaultView": "checkListView",
-         "lists": [
+              "listItemType": "task",
+              "challenge": "Fuel Quantity",
+              "challengeAudio": "",
+              "response": "Check visually",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
             {
-               "listTitle": "Taxi",
-               "listTitleAudio": "",
-               "listSelectorName": "Taxi",
-               "tasks": [
-                  {
-                     "type": "task",
-                     "challenge": "Brakes",
-                     "challengeAudio": "",
-                     "response": "TEST",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Flight Instruments",
-                     "challengeAudio": "",
-                     "response": "CHECK",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  },
-                  {
-                     "type": "task",
-                     "challenge": "Altimeter",
-                     "challengeAudio": "",
-                     "response": "SET",
-                     "responseAudio": "",
-                     "mandatory": true,
-                     "suppressAudioChallenge": false,
-                     "suppressAudioResponse": false
-                  }
-               ]
+              "listItemType": "task",
+              "challenge": "Control Surfaces",
+              "challengeAudio": "",
+              "response": "Check for free and correct movement",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
             }
-         ]
-      }
-   ],
-   "contributors": [
-      {
-         "listTitle": "Converted from Cessna 172 Format",
-         "username": "dpottratz",
-         "nickname": ""
-      }
-   ]
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Engine Start",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "defaultView": "checkListView",
+      "lists": [
+        {
+          "listTitle": "Engine Start",
+          "listTitleAudio": "",
+          "listSelectorName": "Engine Start",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Parking Brake",
+              "challengeAudio": "",
+              "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Circuit Breakers",
+              "challengeAudio": "",
+              "response": "CHECK IN",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Beacon",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "RICH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Throttle",
+              "challengeAudio": "",
+              "response": "OPEN 1/4 INCH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Taxi",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "defaultView": "checkListView",
+      "lists": [
+        {
+          "listTitle": "Taxi",
+          "listTitleAudio": "",
+          "listSelectorName": "Taxi",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Brakes",
+              "challengeAudio": "",
+              "response": "TEST",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flight Instruments",
+              "challengeAudio": "",
+              "response": "CHECK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Altimeter",
+              "challengeAudio": "",
+              "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "contributors": [
+    {
+      "listTitle": "Converted from Cessna 172 Format",
+      "username": "dpottratz",
+      "nickname": ""
+    }
+  ]
 }
