@@ -13,27 +13,58 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.ui.components.*
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.util.PermissionHandler
+import site.jarviscopilot.jarvis.util.RequestAudioPermission
+import site.jarviscopilot.jarvis.util.UserPreferences
 
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit
 ) {
-    // State for settings
-    var useVoiceControl by remember { mutableStateOf(true) }
-    var useNightMode by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    // Get instance of UserPreferences
+    val userPreferences = remember { UserPreferences.getInstance(context) }
+
+    // State for settings - initialize from UserPreferences
+    var useVoiceControl by remember { mutableStateOf(userPreferences.isVoiceControlEnabled()) }
+    var useNightMode by remember { mutableStateOf(userPreferences.isNightModeEnabled()) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
+
+    // State for permission handling
+    var requestVoicePermission by remember { mutableStateOf(false) }
 
     // Custom Jarvis-themed toast - only show when showToast is true
     if (showToast) {
         JarvisToast(
             message = toastMessage,
             onDismiss = { showToast = false }
+        )
+    }
+
+    // Permission request handling
+    if (requestVoicePermission) {
+        RequestAudioPermission(
+            onPermissionGranted = {
+                useVoiceControl = true
+                userPreferences.setVoiceControlEnabled(true)
+                toastMessage = "Voice control enabled"
+                showToast = true
+                requestVoicePermission = false
+            },
+            onPermissionDenied = {
+                useVoiceControl = false
+                userPreferences.setVoiceControlEnabled(false)
+                toastMessage = "Voice control disabled - microphone permission required"
+                showToast = true
+                requestVoicePermission = false
+            }
         )
     }
 
@@ -83,12 +114,19 @@ fun SettingsScreen(
                 isChecked = useVoiceControl,
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
-                        // Would need permission check here in real implementation
-                        useVoiceControl = true
-                        toastMessage = "Voice control enabled"
-                        showToast = true
+                        // Check for audio permission before enabling voice control
+                        if (PermissionHandler.hasAudioPermission(context)) {
+                            useVoiceControl = true
+                            userPreferences.setVoiceControlEnabled(true)
+                            toastMessage = "Voice control enabled"
+                            showToast = true
+                        } else {
+                            // Request permission if not granted
+                            requestVoicePermission = true
+                        }
                     } else {
                         useVoiceControl = false
+                        userPreferences.setVoiceControlEnabled(false)
                         toastMessage = "Voice control disabled"
                         showToast = true
                     }
@@ -105,6 +143,7 @@ fun SettingsScreen(
                 isChecked = useNightMode,
                 onCheckedChange = { isChecked ->
                     useNightMode = isChecked
+                    userPreferences.setNightModeEnabled(isChecked)
                     toastMessage = if (isChecked) "Night mode enabled" else "Night mode disabled"
                     showToast = true
                 }

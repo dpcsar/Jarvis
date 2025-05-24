@@ -18,8 +18,6 @@ import androidx.navigation.compose.rememberNavController
 import site.jarviscopilot.jarvis.ui.components.JarvisToast
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
-import site.jarviscopilot.jarvis.util.PermissionHandler
-import site.jarviscopilot.jarvis.util.RequestAudioPermission
 
 class MainActivity : ComponentActivity() {
 
@@ -28,30 +26,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            JarvisApp(activity = this)
+            JarvisApp()
         }
     }
 }
 
 @Composable
-fun JarvisApp(activity: ComponentActivity? = null) {
+fun JarvisApp() {
     JarvisTheme {
         val navController = rememberNavController()
         val showToast = remember { mutableStateOf(false) }
         val toastMessage = remember { mutableStateOf("") }
-
-        if (activity != null && !PermissionHandler.hasAudioPermission(activity)) {
-            RequestAudioPermission(
-                onPermissionGranted = {
-                    toastMessage.value = "Audio recording permission granted"
-                    showToast.value = true
-                },
-                onPermissionDenied = {
-                    toastMessage.value = "Audio recording permission denied"
-                    showToast.value = true
-                }
-            )
-        }
 
         // Custom Jarvis-themed toast - only show when showToast is true
         if (showToast.value) {
