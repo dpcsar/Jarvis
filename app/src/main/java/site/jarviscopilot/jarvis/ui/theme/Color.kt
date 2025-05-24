@@ -2,6 +2,11 @@ package site.jarviscopilot.jarvis.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Other colors used in the app
+val JarvisOnPrimary = Color.White
+val JarvisOnSecondary = Color.Black
+val JarvisOnTertiary = Color.Black
+
 // Light theme colors
 val JarvisLightBlue = Color(0xFF2196F3)
 val JarvisLightTeal = Color(0xFF26C6DA)

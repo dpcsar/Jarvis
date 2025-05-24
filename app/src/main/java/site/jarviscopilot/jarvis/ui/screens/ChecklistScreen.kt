@@ -52,19 +52,14 @@ fun ChecklistScreen(
             "Check transponder"
         )
     }
-
     // Track which items are completed
     val completedItems = remember { mutableStateListOf<Int>() }
-
     // Track the currently active item
     val activeItemIndex = remember { mutableIntStateOf(0) }
-
     // Track whether the mic is active
     val isMicActive = remember { mutableStateOf(false) }
-
     // Track if a dialog is showing
     val showDialog = remember { mutableStateOf(false) }
-
     // Function to find the first unchecked item
     val findFirstUnchecked = {
         checklistItems.indices.firstOrNull { it !in completedItems }

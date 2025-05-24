@@ -11,9 +11,7 @@ import site.jarviscopilot.jarvis.ui.screens.ChecklistScreen
 import site.jarviscopilot.jarvis.ui.screens.MainScreen
 import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
 
-/**
- * Navigation routes used in the app
- */
+// Navigation routes used in the app
 object JarvisDestinations {
     const val MAIN_ROUTE = "main"
     const val CHECKLIST_ROUTE = "checklist/{checklistName}"
@@ -23,9 +21,8 @@ object JarvisDestinations {
     fun checklistRoute(checklistName: String): String = "checklist/$checklistName"
 }
 
-/**
- * JarvisNavHost composable that sets up the navigation structure of the app
- */
+
+// JarvisNavHost composable that sets up the navigation structure of the app
 @Composable
 fun JarvisNavHost(
     navController: NavHostController,

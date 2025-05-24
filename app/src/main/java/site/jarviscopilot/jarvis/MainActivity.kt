@@ -12,13 +12,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
-import site.jarviscopilot.jarvis.ui.components.JarvisToast
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.UserPreferences
@@ -53,16 +51,6 @@ fun JarvisApp() {
 
     JarvisTheme(darkTheme = isDarkTheme) {
         val navController = rememberNavController()
-        val showToast = remember { mutableStateOf(false) }
-        val toastMessage = remember { mutableStateOf("") }
-
-        // Custom Jarvis-themed toast - only show when showToast is true
-        if (showToast.value) {
-            JarvisToast(
-                message = toastMessage.value,
-                onDismiss = { showToast.value = false }
-            )
-        }
 
         Scaffold { paddingValues ->
             Surface(

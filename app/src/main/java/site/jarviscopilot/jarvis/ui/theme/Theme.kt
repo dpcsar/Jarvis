@@ -7,7 +7,6 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val JarvisLightColorScheme = lightColorScheme(
@@ -16,9 +15,9 @@ private val JarvisLightColorScheme = lightColorScheme(
     tertiary = JarvisLightAccent,
     background = JarvisLightBackground,
     surface = JarvisLightSurface,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onTertiary = Color.Black,
+    onPrimary = JarvisOnPrimary,
+    onSecondary = JarvisOnSecondary,
+    onTertiary = JarvisOnTertiary,
     onBackground = JarvisDarkGray,
     onSurface = JarvisDarkGray
 )
@@ -29,9 +28,9 @@ private val JarvisDarkColorScheme = darkColorScheme(
     tertiary = JarvisAccent,
     background = JarvisDarkBackground,
     surface = JarvisDarkSurface,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onTertiary = Color.Black,
+    onPrimary = JarvisOnPrimary,
+    onSecondary = JarvisOnSecondary,
+    onTertiary = JarvisOnTertiary,
     onBackground = JarvisAccent,
     onSurface = JarvisGray
 )
