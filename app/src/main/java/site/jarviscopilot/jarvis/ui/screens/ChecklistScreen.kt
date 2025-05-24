@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -102,14 +104,12 @@ fun ChecklistScreen(
                 ) {
                     // Home button
                     JarvisIconButton(
-                        text = "Home",
                         icon = Icons.Default.Home,
                         onClick = onNavigateHome
                     )
 
                     // Check button - mark current item as complete
                     JarvisIconButton(
-                        text = "Check",
                         icon = Icons.Default.Check,
                         onClick = {
                             if (activeItemIndex.intValue < checklistItems.size &&
@@ -126,7 +126,6 @@ fun ChecklistScreen(
 
                     // Skip button - skip current item if allowed
                     JarvisIconButton(
-                        text = "Skip",
                         icon = Icons.Default.SkipNext,
                         onClick = {
                             showDialog.value = true
@@ -134,9 +133,23 @@ fun ChecklistScreen(
                         enabled = activeItemIndex.intValue < checklistItems.size
                     )
 
+                    // Search button - find first skipped item
+                    JarvisIconButton(
+                        icon = Icons.Default.Search,
+                        onClick = {
+                            // Find the first skipped item (items that are not in completedItems)
+                            val firstSkipped = checklistItems.indices.firstOrNull {
+                                it !in completedItems && it != activeItemIndex.intValue
+                            }
+                            // If found, navigate to it
+                            firstSkipped?.let {
+                                activeItemIndex.intValue = it
+                            }
+                        }
+                    )
+
                     // Mic button - toggles listening for voice commands
                     JarvisIconButton(
-                        text = "Listen",
                         icon = Icons.Default.Mic,
                         onClick = {
                             isMicActive.value = !isMicActive.value
@@ -145,6 +158,16 @@ fun ChecklistScreen(
                             MaterialTheme.colorScheme.tertiary
                         else
                             MaterialTheme.colorScheme.onPrimary
+                    )
+
+                    // Emergency button - displays emergency checklists
+                    JarvisIconButton(
+                        icon = Icons.Default.Warning,
+                        onClick = {
+                            // Action to display emergency checklists will go here
+                        },
+                        iconTint = MaterialTheme.colorScheme.error,
+                        containerColor = MaterialTheme.colorScheme.errorContainer
                     )
                 }
             }
@@ -317,28 +340,39 @@ fun ChecklistScreenPreview(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         JarvisIconButton(
-                            text = "Home",
                             icon = Icons.Default.Home,
                             onClick = {}
                         )
                         JarvisIconButton(
-                            text = "Check",
                             icon = Icons.Default.Check,
                             onClick = {}
                         )
                         JarvisIconButton(
-                            text = "Skip",
                             icon = Icons.Default.SkipNext,
                             onClick = { showDialog.value = true }
                         )
+
+                        // Search button - find first skipped item
                         JarvisIconButton(
-                            text = "Listen",
+                            icon = Icons.Default.Search,
+                            onClick = {}
+                        )
+
+                        JarvisIconButton(
                             icon = Icons.Default.Mic,
                             onClick = { isMicActive.value = !isMicActive.value },
                             iconTint = if (isMicActive.value)
                                 MaterialTheme.colorScheme.tertiary
                             else
                                 MaterialTheme.colorScheme.onPrimary
+                        )
+
+                        // Emergency button - displays emergency checklists
+                        JarvisIconButton(
+                            icon = Icons.Default.Warning,
+                            onClick = { },
+                            iconTint = MaterialTheme.colorScheme.error,
+                            containerColor = MaterialTheme.colorScheme.errorContainer
                         )
                     }
                 }

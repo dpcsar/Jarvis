@@ -73,26 +73,30 @@ fun JarvisOutlinedButton(
 // A button with both text and icon that uses the Jarvis theme
 @Composable
 fun JarvisIconButton(
-    text: String,
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    iconTint: Color = MaterialTheme.colorScheme.onPrimary
+    iconTint: Color = MaterialTheme.colorScheme.onPrimary,
+    containerColor: Color = MaterialTheme.colorScheme.primary
 ) {
-    JarvisButton(
+    Button(
         onClick = onClick,
-        modifier = modifier,
-        enabled = enabled
+        modifier = modifier.defaultMinSize(minWidth = 48.dp, minHeight = 48.dp),
+        enabled = enabled,
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ),
+        contentPadding = PaddingValues(8.dp)
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = iconTint
-        )
-        Text(
-            text = text,
-            modifier = Modifier.defaultMinSize(minWidth = 64.dp)
         )
     }
 }
@@ -118,7 +122,6 @@ fun JarvisButtonLightPreview() {
             }
 
             JarvisIconButton(
-                text = "Icon Button",
                 icon = Icons.Default.Add,
                 onClick = {},
             )
@@ -147,7 +150,6 @@ fun JarvisButtonDarkPreview() {
             }
 
             JarvisIconButton(
-                text = "Icon Button",
                 icon = Icons.Default.Add,
                 onClick = {},
             )

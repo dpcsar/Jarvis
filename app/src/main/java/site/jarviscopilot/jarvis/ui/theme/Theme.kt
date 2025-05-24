@@ -15,11 +15,14 @@ private val JarvisLightColorScheme = lightColorScheme(
     tertiary = JarvisLightAccent,
     background = JarvisLightBackground,
     surface = JarvisLightSurface,
+    error = JarvisLightEmergency,
+    errorContainer = JarvisLightEmergencyBackground, // Added emergency background color
     onPrimary = JarvisOnPrimary,
     onSecondary = JarvisOnSecondary,
     onTertiary = JarvisOnTertiary,
     onBackground = JarvisDarkGray,
-    onSurface = JarvisDarkGray
+    onSurface = JarvisDarkGray,
+    onError = JarvisOnPrimary
 )
 
 private val JarvisDarkColorScheme = darkColorScheme(
@@ -28,11 +31,14 @@ private val JarvisDarkColorScheme = darkColorScheme(
     tertiary = JarvisAccent,
     background = JarvisDarkBackground,
     surface = JarvisDarkSurface,
+    error = JarvisDarkEmergency,
+    errorContainer = JarvisDarkEmergencyBackground, // Added emergency background color
     onPrimary = JarvisOnPrimary,
     onSecondary = JarvisOnSecondary,
     onTertiary = JarvisOnTertiary,
     onBackground = JarvisAccent,
-    onSurface = JarvisGray
+    onSurface = JarvisGray,
+    onError = JarvisOnPrimary
 )
 
 @Composable
