@@ -63,11 +63,13 @@ fun JarvisApp(activity: ComponentActivity? = null) {
                 // Use the JarvisNavHost for navigation
                 JarvisNavHost(navController = navController)
 
-                // Custom Jarvis-themed toast
-                JarvisToast(
-                    message = toastMessage.value,
-                    onDismiss = { showToast.value = false }
-                )
+                // Custom Jarvis-themed toast - only show when showToast is true
+                if (showToast.value) {
+                    JarvisToast(
+                        message = toastMessage.value,
+                        onDismiss = { showToast.value = false }
+                    )
+                }
             }
         }
     }

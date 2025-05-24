@@ -26,7 +26,6 @@ fun SettingsScreen(
     // State for settings
     var useVoiceControl by remember { mutableStateOf(true) }
     var useNightMode by remember { mutableStateOf(false) }
-    var showAudioPermissionDialog by remember { mutableStateOf(false) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
 
@@ -77,7 +76,9 @@ fun SettingsScreen(
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
                         // Would need permission check here in real implementation
-                        showAudioPermissionDialog = true
+                        useVoiceControl = true
+                        toastMessage = "Voice control enabled"
+                        showToast = true
                     } else {
                         useVoiceControl = false
                         toastMessage = "Voice control disabled"
@@ -150,34 +151,13 @@ fun SettingsScreen(
             }
         }
 
-        // Audio Permission Dialog
-        if (showAudioPermissionDialog) {
-            JarvisConfirmationDialog(
-                title = "Audio Permission Required",
-                message = "Voice control requires microphone access. Would you like to grant this permission?",
-                onConfirmClick = {
-                    // In real implementation, would request permission here
-                    useVoiceControl = true
-                    showAudioPermissionDialog = false
-                    toastMessage = "Voice control enabled"
-                    showToast = true
-                },
-                onDismissClick = {
-                    showAudioPermissionDialog = false
-                },
-                onDismissRequest = {
-                    showAudioPermissionDialog = false
-                },
-                confirmText = "Grant",
-                dismissText = "Cancel"
+        // Custom Toast
+        if (showToast) {
+            JarvisToast(
+                message = toastMessage,
+                onDismiss = { showToast = false }
             )
         }
-
-        // Custom Toast
-        JarvisToast(
-            message = toastMessage,
-            onDismiss = { showToast = false }
-        )
     }
 }
 

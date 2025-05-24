@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import site.jarviscopilot.jarvis.ui.components.JarvisButton
+import site.jarviscopilot.jarvis.ui.components.JarvisDialog
+import site.jarviscopilot.jarvis.ui.components.JarvisOutlinedButton
 
 object PermissionHandler {
     fun hasAudioPermission(context: Context): Boolean {
@@ -48,7 +49,6 @@ fun RequestAudioPermission(
             onPermissionGranted()
         } else {
             showRationale = true
-            // Call onPermissionDenied if user denied the permission
             onPermissionDenied()
         }
     }
@@ -58,36 +58,34 @@ fun RequestAudioPermission(
     }
 
     if (showRationale) {
-        AlertDialog(
+        JarvisDialog(
+            title = "Microphone Permission Required",
             onDismissRequest = {
                 showRationale = false
                 onPermissionDenied()
             },
-            title = { Text("Microphone Permission Required") },
-            text = {
+            content = {
                 Text(
                     "Jarvis needs access to your microphone to enable voice control " +
                     "features. Without this permission, voice-related features will be disabled."
                 )
             },
-            confirmButton = {
-                Button(
+            buttons = {
+                JarvisOutlinedButton(
+                    onClick = {
+                        showRationale = false
+                        onPermissionDenied()
+                    }
+                ) {
+                    Text("Deny")
+                }
+                JarvisButton(
                     onClick = {
                         showRationale = false
                         permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                     }
                 ) {
                     Text("Grant Permission")
-                }
-            },
-            dismissButton = {
-                Button(
-                    onClick = {
-                        showRationale = false
-                        onPermissionDenied()
-                    }
-                ) {
-                    Text("Continue Without Voice")
                 }
             }
         )
