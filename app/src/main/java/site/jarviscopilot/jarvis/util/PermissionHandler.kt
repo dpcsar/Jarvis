@@ -2,7 +2,10 @@ package site.jarviscopilot.jarvis.util
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Text
@@ -25,6 +28,20 @@ object PermissionHandler {
             Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
     }
+
+    fun openAppSettings(context: Context) {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", context.packageName, null)
+        intent.data = uri
+        context.startActivity(intent)
+    }
+
+    fun shouldShowRationale(context: Context, permission: String): Boolean {
+        return androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale(
+            context as androidx.activity.ComponentActivity,
+            permission
+        )
+    }
 }
 
 @Composable
@@ -34,6 +51,7 @@ fun RequestAudioPermission(
 ) {
     val context = LocalContext.current
     var showRationale by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }
 
     if (PermissionHandler.hasAudioPermission(context)) {
         LaunchedEffect(key1 = Unit) {
@@ -48,8 +66,12 @@ fun RequestAudioPermission(
         if (isGranted) {
             onPermissionGranted()
         } else {
-            showRationale = true
-            onPermissionDenied()
+            // Check if we can show the permission dialog again or need to direct to settings
+            if (PermissionHandler.shouldShowRationale(context, Manifest.permission.RECORD_AUDIO)) {
+                showRationale = true
+            } else {
+                showSettings = true
+            }
         }
     }
 
@@ -86,6 +108,40 @@ fun RequestAudioPermission(
                     }
                 ) {
                     Text("Grant Permission")
+                }
+            }
+        )
+    }
+
+    if (showSettings) {
+        JarvisDialog(
+            title = "Permission Required",
+            onDismissRequest = {
+                showSettings = false
+                onPermissionDenied()
+            },
+            content = {
+                Text(
+                    "Microphone permission is required but has been permanently denied. " +
+                    "Please open app settings and manually grant the microphone permission."
+                )
+            },
+            buttons = {
+                JarvisOutlinedButton(
+                    onClick = {
+                        showSettings = false
+                        onPermissionDenied()
+                    }
+                ) {
+                    Text("Cancel")
+                }
+                JarvisButton(
+                    onClick = {
+                        showSettings = false
+                        PermissionHandler.openAppSettings(context)
+                    }
+                ) {
+                    Text("Open Settings")
                 }
             }
         )
