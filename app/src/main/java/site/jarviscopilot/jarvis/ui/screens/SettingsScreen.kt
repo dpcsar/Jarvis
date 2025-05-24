@@ -29,6 +29,14 @@ fun SettingsScreen(
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
 
+    // Custom Jarvis-themed toast - only show when showToast is true
+    if (showToast) {
+        JarvisToast(
+            message = toastMessage,
+            onDismiss = { showToast = false }
+        )
+    }
+
     Scaffold(
         topBar = {
             Column {
@@ -149,14 +157,6 @@ fun SettingsScreen(
             ) {
                 Text("Import Checklist")
             }
-        }
-
-        // Custom Toast
-        if (showToast) {
-            JarvisToast(
-                message = toastMessage,
-                onDismiss = { showToast = false }
-            )
         }
     }
 }

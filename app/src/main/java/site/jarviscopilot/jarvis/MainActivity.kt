@@ -40,6 +40,27 @@ fun JarvisApp(activity: ComponentActivity? = null) {
         val showToast = remember { mutableStateOf(false) }
         val toastMessage = remember { mutableStateOf("") }
 
+        if (activity != null && !PermissionHandler.hasAudioPermission(activity)) {
+            RequestAudioPermission(
+                onPermissionGranted = {
+                    toastMessage.value = "Audio recording permission granted"
+                    showToast.value = true
+                },
+                onPermissionDenied = {
+                    toastMessage.value = "Audio recording permission denied"
+                    showToast.value = true
+                }
+            )
+        }
+
+        // Custom Jarvis-themed toast - only show when showToast is true
+        if (showToast.value) {
+            JarvisToast(
+                message = toastMessage.value,
+                onDismiss = { showToast.value = false }
+            )
+        }
+
         Scaffold { paddingValues ->
             Surface(
                 modifier = Modifier
@@ -47,29 +68,8 @@ fun JarvisApp(activity: ComponentActivity? = null) {
                     .padding(paddingValues),
                 color = MaterialTheme.colorScheme.background
             ) {
-                if (activity != null && !PermissionHandler.hasAudioPermission(activity)) {
-                    RequestAudioPermission(
-                        onPermissionGranted = {
-                            toastMessage.value = "Audio recording permission granted"
-                            showToast.value = true
-                        },
-                        onPermissionDenied = {
-                            toastMessage.value = "Audio recording permission denied"
-                            showToast.value = true
-                        }
-                    )
-                }
-
                 // Use the JarvisNavHost for navigation
                 JarvisNavHost(navController = navController)
-
-                // Custom Jarvis-themed toast - only show when showToast is true
-                if (showToast.value) {
-                    JarvisToast(
-                        message = toastMessage.value,
-                        onDismiss = { showToast.value = false }
-                    )
-                }
             }
         }
     }
