@@ -1,12 +1,16 @@
 package site.jarviscopilot.jarvis.data
 
-data class Checklist(
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ChecklistData(
     val title: String,
     val titleAudio: String,
     val description: String,
     val sections: List<ChecklistSection>
 )
 
+@Serializable
 data class ChecklistSection(
     val sectionType: String,
     val sectionTitle: String,
@@ -16,6 +20,7 @@ data class ChecklistSection(
     val lists: List<ChecklistList>
 )
 
+@Serializable
 data class ChecklistList(
     val listTitle: String,
     val listTitleAudio: String,
@@ -23,6 +28,7 @@ data class ChecklistList(
     val listItems: List<ChecklistItem>
 )
 
+@Serializable
 data class ChecklistItem(
     val listItemType: String,
     val challenge: String,

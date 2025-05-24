@@ -7,6 +7,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -20,13 +21,12 @@ data class ChecklistInfo(
     val isExample: Boolean
 )
 
+private const val USER_CHECKLISTS_DIR = "user_checklists"
+
 class ChecklistRepository(private val context: Context) {
 
-    companion object {
-        private const val USER_CHECKLISTS_DIR = "user_checklists"
-    }
-
     private val gson = Gson()
+    private val kotlinxJson = Json { ignoreUnknownKeys = true }
 
     // Get the directory for user-imported checklists
     private fun getUserChecklistsDir(): File {
@@ -48,7 +48,7 @@ class ChecklistRepository(private val context: Context) {
     private suspend fun loadExampleChecklistInfo(): List<ChecklistInfo> = withContext(Dispatchers.IO) {
         try {
             context.assets.list("")
-                ?.filter { it.startsWith("cl_") && it.endsWith(".json") }
+                ?.filter { it.endsWith(".json") }
                 ?.mapNotNull { filename ->
                     try {
                         if (isExampleChecklistDeleted(filename)) {
@@ -59,7 +59,7 @@ class ChecklistRepository(private val context: Context) {
                             val title = jsonObject.get("title")?.asString ?: ""
                             val description = jsonObject.get("description")?.asString ?: ""
                             val name = title.ifEmpty {
-                                filename.substringAfter("cl_").substringBefore(".json").replace("_", " ").capitalize()
+                                filename.substringBefore(".json").replace("_", " ").capitalize()
                             }
                             ChecklistInfo(filename, name, description, filename, true)
                         }
@@ -90,6 +90,24 @@ class ChecklistRepository(private val context: Context) {
                     null
                 }
             } ?: emptyList()
+    }
+
+    // Load a specific checklist by filename (from either assets or user directory)
+    fun loadChecklist(fileName: String): ChecklistData? {
+        return try {
+            // First try to load from user directory
+            val userFile = File(getUserChecklistsDir(), fileName)
+            val jsonString = if (userFile.exists()) {
+                userFile.readText()
+            } else {
+                // If not found in user directory, try loading from assets
+                context.assets.open(fileName).bufferedReader().use { it.readText() }
+            }
+            kotlinxJson.decodeFromString<ChecklistData>(jsonString)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
     }
 
     // Import a checklist from a Uri (file selected by the user)
