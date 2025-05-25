@@ -13,6 +13,7 @@
 /.idea/appInsightsSettings.xml
 /.idea/inspectionProfiles/**
 /.idea/deploymentTargetSelector.xml
+/.idea/deviceManager.xml
 .DS_Store
 /build
 /captures
