@@ -1,9 +1,11 @@
 package site.jarviscopilot.jarvis.ui.components
 
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -12,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +39,33 @@ fun SectionSelector(
     onSectionSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Remember scroll state to control scrolling behavior
+    val listState = rememberLazyListState()
+
+    // When selected section changes, scroll to center it
+    LaunchedEffect(selectedSectionIndex) {
+        if (sections.isNotEmpty()) {
+            // We need to scroll to position the item in the center
+            // Get the item's layout info to calculate the centering offset
+            listState.layoutInfo.visibleItemsInfo.find { it.index == selectedSectionIndex }?.let { itemInfo ->
+                // Calculate the center position of the viewport
+                val viewportCenter = (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
+
+                // Calculate how much to scroll so the item's center aligns with viewport center
+                // Half the item width is used to target the center of the item, not its leading edge
+                val itemCenter = itemInfo.offset + (itemInfo.size / 2)
+                val scrollBy = itemCenter - viewportCenter
+
+                // Scroll by the calculated amount
+                listState.animateScrollBy(scrollBy.toFloat())
+            } ?: run {
+                // Fallback if we can't find the item yet: just scroll to the item
+                // This will position the leading edge but will be corrected once layout info is available
+                listState.animateScrollToItem(selectedSectionIndex)
+            }
+        }
+    }
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -44,6 +74,7 @@ fun SectionSelector(
         tonalElevation = 4.dp
     ) {
         LazyRow(
+            state = listState,
             modifier = Modifier.padding(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
