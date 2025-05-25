@@ -42,6 +42,7 @@ import site.jarviscopilot.jarvis.ui.components.JarvisConfirmationDialog
 import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.ui.components.ChecklistBottomRibbon
 
 @Composable
 fun ChecklistScreen(
@@ -93,85 +94,42 @@ fun ChecklistScreen(
             }
         },
         bottomBar = {
-            BottomAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Home button
-                    JarvisIconButton(
-                        icon = Icons.Default.Home,
-                        onClick = onNavigateHome
-                    )
-
-                    // Check button - mark current item as complete
-                    JarvisIconButton(
-                        icon = Icons.Default.Check,
-                        onClick = {
-                            if (activeItemIndex.intValue < checklistItems.size &&
-                                activeItemIndex.intValue !in completedItems
-                            ) {
-                                completedItems.add(activeItemIndex.intValue)
-                                // Move to next item if available
-                                findFirstUnchecked()?.let {
-                                    activeItemIndex.intValue = it
-                                }
-                            }
+            ChecklistBottomRibbon(
+                onNavigateHome = onNavigateHome,
+                onCheckItem = {
+                    if (activeItemIndex.intValue < checklistItems.size &&
+                        activeItemIndex.intValue !in completedItems
+                    ) {
+                        completedItems.add(activeItemIndex.intValue)
+                        // Move to next item if available
+                        findFirstUnchecked()?.let {
+                            activeItemIndex.intValue = it
                         }
-                    )
-
-                    // Skip button - skip current item if allowed
-                    JarvisIconButton(
-                        icon = Icons.Default.SkipNext,
-                        onClick = {
-                            showDialog.value = true
-                        },
-                        enabled = activeItemIndex.intValue < checklistItems.size
-                    )
-
-                    // Search button - find first skipped item
-                    JarvisIconButton(
-                        icon = Icons.Default.Search,
-                        onClick = {
-                            // Find the first skipped item (items that are not in completedItems)
-                            val firstSkipped = checklistItems.indices.firstOrNull {
-                                it !in completedItems && it != activeItemIndex.intValue
-                            }
-                            // If found, navigate to it
-                            firstSkipped?.let {
-                                activeItemIndex.intValue = it
-                            }
-                        }
-                    )
-
-                    // Mic button - toggles listening for voice commands
-                    JarvisIconButton(
-                        icon = Icons.Default.Mic,
-                        onClick = {
-                            isMicActive.value = !isMicActive.value
-                        },
-                        iconTint = if (isMicActive.value)
-                            MaterialTheme.colorScheme.tertiary
-                        else
-                            MaterialTheme.colorScheme.onPrimary
-                    )
-
-                    // Emergency button - displays emergency checklists
-                    JarvisIconButton(
-                        icon = Icons.Default.Warning,
-                        onClick = {
-                            // Action to display emergency checklists will go here
-                        },
-                        iconTint = MaterialTheme.colorScheme.error,
-                        containerColor = MaterialTheme.colorScheme.errorContainer
-                    )
-                }
-            }
-        }
+                    }
+                },
+                onSkipItem = {
+                    showDialog.value = true
+                },
+                onSearchItem = {
+                    // Find the first skipped item (items that are not in completedItems)
+                    val firstSkipped = checklistItems.indices.firstOrNull {
+                        it !in completedItems && it != activeItemIndex.intValue
+                    }
+                    // If found, navigate to it
+                    firstSkipped?.let {
+                        activeItemIndex.intValue = it
+                    }
+                },
+                onToggleMic = {
+                    isMicActive.value = !isMicActive.value
+                },
+                onEmergency = {
+                    // Action to display emergency checklists will go here
+                },
+                isMicActive = isMicActive.value,
+                isActiveItemEnabled = activeItemIndex.intValue < checklistItems.size
+            )
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
