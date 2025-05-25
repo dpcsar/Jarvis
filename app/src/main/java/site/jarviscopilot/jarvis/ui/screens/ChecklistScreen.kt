@@ -3,8 +3,12 @@ package site.jarviscopilot.jarvis.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,8 +29,10 @@ import site.jarviscopilot.jarvis.data.ChecklistList
 import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.data.ChecklistSection
 import site.jarviscopilot.jarvis.ui.components.ChecklistBottomRibbon
-import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
 import site.jarviscopilot.jarvis.ui.components.ChecklistItem
+import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
+import site.jarviscopilot.jarvis.ui.components.ChecklistTile
+import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -49,37 +55,53 @@ fun ChecklistScreen(
     // Track the currently selected section
     val selectedSectionIndex = remember { mutableIntStateOf(0) }
 
-    // Extract checklist items from the loaded data based on selected section
-    val checklistItems = remember(checklistData, selectedSectionIndex.intValue) {
-        if (checklistData != null && checklistData.sections.isNotEmpty()) {
-            if (selectedSectionIndex.intValue < checklistData.sections.size) {
-                val section = checklistData.sections[selectedSectionIndex.intValue]
-                if (section.lists.isNotEmpty()) {
-                    section.lists.first().listItems
-                } else {
-                    emptyList()
-                }
-            } else {
-                emptyList()
-            }
+    // Track the currently selected list within a section
+    val selectedListIndex = remember { mutableIntStateOf(0) }
+
+    // Get current view mode from section (normalListView or tileListView)
+    val currentViewMode = remember(checklistData, selectedSectionIndex.intValue) {
+        if (checklistData != null &&
+            selectedSectionIndex.intValue < checklistData.sections.size) {
+            checklistData.sections[selectedSectionIndex.intValue].listView
+        } else {
+            "normalListView" // Default to normal list view
+        }
+    }
+
+    // Get lists from the selected section
+    val currentSectionLists = remember(checklistData, selectedSectionIndex.intValue) {
+        if (checklistData != null &&
+            selectedSectionIndex.intValue < checklistData.sections.size) {
+            checklistData.sections[selectedSectionIndex.intValue].lists
         } else {
             emptyList()
         }
     }
 
-    // Track which items are completed (per section)
-    val completedItemsBySection = remember(checklistData) {
-        if (checklistData != null) {
-            List(checklistData.sections.size) { mutableStateListOf<Int>() }
+    // Extract checklist items from the loaded data based on selected section and list
+    val checklistItems = remember(checklistData, selectedSectionIndex.intValue, selectedListIndex.intValue) {
+        if (checklistData != null &&
+            selectedSectionIndex.intValue < checklistData.sections.size &&
+            selectedListIndex.intValue < checklistData.sections[selectedSectionIndex.intValue].lists.size) {
+            checklistData.sections[selectedSectionIndex.intValue].lists[selectedListIndex.intValue].listItems
         } else {
-            listOf(mutableStateListOf<Int>())
+            emptyList()
         }
     }
 
-    // Current section's completed items
-    val completedItems = remember(selectedSectionIndex.intValue, completedItemsBySection) {
-        if (selectedSectionIndex.intValue < completedItemsBySection.size) {
-            completedItemsBySection[selectedSectionIndex.intValue]
+    // Track which items are completed (per section and list)
+    val completedItemsBySection = remember(checklistData) {
+        checklistData?.sections?.map { section ->
+            section.lists.map { mutableStateListOf<Int>() }
+        }
+            ?: listOf(listOf(mutableStateListOf<Int>()))
+    }
+
+    // Current section's and list's completed items
+    val completedItems = remember(selectedSectionIndex.intValue, selectedListIndex.intValue, completedItemsBySection) {
+        if (selectedSectionIndex.intValue < completedItemsBySection.size &&
+            selectedListIndex.intValue < completedItemsBySection[selectedSectionIndex.intValue].size) {
+            completedItemsBySection[selectedSectionIndex.intValue][selectedListIndex.intValue]
         } else {
             mutableStateListOf()
         }
@@ -102,13 +124,28 @@ fun ChecklistScreen(
         },
         bottomBar = {
             Column {
-                // Place the SectionSelector above the ChecklistBottomRibbon
+                // Display ListSelector only when in list view and there's more than one list
+                if (currentViewMode == "normalListView" && currentSectionLists.size > 1) {
+                    ListSelector(
+                        lists = currentSectionLists,
+                        selectedListIndex = selectedListIndex.intValue,
+                        onListSelected = { newIndex ->
+                            selectedListIndex.intValue = newIndex
+                            // Reset active item when changing lists
+                            activeItemIndex.intValue = 0
+                        }
+                    )
+                }
+
+                // Place the SectionSelector below the ListSelector, but above the ChecklistBottomRibbon
                 if (checklistData != null && checklistData.sections.size > 1) {
                     SectionSelector(
                         sections = checklistData.sections,
                         selectedSectionIndex = selectedSectionIndex.intValue,
                         onSectionSelected = { newIndex ->
                             selectedSectionIndex.intValue = newIndex
+                            // Reset selected list index when changing sections
+                            selectedListIndex.intValue = 0
                             // Reset active item when changing sections
                             activeItemIndex.intValue = 0
                         }
@@ -186,18 +223,57 @@ fun ChecklistScreen(
                 }
             }
 
-            // Checklist items
-            LazyColumn {
-                itemsIndexed(checklistItems) { index, item ->
-                    ChecklistItem(
-                        text = "${item.challenge}: ${item.response}",
-                        isCompleted = index in completedItems,
-                        type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
-                        isActive = index == activeItemIndex.intValue,
-                        onItemClick = {
-                            activeItemIndex.intValue = index
-                        }
+            // Display current list title only in list view mode
+            if (currentViewMode == "normalListView" && currentSectionLists.isNotEmpty() &&
+                selectedListIndex.intValue < currentSectionLists.size) {
+                val listTitle = currentSectionLists[selectedListIndex.intValue].listTitle
+                if (listTitle.isNotEmpty()) {
+                    Text(
+                        text = listTitle,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
+                }
+            }
+
+            // Choose between list view and tile view based on the section's listView property
+            when (currentViewMode) {
+                "normalListView" -> {
+                    // Normal list view (existing implementation)
+                    LazyColumn {
+                        itemsIndexed(checklistItems) { index, item ->
+                            ChecklistItem(
+                                text = "${item.challenge}: ${item.response}",
+                                isCompleted = index in completedItems,
+                                type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
+                                isActive = index == activeItemIndex.intValue,
+                                onItemClick = {
+                                    activeItemIndex.intValue = index
+                                }
+                            )
+                        }
+                    }
+                }
+                "tileListView" -> {
+                    // Tile view - display lists as tiles
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(currentSectionLists) { list ->
+                            val listIndex = currentSectionLists.indexOf(list)
+                            ChecklistTile(
+                                checklistList = list,
+                                isSelected = listIndex == selectedListIndex.intValue,
+                                onTileClick = {
+                                    selectedListIndex.intValue = listIndex
+                                    // Reset active item when changing lists
+                                    activeItemIndex.intValue = 0
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -208,7 +284,8 @@ fun ChecklistScreen(
 @Composable
 fun ChecklistScreenPreview(
     darkTheme: Boolean = false,
-    checklistName: String = "Pre-Flight Checklist"
+    checklistName: String = "Pre-Flight Checklist",
+    previewSection: Int = 0 // 0 for normalListView, 1 for tileListView
 ) {
     // Create mock checklist data with multiple sections
     val mockChecklistData = remember {
@@ -222,7 +299,7 @@ fun ChecklistScreenPreview(
                     sectionTitle = "Pre-flight Section",
                     sectionTitleAudio = "",
                     sectionSelectorName = "Pre-flight",
-                    listView = "list",
+                    listView = "normalListView",
                     lists = listOf(
                         ChecklistList(
                             listTitle = "Critical Items",
@@ -250,6 +327,33 @@ fun ChecklistScreenPreview(
                                     suppressAudioResponse = false
                                 )
                             )
+                        ),
+                        ChecklistList(
+                            listTitle = "Secondary Items",
+                            listTitleAudio = "",
+                            listSelectorName = "Secondary",
+                            listItems = listOf(
+                                ChecklistItem(
+                                    listItemType = "standard",
+                                    challenge = "Flight plan",
+                                    challengeAudio = "",
+                                    response = "Filed and approved",
+                                    responseAudio = "",
+                                    mandatory = false,
+                                    suppressAudioChallenge = false,
+                                    suppressAudioResponse = false
+                                ),
+                                ChecklistItem(
+                                    listItemType = "standard",
+                                    challenge = "Passenger briefing",
+                                    challengeAudio = "",
+                                    response = "Completed",
+                                    responseAudio = "",
+                                    mandatory = false,
+                                    suppressAudioChallenge = false,
+                                    suppressAudioResponse = false
+                                )
+                            )
                         )
                     )
                 ),
@@ -258,12 +362,12 @@ fun ChecklistScreenPreview(
                     sectionTitle = "Flight Section",
                     sectionTitleAudio = "",
                     sectionSelectorName = "Flight",
-                    listView = "list",
+                    listView = "tileListView",
                     lists = listOf(
                         ChecklistList(
-                            listTitle = "Flight Items",
+                            listTitle = "Takeoff Items",
                             listTitleAudio = "",
-                            listSelectorName = "Flight",
+                            listSelectorName = "Takeoff",
                             listItems = listOf(
                                 ChecklistItem(
                                     listItemType = "standard",
@@ -274,48 +378,36 @@ fun ChecklistScreenPreview(
                                     mandatory = false,
                                     suppressAudioChallenge = false,
                                     suppressAudioResponse = false
-                                ),
+                                )
+                            )
+                        ),
+                        ChecklistList(
+                            listTitle = "Cruise Items",
+                            listTitleAudio = "",
+                            listSelectorName = "Cruise",
+                            listItems = listOf(
                                 ChecklistItem(
                                     listItemType = "standard",
-                                    challenge = "Weather conditions",
+                                    challenge = "Altitude check",
                                     challengeAudio = "",
-                                    response = "Within acceptable parameters",
+                                    response = "Maintaining assigned altitude",
                                     responseAudio = "",
                                     mandatory = true,
                                     suppressAudioChallenge = false,
                                     suppressAudioResponse = false
                                 )
                             )
-                        )
-                    )
-                ),
-                ChecklistSection(
-                    sectionType = "standard",
-                    sectionTitle = "Post-flight Section",
-                    sectionTitleAudio = "",
-                    sectionSelectorName = "Post-flight",
-                    listView = "list",
-                    lists = listOf(
+                        ),
                         ChecklistList(
-                            listTitle = "Post-flight Items",
+                            listTitle = "Landing Items",
                             listTitleAudio = "",
-                            listSelectorName = "Post-flight",
+                            listSelectorName = "Landing",
                             listItems = listOf(
                                 ChecklistItem(
                                     listItemType = "standard",
-                                    challenge = "Communication check",
+                                    challenge = "Landing gear",
                                     challengeAudio = "",
-                                    response = "All channels clear",
-                                    responseAudio = "",
-                                    mandatory = false,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                ),
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Engine shutdown",
-                                    challengeAudio = "",
-                                    response = "Complete shutdown procedure",
+                                    response = "Down and locked",
                                     responseAudio = "",
                                     mandatory = true,
                                     suppressAudioChallenge = false,
@@ -333,7 +425,13 @@ fun ChecklistScreenPreview(
     val completedItems = remember { mutableStateListOf<Int>(0) }
     val activeItemIndex = remember { mutableIntStateOf(1) }
     val isMicActive = remember { mutableStateOf(false) }
-    val selectedSectionIndex = remember { mutableIntStateOf(0) }
+    val selectedSectionIndex = remember { mutableIntStateOf(previewSection) }
+    val selectedListIndex = remember { mutableIntStateOf(0) }
+
+    // Get current view mode from the selected section
+    val currentViewMode = mockChecklistData.sections[selectedSectionIndex.intValue].listView
+    // Get lists from the selected section
+    val currentSectionLists = mockChecklistData.sections[selectedSectionIndex.intValue].lists
 
     JarvisTheme(darkTheme = darkTheme) {
         Scaffold(
@@ -344,7 +442,16 @@ fun ChecklistScreenPreview(
             },
             bottomBar = {
                 Column {
-                    // Add SectionSelector to the preview
+                    // Display ListSelector only in normalListView mode with multiple lists
+                    if (currentViewMode == "normalListView" && currentSectionLists.size > 1) {
+                        ListSelector(
+                            lists = currentSectionLists,
+                            selectedListIndex = selectedListIndex.intValue,
+                            onListSelected = { selectedListIndex.intValue = it }
+                        )
+                    }
+
+                    // Add SectionSelector if we have multiple sections
                     SectionSelector(
                         sections = mockChecklistData.sections,
                         selectedSectionIndex = selectedSectionIndex.intValue,
@@ -389,17 +496,55 @@ fun ChecklistScreenPreview(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // Checklist items - show items from the current section
-                val checklistItems = currentSection.lists.first().listItems
-                LazyColumn {
-                    itemsIndexed(checklistItems) { index, item ->
-                        ChecklistItem(
-                            text = "${item.challenge}: ${item.response}",
-                            isCompleted = index in completedItems,
-                            type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
-                            isActive = index == activeItemIndex.intValue,
-                            onItemClick = {}
+                // Display list title only in normal list view mode
+                if (currentViewMode == "normalListView" &&
+                    selectedListIndex.intValue < currentSectionLists.size) {
+                    val listTitle = currentSectionLists[selectedListIndex.intValue].listTitle
+                    if (listTitle.isNotEmpty()) {
+                        Text(
+                            text = listTitle,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.padding(bottom = 8.dp)
                         )
+                    }
+                }
+
+                when (currentViewMode) {
+                    "normalListView" -> {
+                        // Normal list view displaying checklist items
+                        if (selectedListIndex.intValue < currentSectionLists.size) {
+                            val checklistItems = currentSectionLists[selectedListIndex.intValue].listItems
+                            LazyColumn {
+                                itemsIndexed(checklistItems) { index, item ->
+                                    ChecklistItem(
+                                        text = "${item.challenge}: ${item.response}",
+                                        isCompleted = index in completedItems,
+                                        type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
+                                        isActive = index == activeItemIndex.intValue,
+                                        onItemClick = {}
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    "tileListView" -> {
+                        // Tile view showing grid of list tiles
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items(currentSectionLists) { list ->
+                                val listIndex = currentSectionLists.indexOf(list)
+                                ChecklistTile(
+                                    checklistList = list,
+                                    isSelected = listIndex == selectedListIndex.intValue,
+                                    onTileClick = {
+                                        selectedListIndex.intValue = listIndex
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -410,11 +555,24 @@ fun ChecklistScreenPreview(
 @Preview(name = "Light Mode", apiLevel = 35, showBackground = true)
 @Composable
 fun ChecklistScreenLightPreview() {
-    ChecklistScreenPreview(darkTheme = false)
+    ChecklistScreenPreview(darkTheme = false, previewSection = 0)
 }
 
 @Preview(name = "Dark Mode", apiLevel = 35, showBackground = true)
 @Composable
 fun ChecklistScreenDarkPreview() {
-    ChecklistScreenPreview(darkTheme = true)
+    ChecklistScreenPreview(darkTheme = true, previewSection = 0)
 }
+
+@Preview(name = "Light Mode Tile", apiLevel = 35, showBackground = true)
+@Composable
+fun ChecklistScreenLightTilePreview() {
+    ChecklistScreenPreview(darkTheme = false, previewSection = 1)
+}
+
+@Preview(name = "Dark Mode Tile", apiLevel = 35, showBackground = true)
+@Composable
+fun ChecklistScreenDarkTilePreview() {
+    ChecklistScreenPreview(darkTheme = true, previewSection = 1)
+}
+
