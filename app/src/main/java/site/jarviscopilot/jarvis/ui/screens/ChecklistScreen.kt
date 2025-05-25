@@ -26,8 +26,7 @@ import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.data.ChecklistSection
 import site.jarviscopilot.jarvis.ui.components.ChecklistBottomRibbon
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
-import site.jarviscopilot.jarvis.ui.components.JarvisChecklistItem
-import site.jarviscopilot.jarvis.ui.components.JarvisConfirmationDialog
+import site.jarviscopilot.jarvis.ui.components.ChecklistItem
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -90,8 +89,6 @@ fun ChecklistScreen(
     val activeItemIndex = remember { mutableIntStateOf(0) }
     // Track whether the mic is active
     val isMicActive = remember { mutableStateOf(false) }
-    // Track if a dialog is showing
-    val showDialog = remember { mutableStateOf(false) }
     // Function to find the first unchecked item
     val findFirstUnchecked = {
         checklistItems.indices.firstOrNull { it !in completedItems }
@@ -132,7 +129,11 @@ fun ChecklistScreen(
                         }
                     },
                     onSkipItem = {
-                        showDialog.value = true
+                        // Skip the current item and move to next without confirmation
+                        val nextUncheckedItem =
+                            checklistItems.indices.firstOrNull { it > activeItemIndex.intValue && it !in completedItems }
+                                ?: activeItemIndex.intValue
+                        activeItemIndex.intValue = nextUncheckedItem
                     },
                     onSearchItem = {
                         // Find the first skipped item (items that are not in completedItems)
@@ -188,7 +189,7 @@ fun ChecklistScreen(
             // Checklist items
             LazyColumn {
                 itemsIndexed(checklistItems) { index, item ->
-                    JarvisChecklistItem(
+                    ChecklistItem(
                         text = "${item.challenge}: ${item.response}",
                         isCompleted = index in completedItems,
                         type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
@@ -199,30 +200,6 @@ fun ChecklistScreen(
                     )
                 }
             }
-        }
-
-        // Skip confirmation dialog
-        if (showDialog.value) {
-            JarvisConfirmationDialog(
-                title = "Skip Item",
-                message = "Are you sure you want to skip this item?",
-                onConfirmClick = {
-                    // Skip the current item and move to next
-                    val nextUncheckedItem =
-                        checklistItems.indices.firstOrNull { it > activeItemIndex.intValue && it !in completedItems }
-                            ?: activeItemIndex.intValue
-                    activeItemIndex.intValue = nextUncheckedItem
-                    showDialog.value = false
-                },
-                onDismissClick = {
-                    showDialog.value = false
-                },
-                onDismissRequest = {
-                    showDialog.value = false
-                },
-                confirmText = "Skip",
-                dismissText = "Cancel"
-            )
         }
     }
 }
@@ -356,7 +333,6 @@ fun ChecklistScreenPreview(
     val completedItems = remember { mutableStateListOf<Int>(0) }
     val activeItemIndex = remember { mutableIntStateOf(1) }
     val isMicActive = remember { mutableStateOf(false) }
-    val showDialog = remember { mutableStateOf(false) }
     val selectedSectionIndex = remember { mutableIntStateOf(0) }
 
     JarvisTheme(darkTheme = darkTheme) {
@@ -378,7 +354,7 @@ fun ChecklistScreenPreview(
                     ChecklistBottomRibbon(
                         onNavigateHome = { },
                         onCheckItem = { },
-                        onSkipItem = { showDialog.value = true },
+                        onSkipItem = { },
                         onSearchItem = { },
                         onToggleMic = { isMicActive.value = !isMicActive.value },
                         onEmergency = { },
@@ -417,7 +393,7 @@ fun ChecklistScreenPreview(
                 val checklistItems = currentSection.lists.first().listItems
                 LazyColumn {
                     itemsIndexed(checklistItems) { index, item ->
-                        JarvisChecklistItem(
+                        ChecklistItem(
                             text = "${item.challenge}: ${item.response}",
                             isCompleted = index in completedItems,
                             type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
@@ -426,19 +402,6 @@ fun ChecklistScreenPreview(
                         )
                     }
                 }
-            }
-
-            // Skip confirmation dialog
-            if (showDialog.value) {
-                JarvisConfirmationDialog(
-                    title = "Skip Item",
-                    message = "Are you sure you want to skip this item?",
-                    onConfirmClick = { showDialog.value = false },
-                    onDismissClick = { showDialog.value = false },
-                    onDismissRequest = { showDialog.value = false },
-                    confirmText = "Skip",
-                    dismissText = "Cancel"
-                )
             }
         }
     }

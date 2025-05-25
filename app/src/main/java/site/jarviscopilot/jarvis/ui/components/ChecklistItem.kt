@@ -34,7 +34,7 @@ enum class ChecklistItemType {
 
 // A customized checklist item that uses the Jarvis theme colors
 @Composable
-fun JarvisChecklistItem(
+fun ChecklistItem(
     text: String,
     isCompleted: Boolean,
     type: ChecklistItemType = ChecklistItemType.NORMAL,
@@ -141,7 +141,7 @@ fun JarvisChecklistItemPreview(
     JarvisTheme {
         Column(Modifier.padding(8.dp)) {
             // Normal item
-            JarvisChecklistItem(
+            ChecklistItem(
                 text = "Uncompleted ${type.name.lowercase()} item",
                 isCompleted = false,
                 type = type,
@@ -150,7 +150,7 @@ fun JarvisChecklistItemPreview(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Completed item
-            JarvisChecklistItem(
+            ChecklistItem(
                 text = "Completed ${type.name.lowercase()} item",
                 isCompleted = true,
                 type = type,
@@ -159,7 +159,7 @@ fun JarvisChecklistItemPreview(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Active item
-            JarvisChecklistItem(
+            ChecklistItem(
                 text = "Active ${type.name.lowercase()} item",
                 isCompleted = false,
                 type = type,
