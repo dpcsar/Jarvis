@@ -8,7 +8,7 @@
       "sectionTitle": "Before You Go",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Pilot currency and proficiency",
@@ -479,7 +479,7 @@
       "sectionTitle": "Preflight",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Preflight Inspection",
@@ -1480,7 +1480,7 @@
       "sectionTitle": "In Flight",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Pre-Takeoff",
@@ -1884,7 +1884,7 @@
       "sectionTitle": "Landing",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Before Landing",
@@ -2131,7 +2131,7 @@
       "sectionTitle": "Post flight",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "After Landing",
@@ -2374,7 +2374,7 @@
       "sectionTitle": "Emergency Procedures",
       "sectionTitleAudio": "",
       "sectionSelectorName": "Emergency",
-      "defaultView": "tileView",
+      "listView": "tileListView",
       "lists": [
         {
           "listTitle": "Air Speeds",
@@ -3913,7 +3913,7 @@
       "sectionTitle": "Speeds",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "tileView",
+      "listView": "tileListView",
       "lists": [
         {
           "listTitle": "Quick Speeds",
@@ -4233,7 +4233,7 @@
       "sectionTitle": "Reference",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "tileView",
+      "listView": "tileListView",
       "lists": [
         {
           "listTitle": "Engine",

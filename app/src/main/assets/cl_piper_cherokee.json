@@ -8,7 +8,7 @@
       "sectionTitle": "Pre-Flight",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Pre-Flight Inspection",
@@ -54,7 +54,7 @@
       "sectionTitle": "Engine Start",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Before Starting Engine",

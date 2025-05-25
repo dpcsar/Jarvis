@@ -245,7 +245,7 @@ fun ChecklistScreenPreview(
                     sectionTitle = "Pre-flight Section",
                     sectionTitleAudio = "",
                     sectionSelectorName = "Pre-flight",
-                    defaultView = "list",
+                    listView = "list",
                     lists = listOf(
                         ChecklistList(
                             listTitle = "Critical Items",
@@ -281,7 +281,7 @@ fun ChecklistScreenPreview(
                     sectionTitle = "Flight Section",
                     sectionTitleAudio = "",
                     sectionSelectorName = "Flight",
-                    defaultView = "list",
+                    listView = "list",
                     lists = listOf(
                         ChecklistList(
                             listTitle = "Flight Items",
@@ -317,7 +317,7 @@ fun ChecklistScreenPreview(
                     sectionTitle = "Post-flight Section",
                     sectionTitleAudio = "",
                     sectionSelectorName = "Post-flight",
-                    defaultView = "list",
+                    listView = "list",
                     lists = listOf(
                         ChecklistList(
                             listTitle = "Post-flight Items",

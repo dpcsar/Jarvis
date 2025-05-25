@@ -16,7 +16,7 @@ data class ChecklistSection(
     val sectionTitle: String,
     val sectionTitleAudio: String,
     val sectionSelectorName: String,
-    val defaultView: String,
+    val listView: String,
     val lists: List<ChecklistList>
 )
 

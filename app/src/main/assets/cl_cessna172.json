@@ -8,7 +8,7 @@
       "sectionTitle": "Pre-Flight",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Pre-Flight",
@@ -54,7 +54,7 @@
       "sectionTitle": "Engine Start",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Engine Start",
@@ -120,7 +120,7 @@
       "sectionTitle": "Taxi",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
-      "defaultView": "checkListView",
+      "listView": "normalListView",
       "lists": [
         {
           "listTitle": "Taxi",
