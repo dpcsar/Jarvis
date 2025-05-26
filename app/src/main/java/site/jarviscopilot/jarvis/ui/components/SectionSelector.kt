@@ -85,10 +85,16 @@ fun SectionSelector(
                 Card(
                     onClick = { onSectionSelected(index) },
                     colors = CardDefaults.cardColors(
-                        containerColor = if (isSelected)
-                            MaterialTheme.colorScheme.primaryContainer
-                        else
-                            MaterialTheme.colorScheme.surfaceVariant
+                        containerColor = when {
+                            section.sectionType == "emergency" && isSelected ->
+                                MaterialTheme.colorScheme.errorContainer
+                            section.sectionType == "emergency" && !isSelected ->
+                                MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                            isSelected ->
+                                MaterialTheme.colorScheme.primaryContainer
+                            else ->
+                                MaterialTheme.colorScheme.surfaceVariant
+                        }
                     ),
                     modifier = Modifier.clip(RoundedCornerShape(16.dp))
                 ) {
@@ -99,10 +105,16 @@ fun SectionSelector(
                                 section.sectionTitle,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = if (isSelected)
-                            MaterialTheme.colorScheme.onPrimaryContainer
-                        else
-                            MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = when {
+                            section.sectionType == "emergency" && isSelected ->
+                                MaterialTheme.colorScheme.onErrorContainer
+                            section.sectionType == "emergency" && !isSelected ->
+                                MaterialTheme.colorScheme.onError
+                            isSelected ->
+                                MaterialTheme.colorScheme.onPrimaryContainer
+                            else ->
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                        },
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                     )
