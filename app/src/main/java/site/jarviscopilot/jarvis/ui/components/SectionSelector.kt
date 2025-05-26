@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.ChecklistSection
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
  * A composable that displays a horizontal row of selectable section cards.
@@ -70,7 +70,7 @@ fun SectionSelector(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = JarvisTheme.colorScheme.surface,
         tonalElevation = 4.dp
     ) {
         LazyRow(
@@ -87,13 +87,13 @@ fun SectionSelector(
                     colors = CardDefaults.cardColors(
                         containerColor = when {
                             section.sectionType == "emergency" && isSelected ->
-                                MaterialTheme.colorScheme.errorContainer
+                                JarvisTheme.colorScheme.emergencyContainer
                             section.sectionType == "emergency" && !isSelected ->
-                                MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                                JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
                             isSelected ->
-                                MaterialTheme.colorScheme.primaryContainer
+                                JarvisTheme.colorScheme.primaryContainer
                             else ->
-                                MaterialTheme.colorScheme.surfaceVariant
+                                JarvisTheme.colorScheme.surfaceVariant
                         }
                     ),
                     modifier = Modifier.clip(RoundedCornerShape(16.dp))
@@ -103,17 +103,17 @@ fun SectionSelector(
                                 section.sectionSelectorName
                               else
                                 section.sectionTitle,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = JarvisTheme.typography.bodyMedium,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         color = when {
                             section.sectionType == "emergency" && isSelected ->
-                                MaterialTheme.colorScheme.onErrorContainer
+                                JarvisTheme.colorScheme.onEmergencyContainer
                             section.sectionType == "emergency" && !isSelected ->
-                                MaterialTheme.colorScheme.onError
+                                JarvisTheme.colorScheme.onEmergency
                             isSelected ->
-                                MaterialTheme.colorScheme.onPrimaryContainer
+                                JarvisTheme.colorScheme.onPrimaryContainer
                             else ->
-                                MaterialTheme.colorScheme.onSurfaceVariant
+                                JarvisTheme.colorScheme.onSurfaceVariant
                         },
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)

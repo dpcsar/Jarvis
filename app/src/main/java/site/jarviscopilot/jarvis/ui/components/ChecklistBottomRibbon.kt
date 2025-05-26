@@ -11,10 +11,10 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun ChecklistBottomRibbon(
@@ -29,7 +29,7 @@ fun ChecklistBottomRibbon(
 ) {
     BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        containerColor = JarvisTheme.colorScheme.primaryContainer,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -66,17 +66,17 @@ fun ChecklistBottomRibbon(
                 icon = Icons.Default.Mic,
                 onClick = onToggleMic,
                 iconTint = if (isMicActive)
-                    MaterialTheme.colorScheme.tertiary
+                    JarvisTheme.colorScheme.tertiary
                 else
-                    MaterialTheme.colorScheme.onPrimary
+                    JarvisTheme.colorScheme.onPrimary
             )
 
             // Emergency button - displays emergency checklists
             JarvisIconButton(
                 icon = Icons.Default.Warning,
                 onClick = onEmergency,
-                iconTint = MaterialTheme.colorScheme.error,
-                containerColor = MaterialTheme.colorScheme.errorContainer
+                iconTint = JarvisTheme.colorScheme.emergency,
+                containerColor = JarvisTheme.colorScheme.emergencyContainer
             )
         }
     }

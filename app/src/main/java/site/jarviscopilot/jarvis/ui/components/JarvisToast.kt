@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,14 +49,14 @@ fun JarvisToast(
                 .padding(16.dp)
                 .alpha(alpha)
                 .background(
-                    color = MaterialTheme.colorScheme.primaryContainer,
+                    color = JarvisTheme.colorScheme.primaryContainer,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
             Text(
                 text = message,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = JarvisTheme.colorScheme.onPrimaryContainer,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -78,14 +77,14 @@ fun JarvisToastLightPreview() {
                     modifier = Modifier
                         .padding(16.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = JarvisTheme.colorScheme.primaryContainer,
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(horizontal = 16.dp, vertical = 10.dp)
                 ) {
                     Text(
                         text = "This is a preview toast message",
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = JarvisTheme.colorScheme.onPrimaryContainer,
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
@@ -101,21 +100,21 @@ fun JarvisToastLightPreview() {
 @Composable
 fun JarvisToastDarkPreview() {
     JarvisTheme(darkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
+        Surface(color = JarvisTheme.colorScheme.background) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 // Using a Box to display the toast in the preview
                 Box(
                     modifier = Modifier
                         .padding(16.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
+                            color = JarvisTheme.colorScheme.primaryContainer,
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(horizontal = 16.dp, vertical = 10.dp)
                 ) {
                     Text(
                         text = "This is a preview toast message",
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = JarvisTheme.colorScheme.onPrimaryContainer,
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()

@@ -33,7 +33,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -219,7 +218,7 @@ fun SettingsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .background(JarvisTheme.colorScheme.primaryContainer)
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -227,14 +226,14 @@ fun SettingsScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            tint = JarvisTheme.colorScheme.onPrimaryContainer
                         )
                     }
 
                     Text(
                         text = "Settings",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = JarvisTheme.typography.titleLarge,
+                        color = JarvisTheme.colorScheme.onPrimaryContainer,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -245,7 +244,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
+                .background(JarvisTheme.colorScheme.background)
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -285,8 +284,8 @@ fun SettingsScreen(
 
             Text(
                 text = "Choose your preferred theme mode",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
+                style = JarvisTheme.typography.bodyMedium,
+                color = JarvisTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -315,8 +314,8 @@ fun SettingsScreen(
 
             Text(
                 text = "Train the 'Hey Jarvis' wake word to better recognize your voice",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
+                style = JarvisTheme.typography.bodyMedium,
+                color = JarvisTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -339,8 +338,8 @@ fun SettingsScreen(
 
             Text(
                 text = "Import custom checklists from your device or cloud storage",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
+                style = JarvisTheme.typography.bodyMedium,
+                color = JarvisTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -368,8 +367,8 @@ fun SettingsScreen(
             // List all available checklists with delete option
             Text(
                 text = "Available Checklists",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
+                style = JarvisTheme.typography.titleMedium,
+                color = JarvisTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -381,8 +380,8 @@ fun SettingsScreen(
             } else if (checklists.isEmpty()) {
                 Text(
                     text = "No checklists available",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = JarvisTheme.typography.bodyMedium,
+                    color = JarvisTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
             } else {
@@ -425,7 +424,7 @@ fun ChecklistListItem(
             ) {
                 Text(
                     text = checklistInfo.name,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = JarvisTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
 
@@ -433,7 +432,7 @@ fun ChecklistListItem(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = checklistInfo.description,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = JarvisTheme.typography.bodyMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -442,8 +441,8 @@ fun ChecklistListItem(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = if (checklistInfo.isExample) "Example checklist" else "User checklist",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = JarvisTheme.typography.bodySmall,
+                    color = JarvisTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -451,7 +450,7 @@ fun ChecklistListItem(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete checklist",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = JarvisTheme.colorScheme.emergency
                 )
             }
         }
@@ -475,7 +474,7 @@ fun SettingSwitchItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = JarvisTheme.colorScheme.primary,
             modifier = Modifier.padding(end = 16.dp)
         )
 
@@ -484,14 +483,14 @@ fun SettingSwitchItem(
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
+                style = JarvisTheme.typography.titleMedium,
+                color = JarvisTheme.colorScheme.onBackground
             )
 
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = JarvisTheme.typography.bodyMedium,
+                color = JarvisTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -499,10 +498,10 @@ fun SettingSwitchItem(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = MaterialTheme.colorScheme.primary,
-                checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
-                uncheckedThumbColor = MaterialTheme.colorScheme.surfaceVariant,
-                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                checkedThumbColor = JarvisTheme.colorScheme.primary,
+                checkedTrackColor = JarvisTheme.colorScheme.primaryContainer,
+                uncheckedThumbColor = JarvisTheme.colorScheme.surfaceVariant,
+                uncheckedTrackColor = JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
             )
         )
     }
@@ -512,8 +511,8 @@ fun SettingSwitchItem(
 fun SettingsSectionHeader(title: String) {
     Text(
         text = title,
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.primary,
+        style = JarvisTheme.typography.titleLarge,
+        color = JarvisTheme.colorScheme.primary,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(vertical = 8.dp)
     )
@@ -568,21 +567,21 @@ fun ThemeOption(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = if (isSelected) {
-        MaterialTheme.colorScheme.primaryContainer
+        JarvisTheme.colorScheme.primaryContainer
     } else {
-        MaterialTheme.colorScheme.surface
+        JarvisTheme.colorScheme.surface
     }
 
     val borderColor = if (isSelected) {
-        MaterialTheme.colorScheme.primary
+        JarvisTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.outline
+        JarvisTheme.colorScheme.outline
     }
 
     val contentColor = if (isSelected) {
-        MaterialTheme.colorScheme.onPrimaryContainer
+        JarvisTheme.colorScheme.onPrimaryContainer
     } else {
-        MaterialTheme.colorScheme.onSurface
+        JarvisTheme.colorScheme.onSurface
     }
 
     Column(
@@ -609,7 +608,7 @@ fun ThemeOption(
 
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = JarvisTheme.typography.bodyMedium,
             color = contentColor
         )
     }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.ChecklistList
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
  * A tile representation of a checklist list for the tile view.
@@ -42,16 +42,16 @@ fun ChecklistTile(
             .clickable { onTileClick() },
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
-                MaterialTheme.colorScheme.primaryContainer
+                JarvisTheme.colorScheme.primaryContainer
             else
-                MaterialTheme.colorScheme.surfaceVariant
+                JarvisTheme.colorScheme.surfaceVariant
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 8.dp else 2.dp
         ),
         shape = RoundedCornerShape(16.dp),
         border = if (isSelected)
-            androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+            androidx.compose.foundation.BorderStroke(2.dp, JarvisTheme.colorScheme.primary)
         else null
     ) {
         Column(
@@ -63,12 +63,12 @@ fun ChecklistTile(
             // Title of the list
             Text(
                 text = checklistList.listTitle,
-                style = MaterialTheme.typography.titleMedium,
+                style = JarvisTheme.typography.titleMedium,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                 color = if (isSelected)
-                    MaterialTheme.colorScheme.onPrimaryContainer
+                    JarvisTheme.colorScheme.onPrimaryContainer
                 else
-                    MaterialTheme.colorScheme.onSurfaceVariant,
+                    JarvisTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -76,11 +76,11 @@ fun ChecklistTile(
             // Item count
             Text(
                 text = "${checklistList.listItems.size} items",
-                style = MaterialTheme.typography.bodySmall,
+                style = JarvisTheme.typography.bodySmall,
                 color = if (isSelected)
-                    MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                    JarvisTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                 else
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    JarvisTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center
             )
         }

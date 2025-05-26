@@ -19,7 +19,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,7 +61,7 @@ fun MainScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .background(JarvisTheme.colorScheme.primaryContainer)
                         .padding(horizontal = 16.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
@@ -71,7 +70,7 @@ fun MainScreen(
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Settings",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            tint = JarvisTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -82,14 +81,14 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
+                .background(JarvisTheme.colorScheme.background)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Jarvis Aviation Assistant",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary,
+                style = JarvisTheme.typography.headlineMedium,
+                color = JarvisTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(vertical = 16.dp)
@@ -97,8 +96,8 @@ fun MainScreen(
 
             Text(
                 text = "Select a Checklist",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
+                style = JarvisTheme.typography.titleLarge,
+                color = JarvisTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -112,8 +111,8 @@ fun MainScreen(
                 ) {
                     Text(
                         text = "No checklists found",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = JarvisTheme.typography.bodyLarge,
+                        color = JarvisTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
 
@@ -152,7 +151,7 @@ fun ChecklistCard(
             .padding(vertical = 8.dp)
             .clickable { onSelected() },
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = JarvisTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -161,8 +160,8 @@ fun ChecklistCard(
         ) {
             Text(
                 text = checklistInfo.name,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = JarvisTheme.typography.titleMedium,
+                color = JarvisTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -170,8 +169,8 @@ fun ChecklistCard(
 
             Text(
                 text = checklistInfo.description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = JarvisTheme.typography.bodyMedium,
+                color = JarvisTheme.colorScheme.onSurfaceVariant
             )
         }
     }

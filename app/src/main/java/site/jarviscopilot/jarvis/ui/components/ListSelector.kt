@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.ChecklistList
+import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
  * A composable that displays a horizontal row of selectable list cards.
@@ -70,7 +70,7 @@ fun ListSelector(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = JarvisTheme.colorScheme.surface,
         tonalElevation = 4.dp
     ) {
         LazyRow(
@@ -86,9 +86,9 @@ fun ListSelector(
                     onClick = { onListSelected(index) },
                     colors = CardDefaults.cardColors(
                         containerColor = if (isSelected)
-                            MaterialTheme.colorScheme.primaryContainer
+                            JarvisTheme.colorScheme.primaryContainer
                         else
-                            MaterialTheme.colorScheme.surfaceVariant
+                            JarvisTheme.colorScheme.surfaceVariant
                     ),
                     modifier = Modifier.clip(RoundedCornerShape(16.dp))
                 ) {
@@ -97,12 +97,12 @@ fun ListSelector(
                                 list.listSelectorName
                               else
                                 list.listTitle,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = JarvisTheme.typography.bodyMedium,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         color = if (isSelected)
-                                MaterialTheme.colorScheme.onPrimaryContainer
+                                JarvisTheme.colorScheme.onPrimaryContainer
                               else
-                                MaterialTheme.colorScheme.onSurfaceVariant,
+                                JarvisTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                     )

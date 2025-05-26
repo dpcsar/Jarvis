@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,16 +48,16 @@ fun ChecklistItem(
 ) {
     val backgroundColor by animateColorAsState(
         when {
-            isActive -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-            isCompleted -> MaterialTheme.colorScheme.surfaceVariant
-            else -> MaterialTheme.colorScheme.surface
+            isActive -> JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+            isCompleted -> JarvisTheme.colorScheme.surfaceVariant
+            else -> JarvisTheme.colorScheme.surface
         }
     )
 
     val borderColor by animateColorAsState(
         when (type) {
-            ChecklistItemType.WARNING -> MaterialTheme.colorScheme.error
-            ChecklistItemType.MANDATORY -> MaterialTheme.colorScheme.tertiary
+            ChecklistItemType.WARNING -> JarvisTheme.colorScheme.emergency
+            ChecklistItemType.MANDATORY -> JarvisTheme.colorScheme.tertiary
             else -> Color.Transparent
         }
     )
@@ -93,15 +92,15 @@ fun ChecklistItem(
                     Icon(
                         imageVector = Icons.Default.Warning,
                         contentDescription = "Warning",
-                        tint = MaterialTheme.colorScheme.error,
+                        tint = JarvisTheme.colorScheme.emergency,
                         modifier = Modifier.padding(end = 8.dp)
                     )
                 }
 
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    style = JarvisTheme.typography.bodyLarge,
+                    color = JarvisTheme.colorScheme.onSurface,
                     textDecoration = if (isCompleted) TextDecoration.LineThrough else TextDecoration.None,
                     fontWeight = when {
                         type == ChecklistItemType.MANDATORY -> FontWeight.Bold
@@ -116,7 +115,7 @@ fun ChecklistItem(
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Completed",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = JarvisTheme.colorScheme.primary
                 )
             }
         }

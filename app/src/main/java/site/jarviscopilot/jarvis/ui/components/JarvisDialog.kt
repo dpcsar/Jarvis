@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +36,7 @@ fun JarvisDialog(
         Card(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = JarvisTheme.colorScheme.surface
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 8.dp
@@ -49,9 +48,9 @@ fun JarvisDialog(
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = JarvisTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = JarvisTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
 
@@ -91,8 +90,8 @@ fun JarvisConfirmationDialog(
         content = {
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = JarvisTheme.typography.bodyMedium,
+                color = JarvisTheme.colorScheme.onSurface,
                 modifier = Modifier.fillMaxWidth()
             )
         },
@@ -126,7 +125,7 @@ fun JarvisDialogPreviewLight() {
             content = {
                 Text(
                     "This is a preview of the JarvisDialog component in light theme.",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = JarvisTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth()
                 )
             },
@@ -157,7 +156,7 @@ fun JarvisDialogPreviewDark() {
             content = {
                 Text(
                     "This is a preview of the JarvisDialog component in dark theme.",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = JarvisTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth()
                 )
             },

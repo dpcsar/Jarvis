@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -260,14 +259,14 @@ fun ChecklistScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
+                .background(JarvisTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
             // Checklist title
             Text(
                 text = checklistData?.title ?: checklistName,
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground,
+                style = JarvisTheme.typography.headlineMedium,
+                color = JarvisTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
@@ -278,8 +277,8 @@ fun ChecklistScreen(
                 if (sectionTitle.isNotEmpty()) {
                     Text(
                         text = sectionTitle,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        style = JarvisTheme.typography.titleMedium,
+                        color = JarvisTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
@@ -294,8 +293,8 @@ fun ChecklistScreen(
                 if (listTitle.isNotEmpty()) {
                     Text(
                         text = listTitle,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        style = JarvisTheme.typography.titleSmall,
+                        color = JarvisTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
@@ -552,14 +551,14 @@ fun ChecklistScreenPreview(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(JarvisTheme.colorScheme.background)
                     .padding(16.dp)
             ) {
                 // Checklist title
                 Text(
                     text = mockChecklistData.title,
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    style = JarvisTheme.typography.headlineMedium,
+                    color = JarvisTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -568,8 +567,8 @@ fun ChecklistScreenPreview(
                 val currentSection = mockChecklistData.sections[selectedSectionIndex.intValue]
                 Text(
                     text = currentSection.sectionTitle,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    style = JarvisTheme.typography.titleMedium,
+                    color = JarvisTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
@@ -580,8 +579,8 @@ fun ChecklistScreenPreview(
                     if (listTitle.isNotEmpty()) {
                         Text(
                             text = listTitle,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            style = JarvisTheme.typography.titleSmall,
+                            color = JarvisTheme.colorScheme.onBackground,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }

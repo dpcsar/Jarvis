@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +42,7 @@ fun TopRibbon(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(JarvisTheme.colorScheme.primaryContainer)
     ) {
         Row(
             modifier = Modifier
@@ -55,7 +54,7 @@ fun TopRibbon(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = flightPlan ?: "No Flight Plan",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = JarvisTheme.typography.bodyLarge
                 )
             }
 
@@ -65,11 +64,11 @@ fun TopRibbon(
                 ) {
                     Text(
                         text = "Local: $localTime",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = JarvisTheme.typography.bodyMedium
                     )
                     Text(
                         text = "UTC: $utcTime",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = JarvisTheme.typography.bodyMedium
                     )
                 }
             }

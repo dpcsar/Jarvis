@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -57,7 +56,7 @@ fun JarvisApp() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                color = MaterialTheme.colorScheme.background
+                color = JarvisTheme.colorScheme.background
             ) {
                 // Use the JarvisNavHost for navigation
                 JarvisNavHost(navController = navController)

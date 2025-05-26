@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,10 +38,10 @@ fun JarvisButton(
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            containerColor = JarvisTheme.colorScheme.primary,
+            contentColor = JarvisTheme.colorScheme.onPrimary,
+            disabledContainerColor = JarvisTheme.colorScheme.surfaceVariant,
+            disabledContentColor = JarvisTheme.colorScheme.onSurfaceVariant
         ),
         contentPadding = contentPadding,
         content = content
@@ -64,8 +63,8 @@ fun JarvisOutlinedButton(
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.primary,
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            contentColor = JarvisTheme.colorScheme.primary,
+            disabledContentColor = JarvisTheme.colorScheme.onSurfaceVariant
         ),
         contentPadding = contentPadding,
         content = content
@@ -79,8 +78,8 @@ fun JarvisIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    iconTint: Color = MaterialTheme.colorScheme.onPrimary,
-    containerColor: Color = MaterialTheme.colorScheme.primary,
+    iconTint: Color = JarvisTheme.colorScheme.onPrimary,
+    containerColor: Color = JarvisTheme.colorScheme.primary,
     text: String? = null
 ) {
     Button(
@@ -90,9 +89,9 @@ fun JarvisIconButton(
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            contentColor = JarvisTheme.colorScheme.onPrimary,
+            disabledContainerColor = JarvisTheme.colorScheme.surfaceVariant,
+            disabledContentColor = JarvisTheme.colorScheme.onSurfaceVariant
         ),
         contentPadding = PaddingValues(horizontal = if (text != null) 16.dp else 8.dp, vertical = 8.dp)
     ) {
@@ -107,8 +106,8 @@ fun JarvisIconButton(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
+                style = JarvisTheme.typography.bodyMedium,
+                color = JarvisTheme.colorScheme.onPrimary
             )
         }
     }
