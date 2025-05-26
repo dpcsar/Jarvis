@@ -10,10 +10,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +39,27 @@ import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
+
+@Composable
+private fun ChecklistListView(
+    checklistItems: List<ChecklistItem>,
+    completedItems: List<Int>,
+    activeItemIndex: Int,
+    onItemClick: (Int) -> Unit
+) {
+    LazyColumn {
+        itemsIndexed(checklistItems) { index, item ->
+            ChecklistItem(
+                text = "${item.challenge}: ${item.response}",
+                isCompleted = index in completedItems,
+                type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
+                isActive = index == activeItemIndex,
+                onItemClick = { onItemClick(index) }
+            )
+        }
+    }
+}
 
 @Composable
 fun ChecklistScreen(
@@ -114,6 +138,16 @@ fun ChecklistScreen(
     // Function to find the first unchecked item
     val findFirstUnchecked = {
         checklistItems.indices.firstOrNull { it !in completedItems }
+    }
+
+    // Track whether we're showing tiles or a list in tile view mode
+    val showingTileGrid = remember { mutableStateOf(true) }
+
+    // When section changes, reset to showing tiles in tile view
+    LaunchedEffect(selectedSectionIndex.intValue) {
+        if (currentViewMode == "tileListView") {
+            showingTileGrid.value = true
+        }
     }
 
     Scaffold(
@@ -223,8 +257,10 @@ fun ChecklistScreen(
                 }
             }
 
-            // Display current list title only in list view mode
-            if (currentViewMode == "normalListView" && currentSectionLists.isNotEmpty() &&
+            // Display current list title only in list view mode or when showing a list in tile mode
+            if ((currentViewMode == "normalListView" ||
+                (currentViewMode == "tileListView" && !showingTileGrid.value)) &&
+                currentSectionLists.isNotEmpty() &&
                 selectedListIndex.intValue < currentSectionLists.size) {
                 val listTitle = currentSectionLists[selectedListIndex.intValue].listTitle
                 if (listTitle.isNotEmpty()) {
@@ -240,39 +276,52 @@ fun ChecklistScreen(
             // Choose between list view and tile view based on the section's listView property
             when (currentViewMode) {
                 "normalListView" -> {
-                    // Normal list view (existing implementation)
-                    LazyColumn {
-                        itemsIndexed(checklistItems) { index, item ->
-                            ChecklistItem(
-                                text = "${item.challenge}: ${item.response}",
-                                isCompleted = index in completedItems,
-                                type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
-                                isActive = index == activeItemIndex.intValue,
-                                onItemClick = {
-                                    activeItemIndex.intValue = index
-                                }
-                            )
-                        }
-                    }
+                    // Normal list view using the new composable
+                    ChecklistListView(
+                        checklistItems = checklistItems,
+                        completedItems = completedItems,
+                        activeItemIndex = activeItemIndex.intValue,
+                        onItemClick = { index -> activeItemIndex.intValue = index }
+                    )
                 }
                 "tileListView" -> {
-                    // Tile view - display lists as tiles
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        items(currentSectionLists) { list ->
-                            val listIndex = currentSectionLists.indexOf(list)
-                            ChecklistTile(
-                                checklistList = list,
-                                isSelected = listIndex == selectedListIndex.intValue,
-                                onTileClick = {
-                                    selectedListIndex.intValue = listIndex
-                                    // Reset active item when changing lists
-                                    activeItemIndex.intValue = 0
-                                }
-                            )
+                    if (showingTileGrid.value) {
+                        // Show tile grid with all lists
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items(currentSectionLists) { list ->
+                                val listIndex = currentSectionLists.indexOf(list)
+                                ChecklistTile(
+                                    checklistList = list,
+                                    isSelected = listIndex == selectedListIndex.intValue,
+                                    onTileClick = {
+                                        selectedListIndex.intValue = listIndex
+                                        // Switch from tile grid to list view
+                                        showingTileGrid.value = false
+                                        // Reset active item when changing lists
+                                        activeItemIndex.intValue = 0
+                                    }
+                                )
+                            }
                         }
+                    } else {
+                        // Back button to return to tile grid
+                        JarvisIconButton(
+                            icon = Icons.AutoMirrored.Filled.ArrowBack,
+                            onClick = { showingTileGrid.value = true },
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            text = "Back to tiles"
+                        )
+
+                        // Show selected list using the new composable
+                        ChecklistListView(
+                            checklistItems = checklistItems,
+                            completedItems = completedItems,
+                            activeItemIndex = activeItemIndex.intValue,
+                            onItemClick = { index -> activeItemIndex.intValue = index }
+                        )
                     }
                 }
             }
@@ -515,17 +564,12 @@ fun ChecklistScreenPreview(
                         // Normal list view displaying checklist items
                         if (selectedListIndex.intValue < currentSectionLists.size) {
                             val checklistItems = currentSectionLists[selectedListIndex.intValue].listItems
-                            LazyColumn {
-                                itemsIndexed(checklistItems) { index, item ->
-                                    ChecklistItem(
-                                        text = "${item.challenge}: ${item.response}",
-                                        isCompleted = index in completedItems,
-                                        type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
-                                        isActive = index == activeItemIndex.intValue,
-                                        onItemClick = {}
-                                    )
-                                }
-                            }
+                            ChecklistListView(
+                                checklistItems = checklistItems,
+                                completedItems = completedItems,
+                                activeItemIndex = activeItemIndex.intValue,
+                                onItemClick = {}
+                            )
                         }
                     }
                     "tileListView" -> {

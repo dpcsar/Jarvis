@@ -3,6 +3,8 @@ package site.jarviscopilot.jarvis.ui.components
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -78,7 +80,8 @@ fun JarvisIconButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     iconTint: Color = MaterialTheme.colorScheme.onPrimary,
-    containerColor: Color = MaterialTheme.colorScheme.primary
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    text: String? = null
 ) {
     Button(
         onClick = onClick,
@@ -91,13 +94,23 @@ fun JarvisIconButton(
             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
-        contentPadding = PaddingValues(8.dp)
+        contentPadding = PaddingValues(horizontal = if (text != null) 16.dp else 8.dp, vertical = 8.dp)
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = iconTint
         )
+
+        // Only show text if provided
+        if (text != null) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
 
