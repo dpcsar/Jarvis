@@ -90,6 +90,10 @@ fun SectionSelector(
                                 JarvisTheme.colorScheme.emergencyContainer
                             section.sectionType == "emergency" && !isSelected ->
                                 JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
+                            section.sectionType == "reference" && isSelected ->
+                                JarvisTheme.colorScheme.referenceContainer
+                            section.sectionType == "reference" && !isSelected ->
+                                JarvisTheme.colorScheme.reference.copy(alpha = 0.7f)
                             isSelected ->
                                 JarvisTheme.colorScheme.primaryContainer
                             else ->
@@ -110,6 +114,10 @@ fun SectionSelector(
                                 JarvisTheme.colorScheme.onEmergencyContainer
                             section.sectionType == "emergency" && !isSelected ->
                                 JarvisTheme.colorScheme.onEmergency
+                            section.sectionType == "reference" && isSelected ->
+                                JarvisTheme.colorScheme.onReferenceContainer
+                            section.sectionType == "reference" && !isSelected ->
+                                JarvisTheme.colorScheme.onReference
                             isSelected ->
                                 JarvisTheme.colorScheme.onPrimaryContainer
                             else ->
