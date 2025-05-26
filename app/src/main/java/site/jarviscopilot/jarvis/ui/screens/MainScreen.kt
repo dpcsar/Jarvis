@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -48,9 +49,11 @@ fun MainScreen(
     val context = LocalContext.current
     val repository = remember { ChecklistRepository(context) }
     var checklistInfoList by remember { mutableStateOf<List<ChecklistInfo>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(key1 = true) {
         checklistInfoList = repository.loadAllChecklists()
+        isLoading = false
     }
 
     Scaffold(
@@ -101,7 +104,29 @@ fun MainScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            if (checklistInfoList.isEmpty()) {
+            if (isLoading) {
+                // Show loading indicator while data is being loaded
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = JarvisTheme.colorScheme.primary
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Loading checklists...",
+                        style = JarvisTheme.typography.bodyLarge,
+                        color = JarvisTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            } else if (checklistInfoList.isEmpty()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
