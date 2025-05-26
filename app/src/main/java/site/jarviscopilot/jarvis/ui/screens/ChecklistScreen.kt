@@ -59,7 +59,8 @@ private fun ChecklistListView(
     checklistItems: List<ChecklistItem>,
     completedItems: List<Int>,
     activeItemIndex: Int,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit,
+    onToggleComplete: (Int) -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -95,7 +96,8 @@ private fun ChecklistListView(
                 isCompleted = index in completedItems,
                 type = convertToItemType(item.listItemType),
                 isActive = index == activeItemIndex,
-                onItemClick = { onItemClick(index) }
+                onItemClick = { onItemClick(index) },
+                onCheckboxClick = { onToggleComplete(index) }
             )
         }
     }
@@ -180,6 +182,22 @@ fun ChecklistScreen(
         checklistItems.indices.firstOrNull { it !in completedItems }
     }
 
+    // Helper function to handle task completion logic
+    val handleTaskCompletion = { itemIndex: Int ->
+        if (itemIndex < checklistItems.size) {
+            if (itemIndex !in completedItems) {
+                completedItems.add(itemIndex)
+                // Move to next item if available
+                findFirstUnchecked()?.let {
+                    activeItemIndex.intValue = it
+                }
+            } else {
+                // If the item is already completed, un-complete it
+                completedItems.remove(itemIndex)
+            }
+        }
+    }
+
     // Track whether we're showing tiles or a list in tile view mode
     val showingTileGrid = remember { mutableStateOf(true) }
 
@@ -229,15 +247,7 @@ fun ChecklistScreen(
                 ChecklistBottomRibbon(
                     onNavigateHome = onNavigateHome,
                     onCheckItem = {
-                        if (activeItemIndex.intValue < checklistItems.size &&
-                            activeItemIndex.intValue !in completedItems
-                        ) {
-                            completedItems.add(activeItemIndex.intValue)
-                            // Move to next item if available
-                            findFirstUnchecked()?.let {
-                                activeItemIndex.intValue = it
-                            }
-                        }
+                        handleTaskCompletion(activeItemIndex.intValue)
                     },
                     onSkipItem = {
                         // Skip the current item and move to next without confirmation
@@ -321,7 +331,10 @@ fun ChecklistScreen(
                         checklistItems = checklistItems,
                         completedItems = completedItems,
                         activeItemIndex = activeItemIndex.intValue,
-                        onItemClick = { index -> activeItemIndex.intValue = index }
+                        onItemClick = { index -> activeItemIndex.intValue = index },
+                        onToggleComplete = { index ->
+                            handleTaskCompletion(index)
+                        }
                     )
                 }
                 "tileListView" -> {
@@ -363,7 +376,10 @@ fun ChecklistScreen(
                             checklistItems = checklistItems,
                             completedItems = completedItems,
                             activeItemIndex = activeItemIndex.intValue,
-                            onItemClick = { index -> activeItemIndex.intValue = index }
+                            onItemClick = { index -> activeItemIndex.intValue = index },
+                            onToggleComplete = { index ->
+                                handleTaskCompletion(index)
+                            }
                         )
                     }
                 }
@@ -699,7 +715,14 @@ fun ChecklistScreenPreview(
                                 checklistItems = checklistItems,
                                 completedItems = completedItems,
                                 activeItemIndex = activeItemIndex.intValue,
-                                onItemClick = {}
+                                onItemClick = {},
+                                onToggleComplete = { index ->
+                                    if (index in completedItems) {
+                                        completedItems.remove(index)
+                                    } else {
+                                        completedItems.add(index)
+                                    }
+                                }
                             )
                         }
                     }

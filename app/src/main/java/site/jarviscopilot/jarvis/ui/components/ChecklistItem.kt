@@ -46,7 +46,8 @@ fun ChecklistItem(
     isCompleted: Boolean = false,
     type: ChecklistItemType = ChecklistItemType.TASK,
     isActive: Boolean = false,
-    onItemClick: () -> Unit
+    onItemClick: () -> Unit,
+    onCheckboxClick: () -> Unit = onItemClick // Default to onItemClick for backward compatibility
 ) {
     // Only TASK items can be completed or active
     val effectiveIsCompleted = if (type == ChecklistItemType.TASK) isCompleted else false
@@ -109,7 +110,7 @@ fun ChecklistItem(
                     // Checkbox (only the checkbox triggers completion)
                     Checkbox(
                         checked = effectiveIsCompleted,
-                        onCheckedChange = { onItemClick() },
+                        onCheckedChange = { onCheckboxClick() },
                         colors = CheckboxDefaults.colors(
                             checkedColor = JarvisTheme.colorScheme.primary,
                             uncheckedColor = JarvisTheme.colorScheme.outline
@@ -123,7 +124,7 @@ fun ChecklistItem(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { /* Future TTS implementation */ }
+                            .clickable { onItemClick() }
                     ) {
                         // Challenge text on the left
                         Text(
@@ -240,7 +241,8 @@ fun JarvisChecklistItemPreview() {
                 response = "Passed all tests",
                 isCompleted = true,
                 type = ChecklistItemType.TASK,
-                onItemClick = {}
+                onItemClick = {},
+                onCheckboxClick = {}
             )
             Spacer(modifier = Modifier.height(2.dp))
 
@@ -250,7 +252,8 @@ fun JarvisChecklistItemPreview() {
                 response = "In progress",
                 type = ChecklistItemType.TASK,
                 isActive = true,
-                onItemClick = {}
+                onItemClick = {},
+                onCheckboxClick = {}
             )
             Spacer(modifier = Modifier.height(2.dp))
 
@@ -259,7 +262,8 @@ fun JarvisChecklistItemPreview() {
                 challenge = "Perform pre-flight inspection",
                 response = "Complete",
                 type = ChecklistItemType.TASK,
-                onItemClick = {}
+                onItemClick = {},
+                onCheckboxClick = {}
             )
 
             Spacer(modifier = Modifier.height(8.dp))
