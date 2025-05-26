@@ -1,6 +1,7 @@
 package site.jarviscopilot.jarvis.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,11 +11,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,11 +37,11 @@ import site.jarviscopilot.jarvis.ui.components.ChecklistBottomRibbon
 import site.jarviscopilot.jarvis.ui.components.ChecklistItem
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
 import site.jarviscopilot.jarvis.ui.components.ChecklistTile
+import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.TopRibbon
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
-import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 
 @Composable
 private fun ChecklistListView(
@@ -48,7 +50,33 @@ private fun ChecklistListView(
     activeItemIndex: Int,
     onItemClick: (Int) -> Unit
 ) {
-    LazyColumn {
+    val listState = rememberLazyListState()
+
+    // Auto-scroll to active item when it changes
+    LaunchedEffect(activeItemIndex) {
+        if (checklistItems.isNotEmpty()) {
+            // Get the item's layout info
+            listState.layoutInfo.visibleItemsInfo.find { it.index == activeItemIndex }?.let { itemInfo ->
+                // Calculate the center position of the viewport
+                val viewportCenter = (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
+
+                // Calculate how much to scroll so the item's center aligns with viewport center
+                val itemCenter = itemInfo.offset + (itemInfo.size / 2)
+                val scrollBy = itemCenter - viewportCenter
+
+                // Scroll by the calculated amount with animation
+                listState.animateScrollBy(scrollBy.toFloat())
+            } ?: run {
+                // Fallback to just scrolling to the item
+                listState.animateScrollToItem(activeItemIndex)
+            }
+        }
+    }
+
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         itemsIndexed(checklistItems) { index, item ->
             ChecklistItem(
                 text = "${item.challenge}: ${item.response}",
