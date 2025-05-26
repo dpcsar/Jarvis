@@ -5,7 +5,7 @@
   "sections": [
     {
       "sectionType": "checklist",
-      "sectionTitle": "Pre-Flight",
+      "sectionTitle": "Preflight",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
       "listView": "normalListView",
@@ -13,7 +13,7 @@
         {
           "listTitle": "Pre-Flight",
           "listTitleAudio": "",
-          "listSelectorName": "Pre-Flight",
+          "listSelectorName": "",
           "listItems": [
             {
               "listItemType": "task",
@@ -44,22 +44,83 @@
               "mandatory": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Pitot Tube",
+              "challengeAudio": "",
+              "response": "REMOVE COVER AND CHECK CLEAR",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Static Ports",
+              "challengeAudio": "",
+              "response": "CHECK CLEAR",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Tires",
+              "challengeAudio": "",
+              "response": "CHECK CONDITION AND PRESSURE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Engine Oil",
+              "challengeAudio": "",
+              "response": "CHECK LEVEL (6-8 QUARTS)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Cowling",
+              "challengeAudio": "",
+              "response": "CHECK SECURE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Propeller",
+              "challengeAudio": "",
+              "response": "CHECK FOR DAMAGE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Windshield",
+              "challengeAudio": "",
+              "response": "CLEAN",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
             }
           ]
-        }
-      ]
-    },
-    {
-      "sectionType": "checklist",
-      "sectionTitle": "Engine Start",
-      "sectionTitleAudio": "",
-      "sectionSelectorName": "",
-      "listView": "normalListView",
-      "lists": [
+        },
         {
-          "listTitle": "Engine Start",
+          "listTitle": "Before Start",
           "listTitleAudio": "",
-          "listSelectorName": "Engine Start",
+          "listSelectorName": "",
           "listItems": [
             {
               "listItemType": "task",
@@ -110,22 +171,93 @@
               "mandatory": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Propeller Area",
+              "challengeAudio": "",
+              "response": "CLEAR",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Master Switch",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Pump",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Ignition",
+              "challengeAudio": "",
+              "response": "START",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Oil Pressure",
+              "challengeAudio": "",
+              "response": "CHECK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Pump",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Avionics Master",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Radios",
+              "challengeAudio": "",
+              "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
             }
           ]
-        }
-      ]
-    },
-    {
-      "sectionType": "checklist",
-      "sectionTitle": "Taxi",
-      "sectionTitleAudio": "",
-      "sectionSelectorName": "",
-      "listView": "normalListView",
-      "lists": [
+        },
         {
-          "listTitle": "Taxi",
+          "listTitle": "Before Taxi",
           "listTitleAudio": "",
-          "listSelectorName": "Taxi",
+          "listSelectorName": "",
           "listItems": [
             {
               "listItemType": "task",
@@ -152,6 +284,1361 @@
               "challenge": "Altimeter",
               "challengeAudio": "",
               "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Directional Gyro",
+              "challengeAudio": "",
+              "response": "SET TO COMPASS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Transponder",
+              "challengeAudio": "",
+              "response": "SET AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Run-Up",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Parking Brake",
+              "challengeAudio": "",
+              "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flight Controls",
+              "challengeAudio": "",
+              "response": "FREE AND CORRECT",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Engine Instruments",
+              "challengeAudio": "",
+              "response": "CHECK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Throttle",
+              "challengeAudio": "",
+              "response": "1700 RPM",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Magnetos",
+              "challengeAudio": "",
+              "response": "CHECK (150 RPM DROP MAX, 50 RPM DIFFERENTIAL)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "CHECK (RPM DROP EXPECTED)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Throttle",
+              "challengeAudio": "",
+              "response": "IDLE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flight Instruments",
+              "challengeAudio": "",
+              "response": "CHECK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Radios/Transponder",
+              "challengeAudio": "",
+              "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Takeoff/Climb",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "listView": "normalListView",
+      "lists": [
+        {
+          "listTitle": "Before Takeoff",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Cabin Doors",
+              "challengeAudio": "",
+              "response": "CLOSED AND LOCKED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flight Controls",
+              "challengeAudio": "",
+              "response": "FREE AND CORRECT",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Instruments",
+              "challengeAudio": "",
+              "response": "CHECK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "RICH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "BOTH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flaps",
+              "challengeAudio": "",
+              "response": "AS REQUIRED (0-10°)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Trim",
+              "challengeAudio": "",
+              "response": "SET FOR TAKEOFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Landing Light",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Transponder",
+              "challengeAudio": "",
+              "response": "ALT",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Normal Takeoff",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Throttle",
+              "challengeAudio": "",
+              "response": "FULL POWER",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Engine Instruments",
+              "challengeAudio": "",
+              "response": "CHECK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Rotate",
+              "challengeAudio": "",
+              "response": "55 KIAS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Climb Speed",
+              "challengeAudio": "",
+              "response": "79 KIAS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Climb",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Airspeed",
+              "challengeAudio": "",
+              "response": "79 KIAS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flaps",
+              "challengeAudio": "",
+              "response": "RETRACT (ABOVE 60 KIAS)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Landing Light",
+              "challengeAudio": "",
+              "response": "OFF (ABOVE 1000' AGL)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Cruise/Descent",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "listView": "normalListView",
+      "lists": [
+        {
+          "listTitle": "Cruise",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Power",
+              "challengeAudio": "",
+              "response": "2000-2700 RPM",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "LEAN AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Trim",
+              "challengeAudio": "",
+              "response": "ADJUST",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Engine Instruments",
+              "challengeAudio": "",
+              "response": "MONITOR",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Descent",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Power",
+              "challengeAudio": "",
+              "response": "AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "ENRICH AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Altimeter",
+              "challengeAudio": "",
+              "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Landing",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "listView": "normalListView",
+      "lists": [
+        {
+          "listTitle": "Before Landing",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Seat Belts",
+              "challengeAudio": "",
+              "response": "FASTENED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "BOTH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "RICH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "ON (IF REQUIRED)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Landing Light",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Normal Landing",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Approach Speed",
+              "challengeAudio": "",
+              "response": "65-75 KIAS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flaps",
+              "challengeAudio": "",
+              "response": "AS REQUIRED (0-40°)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Trim",
+              "challengeAudio": "",
+              "response": "ADJUST",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Touchdown",
+              "challengeAudio": "",
+              "response": "MAIN WHEELS FIRST",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "After Landing",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Flaps",
+              "challengeAudio": "",
+              "response": "UP",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "COLD",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Transponder",
+              "challengeAudio": "",
+              "response": "1200",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Postflight",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "listView": "normalListView",
+      "lists": [
+        {
+          "listTitle": "Engine Shutdown",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Parking Brake",
+              "challengeAudio": "",
+              "response": "SET",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Throttle",
+              "challengeAudio": "",
+              "response": "1000 RPM",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Radios/Electrical",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "IDLE CUT-OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Ignition",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Master Switch",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Securing Aircraft",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Control Lock",
+              "challengeAudio": "",
+              "response": "INSTALL",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Pitot Cover",
+              "challengeAudio": "",
+              "response": "INSTALL",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Tie-downs",
+              "challengeAudio": "",
+              "response": "SECURE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Cabin",
+              "challengeAudio": "",
+              "response": "SECURE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionType": "checklist",
+      "sectionTitle": "Emergency Procedures",
+      "sectionTitleAudio": "",
+      "sectionSelectorName": "",
+      "listView": "tileListView",
+      "lists": [
+        {
+          "listTitle": "Engine Failure During Takeoff",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Airspeed",
+              "challengeAudio": "",
+              "response": "68 KIAS (GLIDE SPEED)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Landing Area",
+              "challengeAudio": "",
+              "response": "SELECT STRAIGHT AHEAD",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "IDLE CUT-OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Ignition",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Flaps",
+              "challengeAudio": "",
+              "response": "AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Master Switch",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Engine Failure In Flight",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Airspeed",
+              "challengeAudio": "",
+              "response": "68 KIAS (GLIDE SPEED)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Landing Area",
+              "challengeAudio": "",
+              "response": "SELECT AND FLY TOWARD",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "BOTH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "RICH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Pump",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Ignition",
+              "challengeAudio": "",
+              "response": "BOTH (OR START IF PROP STOPPED)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Radio",
+              "challengeAudio": "",
+              "response": "MAYDAY 121.5 MHz",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Transponder",
+              "challengeAudio": "",
+              "response": "7700",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Engine Fire During Start",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Cranking",
+              "challengeAudio": "",
+              "response": "CONTINUE TO START ENGINE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "If Engine Starts",
+              "challengeAudio": "",
+              "response": "POWER 1700 RPM FOR FEW MINUTES",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "If Engine Fails to Start",
+              "challengeAudio": "",
+              "response": "CONTINUE CRANKING",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "If Fire Continues",
+              "challengeAudio": "",
+              "response": "MIXTURE - IDLE CUT-OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Master Switch",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fire Extinguisher",
+              "challengeAudio": "",
+              "response": "OBTAIN ASSISTANCE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Engine Fire In Flight",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "IDLE CUT-OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Master Switch",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Cabin Vents/Heat",
+              "challengeAudio": "",
+              "response": "CLOSED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Airspeed",
+              "challengeAudio": "",
+              "response": "100 KIAS (IF TERRAIN PERMITS)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Forced Landing",
+              "challengeAudio": "",
+              "response": "EXECUTE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Electrical Fire",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Master Switch",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Vents/Cabin Air/Heat",
+              "challengeAudio": "",
+              "response": "CLOSED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fire Extinguisher",
+              "challengeAudio": "",
+              "response": "ACTIVATE (IF AVAILABLE)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "If Fire Appears Out",
+              "challengeAudio": "",
+              "response": "MASTER SWITCH - ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Circuit Breakers",
+              "challengeAudio": "",
+              "response": "CHECK FOR FAULTY CIRCUIT",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Radio/Electrical Switches",
+              "challengeAudio": "",
+              "response": "OFF",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Vents/Cabin Air/Heat",
+              "challengeAudio": "",
+              "response": "OPEN WHEN SMOKE CLEARS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Land",
+              "challengeAudio": "",
+              "response": "AS SOON AS PRACTICAL",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Icing Conditions",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Turn Around or Change Altitude",
+              "challengeAudio": "",
+              "response": "EXIT ICING CONDITIONS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Pitot Heat",
+              "challengeAudio": "",
+              "response": "ON (IF AVAILABLE)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Defroster",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Airspeed",
+              "challengeAudio": "",
+              "response": "INCREASE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Cabin Heat",
+              "challengeAudio": "",
+              "response": "MAXIMUM (IF ICE ON WINDSHIELD)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Spin Recovery",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Throttle",
+              "challengeAudio": "",
+              "response": "IDLE",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Rudder",
+              "challengeAudio": "",
+              "response": "OPPOSITE TO DIRECTION OF SPIN",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Elevator",
+              "challengeAudio": "",
+              "response": "FORWARD OF NEUTRAL",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "When Rotation Stops",
+              "challengeAudio": "",
+              "response": "NEUTRALIZE RUDDER",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Elevator",
+              "challengeAudio": "",
+              "response": "EASE BACK TO LEVEL FLIGHT",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Power",
+              "challengeAudio": "",
+              "response": "ADD AS REQUIRED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Rough Engine Operation",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Carburetor Heat",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Mixture",
+              "challengeAudio": "",
+              "response": "RICH",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Selector",
+              "challengeAudio": "",
+              "response": "SWITCH TANKS",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Fuel Pump",
+              "challengeAudio": "",
+              "response": "ON",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Engine Instruments",
+              "challengeAudio": "",
+              "response": "CHECK",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Magnetos",
+              "challengeAudio": "",
+              "response": "CHECK (LEFT, RIGHT, BOTH)",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Land",
+              "challengeAudio": "",
+              "response": "AS SOON AS PRACTICAL",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            }
+          ]
+        },
+        {
+          "listTitle": "Radio Failure",
+          "listTitleAudio": "",
+          "listSelectorName": "",
+          "listItems": [
+            {
+              "listItemType": "task",
+              "challenge": "Transponder",
+              "challengeAudio": "",
+              "response": "7600",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "VFR Conditions",
+              "challengeAudio": "",
+              "response": "REMAIN VFR, LAND AS SOON AS PRACTICAL",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "IFR Conditions",
+              "challengeAudio": "",
+              "response": "FLY: ASSIGNED, VECTORED, EXPECTED, FILED",
+              "responseAudio": "",
+              "mandatory": true,
+              "suppressAudioChallenge": false,
+              "suppressAudioResponse": false
+            },
+            {
+              "listItemType": "task",
+              "challenge": "Light Signals",
+              "challengeAudio": "",
+              "response": "WATCH FOR TOWER SIGNALS",
               "responseAudio": "",
               "mandatory": true,
               "suppressAudioChallenge": false,
