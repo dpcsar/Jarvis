@@ -27,29 +27,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 // Represents the different types of checklist items
 enum class ChecklistItemType {
-    NORMAL, WARNING, MANDATORY
+    TASK, NOTE, LABEL, CAUTION, WARNING
 }
 
 // A customized checklist item that uses the Jarvis theme colors
 @Composable
 fun ChecklistItem(
     text: String,
-    isCompleted: Boolean,
-    type: ChecklistItemType = ChecklistItemType.NORMAL,
+    isCompleted: Boolean = false,
+    type: ChecklistItemType = ChecklistItemType.TASK,
     isActive: Boolean = false,
     onItemClick: () -> Unit
 ) {
+    // Only TASK items can be completed or active
+    val effectiveIsCompleted = if (type == ChecklistItemType.TASK) isCompleted else false
+    val effectiveIsActive = if (type == ChecklistItemType.TASK) isActive else false
+
     val backgroundColor by animateColorAsState(
         when {
-            isActive -> JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-            isCompleted -> JarvisTheme.colorScheme.surfaceVariant
+            effectiveIsActive -> JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+            effectiveIsCompleted -> JarvisTheme.colorScheme.surfaceVariant
             else -> JarvisTheme.colorScheme.surface
         }
     )
@@ -57,8 +59,10 @@ fun ChecklistItem(
     val borderColor by animateColorAsState(
         when (type) {
             ChecklistItemType.WARNING -> JarvisTheme.colorScheme.emergency
-            ChecklistItemType.MANDATORY -> JarvisTheme.colorScheme.tertiary
-            else -> Color.Transparent
+            ChecklistItemType.CAUTION -> JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
+            ChecklistItemType.LABEL -> JarvisTheme.colorScheme.tertiary
+            ChecklistItemType.NOTE -> JarvisTheme.colorScheme.secondary
+            ChecklistItemType.TASK -> Color.Transparent
         }
     )
 
@@ -68,13 +72,13 @@ fun ChecklistItem(
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .border(
-                width = if (type != ChecklistItemType.NORMAL) 2.dp else 0.dp,
+                width = if (type != ChecklistItemType.TASK) 2.dp else 0.dp,
                 color = borderColor,
                 shape = RoundedCornerShape(8.dp)
             )
             .clickable { onItemClick() },
         color = backgroundColor,
-        shadowElevation = if (isActive) 4.dp else 1.dp
+        shadowElevation = if (effectiveIsActive) 4.dp else 1.dp
     ) {
         Row(
             modifier = Modifier
@@ -87,31 +91,42 @@ fun ChecklistItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f)
             ) {
-                // Warning icon for warning type
-                if (type == ChecklistItemType.WARNING) {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = "Warning",
-                        tint = JarvisTheme.colorScheme.emergency,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
+                // Icons for specific types
+                when (type) {
+                    ChecklistItemType.WARNING -> {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = "Warning",
+                            tint = JarvisTheme.colorScheme.emergency,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+                    ChecklistItemType.CAUTION -> {
+                        Icon(
+                            imageVector = Icons.Default.Warning, // Reuse warning icon but with different styling
+                            contentDescription = "Caution",
+                            tint = JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f),
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+                    else -> { /* No icon for other types */ }
                 }
 
                 Text(
                     text = text,
                     style = JarvisTheme.typography.bodyLarge,
                     color = JarvisTheme.colorScheme.onSurface,
-                    textDecoration = if (isCompleted) TextDecoration.LineThrough else TextDecoration.None,
-                    fontWeight = when {
-                        type == ChecklistItemType.MANDATORY -> FontWeight.Bold
-                        isActive -> FontWeight.Medium
-                        else -> FontWeight.Normal
+                    textDecoration = if (effectiveIsCompleted) TextDecoration.LineThrough else TextDecoration.None,
+                    fontWeight = when (type) {
+                        ChecklistItemType.LABEL -> FontWeight.Bold
+                        ChecklistItemType.NOTE -> FontWeight.Medium
+                        else -> if (effectiveIsActive) FontWeight.Medium else FontWeight.Normal
                     }
                 )
             }
 
             // Completed checkmark
-            if (isCompleted) {
+            if (effectiveIsCompleted) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Completed",
@@ -122,16 +137,6 @@ fun ChecklistItem(
     }
 }
 
-// Parameter provider for JarvisChecklistItem previews
-class ChecklistItemParameterProvider : PreviewParameterProvider<ChecklistItemType> {
-    @Suppress("unused")
-    override val values = sequenceOf(
-        ChecklistItemType.NORMAL,
-        ChecklistItemType.WARNING,
-        ChecklistItemType.MANDATORY
-    )
-}
-
 // Preview for JarvisChecklistItem in both light and dark themes
 @PreviewLightDark
 @Preview(
@@ -140,35 +145,94 @@ class ChecklistItemParameterProvider : PreviewParameterProvider<ChecklistItemTyp
     apiLevel = 35
 )
 @Composable
-fun JarvisChecklistItemPreview(
-    @PreviewParameter(ChecklistItemParameterProvider::class) type: ChecklistItemType
-) {
+fun JarvisChecklistItemPreview() {
     JarvisTheme {
         Column(Modifier.padding(8.dp)) {
-            // Normal item
+            // Show each type with appropriate styling
+            Text(
+                text = "Task items",
+                style = JarvisTheme.typography.titleSmall,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+
+            // Normal task
             ChecklistItem(
-                text = "Uncompleted ${type.name.lowercase()} item",
-                isCompleted = false,
-                type = type,
+                text = "Regular task item",
+                type = ChecklistItemType.TASK,
                 onItemClick = {}
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
-            // Completed item
+            // Completed task
             ChecklistItem(
-                text = "Completed ${type.name.lowercase()} item",
+                text = "Completed task item",
                 isCompleted = true,
-                type = type,
+                type = ChecklistItemType.TASK,
                 onItemClick = {}
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
-            // Active item
+            // Active task
             ChecklistItem(
-                text = "Active ${type.name.lowercase()} item",
-                isCompleted = false,
-                type = type,
+                text = "Active task item",
                 isActive = true,
+                type = ChecklistItemType.TASK,
+                onItemClick = {}
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Note item
+            Text(
+                text = "Note item",
+                style = JarvisTheme.typography.titleSmall,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+            ChecklistItem(
+                text = "This is a note item",
+                type = ChecklistItemType.NOTE,
+                onItemClick = {}
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Label item
+            Text(
+                text = "Label item",
+                style = JarvisTheme.typography.titleSmall,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+            ChecklistItem(
+                text = "This is a label item",
+                type = ChecklistItemType.LABEL,
+                onItemClick = {}
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Caution item
+            Text(
+                text = "Caution item",
+                style = JarvisTheme.typography.titleSmall,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+            ChecklistItem(
+                text = "This is a caution item",
+                type = ChecklistItemType.CAUTION,
+                onItemClick = {}
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Warning item
+            Text(
+                text = "Warning item",
+                style = JarvisTheme.typography.titleSmall,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+            ChecklistItem(
+                text = "This is a warning item",
+                type = ChecklistItemType.WARNING,
                 onItemClick = {}
             )
         }

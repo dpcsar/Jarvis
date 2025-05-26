@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 
 /**
  * Extension of Material3 ColorScheme that includes additional Jarvis-specific colors
- * like reference (replacing error) and emergency
+ * like reference (replacing error), emergency, warning, and caution
  */
 class JarvisColorScheme(
     // Standard Material3 colors
@@ -22,7 +22,17 @@ class JarvisColorScheme(
     val emergency: Color,
     val emergencyContainer: Color,
     val onEmergency: Color,
-    val onEmergencyContainer: Color
+    val onEmergencyContainer: Color,
+    // Adding warning colors
+    val warning: Color,
+    val warningContainer: Color,
+    val onWarning: Color,
+    val onWarningContainer: Color,
+    // Adding caution colors
+    val caution: Color,
+    val cautionContainer: Color,
+    val onCaution: Color,
+    val onCautionContainer: Color
 ) {
     // Provide the standard Material3 colors by delegation
     val primary get() = colorScheme.primary
@@ -99,7 +109,14 @@ val LocalJarvisColorScheme = staticCompositionLocalOf {
         emergency = Color.Unspecified,
         emergencyContainer = Color.Unspecified,
         onEmergency = Color.Unspecified,
-        onEmergencyContainer = Color.Unspecified
+        onEmergencyContainer = Color.Unspecified,
+        warning = Color.Unspecified,
+        warningContainer = Color.Unspecified,
+        onWarning = Color.Unspecified,
+        onWarningContainer = Color.Unspecified,
+        caution = Color.Unspecified,
+        cautionContainer = Color.Unspecified,
+        onCaution = Color.Unspecified,
+        onCautionContainer = Color.Unspecified
     )
 }
-

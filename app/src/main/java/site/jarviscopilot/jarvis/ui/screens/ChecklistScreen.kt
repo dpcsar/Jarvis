@@ -80,7 +80,7 @@ private fun ChecklistListView(
             ChecklistItem(
                 text = "${item.challenge}: ${item.response}",
                 isCompleted = index in completedItems,
-                type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.NORMAL,
+                type = if (item.mandatory) ChecklistItemType.WARNING else ChecklistItemType.TASK,
                 isActive = index == activeItemIndex,
                 onItemClick = { onItemClick(index) }
             )

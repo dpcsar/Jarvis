@@ -46,7 +46,7 @@ private val JarvisDarkColorScheme = darkColorScheme(
     onError = JarvisOnPrimary, // Keep for Material compatibility
 )
 
-// Create Jarvis light color scheme with both reference and emergency colors
+// Create Jarvis light color scheme with reference, emergency, warning, and caution colors
 private val JarvisLightExtendedColorScheme = JarvisColorScheme(
     colorScheme = JarvisLightColorScheme,
     reference = JarvisLightReference,
@@ -56,10 +56,18 @@ private val JarvisLightExtendedColorScheme = JarvisColorScheme(
     emergency = JarvisLightEmergency,
     emergencyContainer = JarvisLightEmergencyBackground,
     onEmergency = JarvisOnPrimary,
-    onEmergencyContainer = JarvisDarkGray
+    onEmergencyContainer = JarvisDarkGray,
+    warning = JarvisLightWarning,
+    warningContainer = JarvisLightWarningBackground,
+    onWarning = JarvisOnPrimary,
+    onWarningContainer = JarvisDarkGray,
+    caution = JarvisLightCaution,
+    cautionContainer = JarvisLightCautionBackground,
+    onCaution = JarvisOnSecondary,
+    onCautionContainer = JarvisDarkGray
 )
 
-// Create Jarvis dark color scheme with both reference and emergency colors
+// Create Jarvis dark color scheme with reference, emergency, warning, and caution colors
 private val JarvisDarkExtendedColorScheme = JarvisColorScheme(
     colorScheme = JarvisDarkColorScheme,
     reference = JarvisDarkReference,
@@ -69,7 +77,15 @@ private val JarvisDarkExtendedColorScheme = JarvisColorScheme(
     emergency = JarvisDarkEmergency,
     emergencyContainer = JarvisDarkEmergencyBackground,
     onEmergency = JarvisOnPrimary,
-    onEmergencyContainer = Color.White
+    onEmergencyContainer = Color.White,
+    warning = JarvisDarkWarning,
+    warningContainer = JarvisDarkWarningBackground,
+    onWarning = JarvisOnSecondary,
+    onWarningContainer = Color.White,
+    caution = JarvisDarkCaution,
+    cautionContainer = JarvisDarkCautionBackground,
+    onCaution = JarvisOnSecondary,
+    onCautionContainer = Color.White
 )
 
 @Composable
@@ -88,7 +104,7 @@ fun JarvisTheme(
         else -> JarvisLightColorScheme
     }
 
-    // Create the extended color scheme with both reference and emergency colors
+    // Create the extended color scheme with reference, emergency, warning, and caution colors
     val jarvisColorScheme = when {
         dynamicColor -> {
             // For dynamic color, create a custom color scheme with the dynamic base
@@ -102,7 +118,15 @@ fun JarvisTheme(
                     emergency = JarvisDarkEmergency,
                     emergencyContainer = JarvisDarkEmergencyBackground,
                     onEmergency = JarvisOnPrimary,
-                    onEmergencyContainer = Color.White
+                    onEmergencyContainer = Color.White,
+                    warning = JarvisDarkWarning,
+                    warningContainer = JarvisDarkWarningBackground,
+                    onWarning = JarvisOnSecondary,
+                    onWarningContainer = Color.White,
+                    caution = JarvisDarkCaution,
+                    cautionContainer = JarvisDarkCautionBackground,
+                    onCaution = JarvisOnSecondary,
+                    onCautionContainer = Color.White
                 )
             } else {
                 JarvisColorScheme(
@@ -114,7 +138,15 @@ fun JarvisTheme(
                     emergency = JarvisLightEmergency,
                     emergencyContainer = JarvisLightEmergencyBackground,
                     onEmergency = JarvisOnPrimary,
-                    onEmergencyContainer = JarvisDarkGray
+                    onEmergencyContainer = JarvisDarkGray,
+                    warning = JarvisLightWarning,
+                    warningContainer = JarvisLightWarningBackground,
+                    onWarning = JarvisOnPrimary,
+                    onWarningContainer = JarvisDarkGray,
+                    caution = JarvisLightCaution,
+                    cautionContainer = JarvisLightCautionBackground,
+                    onCaution = JarvisOnSecondary,
+                    onCautionContainer = JarvisDarkGray
                 )
             }
         }
