@@ -90,7 +90,8 @@ private fun ChecklistListView(
     ) {
         itemsIndexed(checklistItems) { index, item ->
             ChecklistItem(
-                text = "${item.challenge}: ${item.response}",
+                challenge = item.challenge,
+                response = item.response,
                 isCompleted = index in completedItems,
                 type = convertToItemType(item.listItemType),
                 isActive = index == activeItemIndex,
