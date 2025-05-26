@@ -23,17 +23,30 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
  * A tile representation of a checklist list for the tile view.
  *
  * @param checklistList The checklist list data to represent as a tile
- * @param isSelected Whether this tile is currently selected
  * @param onTileClick Callback when the tile is clicked
+ * @param category The category of the checklist ("emergency" or "reference")
  * @param modifier Optional modifier for the component
  */
 @Composable
 fun ChecklistTile(
+    modifier: Modifier = Modifier,
     checklistList: ChecklistList,
-    isSelected: Boolean,
     onTileClick: () -> Unit,
-    modifier: Modifier = Modifier
+    category: String = ""
 ) {
+    // Determine colors based on category
+    val containerColor = when {
+        category.equals("emergency", ignoreCase = true) -> JarvisTheme.colorScheme.emergencyContainer
+        category.equals("reference", ignoreCase = true) -> JarvisTheme.colorScheme.referenceContainer
+        else -> JarvisTheme.colorScheme.surfaceVariant
+    }
+
+    val textColor = when {
+        category.equals("emergency", ignoreCase = true) -> JarvisTheme.colorScheme.onEmergencyContainer
+        category.equals("reference", ignoreCase = true) -> JarvisTheme.colorScheme.onReferenceContainer
+        else -> JarvisTheme.colorScheme.onSurfaceVariant
+    }
+
     Card(
         modifier = modifier
             .aspectRatio(1f)  // Square aspect ratio
@@ -41,18 +54,12 @@ fun ChecklistTile(
             .clip(RoundedCornerShape(16.dp))
             .clickable { onTileClick() },
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected)
-                JarvisTheme.colorScheme.primaryContainer
-            else
-                JarvisTheme.colorScheme.surfaceVariant
+            containerColor = containerColor
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isSelected) 8.dp else 2.dp
+            defaultElevation = 2.dp
         ),
-        shape = RoundedCornerShape(16.dp),
-        border = if (isSelected)
-            androidx.compose.foundation.BorderStroke(2.dp, JarvisTheme.colorScheme.primary)
-        else null
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
             modifier = Modifier
@@ -64,11 +71,8 @@ fun ChecklistTile(
             Text(
                 text = checklistList.listTitle,
                 style = JarvisTheme.typography.titleMedium,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                color = if (isSelected)
-                    JarvisTheme.colorScheme.onPrimaryContainer
-                else
-                    JarvisTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Normal,
+                color = textColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -77,10 +81,7 @@ fun ChecklistTile(
             Text(
                 text = "${checklistList.listItems.size} items",
                 style = JarvisTheme.typography.bodySmall,
-                color = if (isSelected)
-                    JarvisTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
-                else
-                    JarvisTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                color = textColor.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center
             )
         }

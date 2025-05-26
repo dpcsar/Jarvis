@@ -320,16 +320,19 @@ fun ChecklistScreen(
                         ) {
                             items(currentSectionLists) { list ->
                                 val listIndex = currentSectionLists.indexOf(list)
+                                // Get the current section type to apply the correct theme
+                                val sectionType = checklistData?.sections?.get(selectedSectionIndex.intValue)?.sectionType ?: ""
+
                                 ChecklistTile(
                                     checklistList = list,
-                                    isSelected = listIndex == selectedListIndex.intValue,
                                     onTileClick = {
                                         selectedListIndex.intValue = listIndex
                                         // Switch from tile grid to list view
                                         showingTileGrid.value = false
                                         // Reset active item when changing lists
                                         activeItemIndex.intValue = 0
-                                    }
+                                    },
+                                    category = sectionType // Pass the section type as the category
                                 )
                             }
                         }
@@ -361,7 +364,7 @@ fun ChecklistScreen(
 fun ChecklistScreenPreview(
     darkTheme: Boolean = false,
     checklistName: String = "Pre-Flight Checklist",
-    previewSection: Int = 0 // 0 for normalListView, 1 for tileListView
+    previewSection: Int = 0 // 0 for normalListView, 1 for tileListView, 2 for emergency, 3 for reference
 ) {
     // Create mock checklist data with multiple sections
     val mockChecklistData = remember {
@@ -492,6 +495,94 @@ fun ChecklistScreenPreview(
                             )
                         )
                     )
+                ),
+                // Add emergency section
+                ChecklistSection(
+                    sectionType = "emergency",
+                    sectionTitle = "Emergency Procedures",
+                    sectionTitleAudio = "",
+                    sectionSelectorName = "Emergency",
+                    listView = "tileListView",
+                    lists = listOf(
+                        ChecklistList(
+                            listTitle = "Engine Failure",
+                            listTitleAudio = "",
+                            listSelectorName = "Engine",
+                            listItems = listOf(
+                                ChecklistItem(
+                                    listItemType = "emergency",
+                                    challenge = "Airspeed",
+                                    challengeAudio = "",
+                                    response = "Best glide speed",
+                                    responseAudio = "",
+                                    mandatory = true,
+                                    suppressAudioChallenge = false,
+                                    suppressAudioResponse = false
+                                )
+                            )
+                        ),
+                        ChecklistList(
+                            listTitle = "Fire Procedures",
+                            listTitleAudio = "",
+                            listSelectorName = "Fire",
+                            listItems = listOf(
+                                ChecklistItem(
+                                    listItemType = "emergency",
+                                    challenge = "Fuel selector",
+                                    challengeAudio = "",
+                                    response = "Off",
+                                    responseAudio = "",
+                                    mandatory = true,
+                                    suppressAudioChallenge = false,
+                                    suppressAudioResponse = false
+                                )
+                            )
+                        )
+                    )
+                ),
+                // Add reference section
+                ChecklistSection(
+                    sectionType = "reference",
+                    sectionTitle = "Reference Materials",
+                    sectionTitleAudio = "",
+                    sectionSelectorName = "Reference",
+                    listView = "tileListView",
+                    lists = listOf(
+                        ChecklistList(
+                            listTitle = "Weather Codes",
+                            listTitleAudio = "",
+                            listSelectorName = "Weather",
+                            listItems = listOf(
+                                ChecklistItem(
+                                    listItemType = "reference",
+                                    challenge = "METAR",
+                                    challengeAudio = "",
+                                    response = "Current weather observation",
+                                    responseAudio = "",
+                                    mandatory = false,
+                                    suppressAudioChallenge = false,
+                                    suppressAudioResponse = false
+                                )
+                            )
+                        ),
+                        ChecklistList(
+                            listTitle = "Radio Frequencies",
+                            listTitleAudio = "",
+                            listSelectorName = "Radio",
+                            listItems = listOf(
+                                ChecklistItem(
+                                    listItemType = "reference",
+                                    challenge = "Emergency frequency",
+                                    challengeAudio = "",
+                                    response = "121.5 MHz",
+                                    responseAudio = "",
+                                    mandatory = false,
+                                    suppressAudioChallenge = false,
+                                    suppressAudioResponse = false
+                                )
+                            )
+                        )
+                    )
                 )
             )
         )
@@ -609,9 +700,13 @@ fun ChecklistScreenPreview(
                                 val listIndex = currentSectionLists.indexOf(list)
                                 ChecklistTile(
                                     checklistList = list,
-                                    isSelected = listIndex == selectedListIndex.intValue,
                                     onTileClick = {
                                         selectedListIndex.intValue = listIndex
+                                    },
+                                    category = when (currentSection.sectionType) {
+                                        "emergency" -> "emergency"
+                                        "reference" -> "reference"
+                                        else -> ""
                                     }
                                 )
                             }
@@ -635,15 +730,26 @@ fun ChecklistScreenDarkPreview() {
     ChecklistScreenPreview(darkTheme = true, previewSection = 0)
 }
 
-@Preview(name = "Light Mode Tile", apiLevel = 35, showBackground = true)
+@Preview(name = "Light Mode Emergency Tiles", apiLevel = 35, showBackground = true)
 @Composable
-fun ChecklistScreenLightTilePreview() {
-    ChecklistScreenPreview(darkTheme = false, previewSection = 1)
+fun ChecklistScreenLightEmergencyPreview() {
+    ChecklistScreenPreview(darkTheme = false, previewSection = 2)
 }
 
-@Preview(name = "Dark Mode Tile", apiLevel = 35, showBackground = true)
+@Preview(name = "Light Mode Emergency Tiles", apiLevel = 35, showBackground = true)
 @Composable
-fun ChecklistScreenDarkTilePreview() {
-    ChecklistScreenPreview(darkTheme = true, previewSection = 1)
+fun ChecklistScreenDarkEmergencyPreview() {
+    ChecklistScreenPreview(darkTheme = true, previewSection = 2)
 }
 
+@Preview(name = "Light Mode Reference Tiles", apiLevel = 35, showBackground = true)
+@Composable
+fun ChecklistScreenLightReferencePreview() {
+    ChecklistScreenPreview(darkTheme = false, previewSection = 3)
+}
+
+@Preview(name = "Light Mode Reference Tiles", apiLevel = 35, showBackground = true)
+@Composable
+fun ChecklistScreenDarkReferencePreview() {
+    ChecklistScreenPreview(darkTheme = true, previewSection = 3)
+}
