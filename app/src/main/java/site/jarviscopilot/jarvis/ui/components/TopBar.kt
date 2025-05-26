@@ -23,7 +23,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.TimeUtil
 
 @Composable
-fun TopRibbon(
+fun TopBar(
     modifier: Modifier = Modifier,
     flightPlan: String? = null
 ) {
@@ -83,7 +83,7 @@ fun TopRibbon(
 @Composable
 fun TopRibbonLightPreview() {
     JarvisTheme {
-        TopRibbon(
+        TopBar(
             flightPlan = "KDEN - KLAX"
         )
     }
@@ -93,7 +93,7 @@ fun TopRibbonLightPreview() {
 @Composable
 fun TopRibbonDarkPreview() {
     JarvisTheme(darkTheme = true) {
-        TopRibbon(
+        TopBar(
             flightPlan = "KDEN - KLAX"
         )
     }

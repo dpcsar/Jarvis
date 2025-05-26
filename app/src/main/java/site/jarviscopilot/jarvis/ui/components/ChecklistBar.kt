@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
-fun ChecklistBottomRibbon(
+fun ChecklistBar(
     onNavigateHome: () -> Unit,
     onCheckItem: () -> Unit,
     onSkipItem: () -> Unit,

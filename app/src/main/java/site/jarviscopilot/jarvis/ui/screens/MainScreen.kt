@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.ChecklistInfo
 import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
-import site.jarviscopilot.jarvis.ui.components.TopRibbon
+import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
@@ -59,7 +59,7 @@ fun MainScreen(
     Scaffold(
         topBar = {
             Column {
-                TopRibbon()
+                TopBar()
 
                 Row(
                     modifier = Modifier

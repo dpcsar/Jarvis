@@ -58,7 +58,7 @@ import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
 import site.jarviscopilot.jarvis.ui.components.JarvisConfirmationDialog
 import site.jarviscopilot.jarvis.ui.components.JarvisToast
-import site.jarviscopilot.jarvis.ui.components.TopRibbon
+import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.PermissionHandler
 import site.jarviscopilot.jarvis.util.RequestAudioPermission
@@ -213,7 +213,7 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             Column {
-                TopRibbon()
+                TopBar()
 
                 Row(
                     modifier = Modifier

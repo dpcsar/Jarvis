@@ -32,14 +32,14 @@ import site.jarviscopilot.jarvis.data.ChecklistItem
 import site.jarviscopilot.jarvis.data.ChecklistList
 import site.jarviscopilot.jarvis.data.ChecklistRepository
 import site.jarviscopilot.jarvis.data.ChecklistSection
-import site.jarviscopilot.jarvis.ui.components.ChecklistBottomRibbon
+import site.jarviscopilot.jarvis.ui.components.ChecklistBar
 import site.jarviscopilot.jarvis.ui.components.ChecklistItem
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
 import site.jarviscopilot.jarvis.ui.components.ChecklistTile
 import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
-import site.jarviscopilot.jarvis.ui.components.TopRibbon
+import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 // Converts a string listItemType to a ChecklistItemType enum
@@ -211,7 +211,7 @@ fun ChecklistScreen(
     Scaffold(
         topBar = {
             Column {
-                TopRibbon()
+                TopBar()
             }
         },
         bottomBar = {
@@ -244,7 +244,7 @@ fun ChecklistScreen(
                     )
                 }
 
-                ChecklistBottomRibbon(
+                ChecklistBar(
                     onNavigateHome = onNavigateHome,
                     onCheckItem = {
                         handleTaskCompletion(activeItemIndex.intValue)
@@ -633,7 +633,7 @@ fun ChecklistScreenPreview(
         Scaffold(
             topBar = {
                 Column {
-                    TopRibbon()
+                    TopBar()
                 }
             },
             bottomBar = {
@@ -654,7 +654,7 @@ fun ChecklistScreenPreview(
                         onSectionSelected = { selectedSectionIndex.intValue = it }
                     )
 
-                    ChecklistBottomRibbon(
+                    ChecklistBar(
                         onNavigateHome = { },
                         onCheckItem = { },
                         onSkipItem = { },
