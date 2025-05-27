@@ -341,7 +341,9 @@ fun ChecklistScreen(
                             selectedListIndex.intValue = newIndex
                             // Reset active item when changing lists
                             activeItemIndex.intValue = 0
-                        }
+                        },
+                        isNormalListView = true,
+                        completedItemsByList = completedItemsBySection[selectedSectionIndex.intValue]
                     )
                 }
 
@@ -480,7 +482,7 @@ fun ChecklistScreen(
                                         // Reset active item when changing lists
                                         activeItemIndex.intValue = 0
                                     },
-                                    category = sectionType // Pass the section type
+                                    category = sectionType // Pass the section
                                 )
                             }
                         }
