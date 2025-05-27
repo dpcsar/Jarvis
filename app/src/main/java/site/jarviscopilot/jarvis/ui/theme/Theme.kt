@@ -159,10 +159,14 @@ fun JarvisTheme(
         materialTypography = Typography
     )
 
+    // Create custom Jarvis shapes
+    val jarvisShapes = JarvisShapes()
+
     // Provide both the Jarvis custom theme tokens and Material theme
     CompositionLocalProvider(
         LocalJarvisColorScheme provides jarvisColorScheme,
-        LocalJarvisTypography provides jarvisTypography
+        LocalJarvisTypography provides jarvisTypography,
+        LocalJarvisShapes provides jarvisShapes
     ) {
         MaterialTheme(
             colorScheme = materialColorScheme,
@@ -183,5 +187,9 @@ object JarvisTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalJarvisTypography.current
-}
 
+    val shapes: JarvisShapes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalJarvisShapes.current
+}

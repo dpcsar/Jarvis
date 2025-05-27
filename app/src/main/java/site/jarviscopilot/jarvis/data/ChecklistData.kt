@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package site.jarviscopilot.jarvis.data
 
 import kotlinx.serialization.Serializable
