@@ -64,9 +64,25 @@ private fun ChecklistListView(
 ) {
     val listState = rememberLazyListState()
 
+    // This effect ensures we scroll to the active item on initial composition
+    // or when resuming a saved checklist
+    LaunchedEffect(Unit) {
+        if (checklistItems.isNotEmpty() && activeItemIndex < checklistItems.size) {
+            listState.scrollToItem(activeItemIndex)
+        }
+    }
+
     // Auto-scroll to active item when it changes
     LaunchedEffect(activeItemIndex) {
         if (checklistItems.isNotEmpty()) {
+            // First make sure the item is visible
+            if (activeItemIndex < checklistItems.size &&
+                !listState.layoutInfo.visibleItemsInfo.any { it.index == activeItemIndex }) {
+                listState.animateScrollToItem(activeItemIndex)
+                // Need to wait for the scroll to complete and layout to update
+                kotlinx.coroutines.delay(100)
+            }
+
             // Get the item's layout info
             listState.layoutInfo.visibleItemsInfo.find { it.index == activeItemIndex }
                 ?.let { itemInfo ->
