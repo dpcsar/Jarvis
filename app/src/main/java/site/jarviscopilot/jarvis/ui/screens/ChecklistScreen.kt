@@ -77,7 +77,8 @@ private fun ChecklistListView(
         if (checklistItems.isNotEmpty()) {
             // First make sure the item is visible
             if (activeItemIndex < checklistItems.size &&
-                !listState.layoutInfo.visibleItemsInfo.any { it.index == activeItemIndex }) {
+                !listState.layoutInfo.visibleItemsInfo.any { it.index == activeItemIndex }
+            ) {
                 listState.animateScrollToItem(activeItemIndex)
                 // Need to wait for the scroll to complete and layout to update
                 kotlinx.coroutines.delay(100)
@@ -242,7 +243,11 @@ fun ChecklistScreen(
     }
 
     // Save state when component is disposed or when values change
-    LaunchedEffect(selectedSectionIndex.intValue, selectedListIndex.intValue, activeItemIndex.intValue) {
+    LaunchedEffect(
+        selectedSectionIndex.intValue,
+        selectedListIndex.intValue,
+        activeItemIndex.intValue
+    ) {
         if (checklistData != null) {
             // Convert completedItemsBySection to a regular List for serialization
             val serializedCompletedItems = completedItemsBySection.map { sectionLists ->
@@ -353,6 +358,12 @@ fun ChecklistScreen(
                         sections = checklistData.sections,
                         selectedSectionIndex = selectedSectionIndex.intValue,
                         onSectionSelected = { newIndex ->
+                            val newSectionType = checklistData.sections[newIndex].sectionType.lowercase()
+                            if (newSectionType == "emergency" || newSectionType == "reference") {
+                                // Reset to tile view when selecting emergency or reference sections
+                                showingTileGrid.value = true
+                            }
+
                             selectedSectionIndex.intValue = newIndex
                             // Reset selected list index when changing sections
                             selectedListIndex.intValue = 0
@@ -422,7 +433,8 @@ fun ChecklistScreen(
                     // Create a function to handle marking all items as complete
                     val handleMarkAllComplete = {
                         // Add all indices to completedItems list - ensure we're using current list's items
-                        val currentCompletedItems = completedItemsBySection[selectedSectionIndex.intValue][selectedListIndex.intValue]
+                        val currentCompletedItems =
+                            completedItemsBySection[selectedSectionIndex.intValue][selectedListIndex.intValue]
                         val itemIndices = checklistItems.indices
                         itemIndices.forEach { index ->
                             if (index !in currentCompletedItems) {
@@ -487,7 +499,16 @@ fun ChecklistScreen(
                             }
                         }
                     } else {
-                        // Show individual list view when a tile has been selected
+                        JarvisIconButton(
+                            onClick = {
+                                // Go back to tile grid view
+                                showingTileGrid.value = true
+                            },
+                            icon = Icons.AutoMirrored.Filled.ArrowBack,
+                            text = "Back to categories",
+                            modifier = Modifier.padding(top = 8.dp)
+                        )                        // Show individual list view when a tile has been selected
+
                         ChecklistListView(
                             checklistItems = checklistItems,
                             completedItems = completedItems,
@@ -497,18 +518,9 @@ fun ChecklistScreen(
                                 handleTaskCompletion(index)
                             }
                         )
-
-                        JarvisIconButton(
-                            onClick = {
-                                // Go back to tile grid view
-                                showingTileGrid.value = true
-                            },
-                            icon = Icons.AutoMirrored.Filled.ArrowBack,
-                            text = "Back to categories",
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
                     }
                 }
+
                 else -> {
                     // Fallback to normal list view if listView property is not recognized
                     ChecklistListView(
