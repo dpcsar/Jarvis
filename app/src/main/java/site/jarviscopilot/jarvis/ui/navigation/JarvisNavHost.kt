@@ -7,9 +7,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import site.jarviscopilot.jarvis.ui.screens.ChecklistScreen
 import site.jarviscopilot.jarvis.ui.screens.MainScreen
 import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
+import site.jarviscopilot.jarvis.ui.screens.checklist.ChecklistScreen
 
 // Navigation routes used in the app
 object JarvisDestinations {

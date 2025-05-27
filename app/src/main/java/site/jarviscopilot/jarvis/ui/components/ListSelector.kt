@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.ChecklistList
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.util.ChecklistUtils
 
 /**
  * A composable that displays a horizontal row of selectable list cards.
@@ -138,6 +139,17 @@ fun ListSelector(
 
                             val progress =
                                 if (totalItems > 0) completedCount.toFloat() / totalItems else 0f
+
+                            // Add percentage text above the progress bar
+                            Text(
+                                text = ChecklistUtils.formatProgress(completedCount, totalItems),
+                                style = JarvisTheme.typography.labelSmall,
+                                color = if (isSelected)
+                                    JarvisTheme.colorScheme.primary
+                                else
+                                    JarvisTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                                modifier = Modifier.padding(bottom = 2.dp)
+                            )
 
                             // Custom progress indicator implementation
                             Box(
