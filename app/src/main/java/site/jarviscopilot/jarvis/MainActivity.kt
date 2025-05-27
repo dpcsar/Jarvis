@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -65,14 +64,3 @@ fun JarvisApp() {
     }
 }
 
-// Preview composable that shows the UI in both light and dark modes
-@Preview( name = "Light Mode", apiLevel = 35, showBackground = true )
-@Preview( name = "Dark Mode", apiLevel = 35, showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
-)
-@Composable
-fun JarvisAppPreviewDark() {
-    JarvisTheme {
-        JarvisApp()
-    }
-}

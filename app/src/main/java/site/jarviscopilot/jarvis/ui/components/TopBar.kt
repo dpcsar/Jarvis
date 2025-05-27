@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -75,27 +74,6 @@ fun TopBar(
         }
 
         HorizontalDivider()
-    }
-}
-
-// Preview composable that shows the UI in both light and dark modes
-@Preview( name = "Light Mode", apiLevel = 35, showBackground = true )
-@Composable
-fun TopRibbonLightPreview() {
-    JarvisTheme {
-        TopBar(
-            flightPlan = "KDEN - KLAX"
-        )
-    }
-}
-
-@Preview( name = "Dark Mode", apiLevel = 35, showBackground = true )
-@Composable
-fun TopRibbonDarkPreview() {
-    JarvisTheme(darkTheme = true) {
-        TopBar(
-            flightPlan = "KDEN - KLAX"
-        )
     }
 }
 

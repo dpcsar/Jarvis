@@ -50,7 +50,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import site.jarviscopilot.jarvis.data.ChecklistInfo
@@ -614,19 +613,3 @@ fun ThemeOption(
     }
 }
 
-// Preview composable that shows the UI in both light and dark modes
-@Preview( name = "Light Mode", apiLevel = 35, showBackground = true )
-@Composable
-fun SettingsScreenLightPreview() {
-    JarvisTheme {
-        SettingsScreen(onNavigateBack =  {})
-    }
-}
-
-@Preview( name = "Dark Mode", apiLevel = 35, showBackground = true )
-@Composable
-fun SettingsScreenDarkPreview() {
-    JarvisTheme (darkTheme = true) {
-        SettingsScreen(onNavigateBack =  {})
-    }
-}
