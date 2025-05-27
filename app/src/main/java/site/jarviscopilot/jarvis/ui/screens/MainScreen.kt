@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.ChecklistInfo
 import site.jarviscopilot.jarvis.data.ChecklistRepository
+import site.jarviscopilot.jarvis.data.ChecklistStateManager
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
@@ -44,15 +45,23 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 @Composable
 fun MainScreen(
     onChecklistSelected: (String) -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    onResumeChecklist: (String, Boolean) -> Unit = { _, _ -> }
 ) {
     val context = LocalContext.current
     val repository = remember { ChecklistRepository(context) }
+    val stateManager = remember { ChecklistStateManager(context) }
+
     var checklistInfoList by remember { mutableStateOf<List<ChecklistInfo>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
+    var resumableChecklists by remember { mutableStateOf<Set<String>>(emptySet()) }
 
     LaunchedEffect(key1 = true) {
         checklistInfoList = repository.loadAllChecklists()
+
+        // Get all checklists that can be resumed
+        resumableChecklists = stateManager.getSavedChecklistFilenames()
+
         isLoading = false
     }
 
@@ -154,9 +163,24 @@ fun MainScreen(
                     contentPadding = PaddingValues(vertical = 8.dp)
                 ) {
                     items(checklistInfoList) { checklistInfo ->
+                        val canResume = resumableChecklists.contains(checklistInfo.filename)
+
                         ChecklistCard(
                             checklistInfo = checklistInfo,
-                            onSelected = { onChecklistSelected(checklistInfo.filename) }
+                            canResume = canResume,
+                            onSelected = {
+                                // Always start fresh when clicking the card itself
+                                onChecklistSelected(checklistInfo.filename)
+                            },
+                            onResume = {
+                                // Resume the checklist with saved progress
+                                onResumeChecklist(checklistInfo.filename, true)
+                            },
+                            onReset = {
+                                // Clear saved state and start fresh
+                                stateManager.clearChecklistState(checklistInfo.filename)
+                                onChecklistSelected(checklistInfo.filename)
+                            }
                         )
                     }
                 }
@@ -168,7 +192,10 @@ fun MainScreen(
 @Composable
 fun ChecklistCard(
     checklistInfo: ChecklistInfo,
-    onSelected: () -> Unit
+    onSelected: () -> Unit,
+    canResume: Boolean = false,
+    onResume: () -> Unit = {},
+    onReset: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
@@ -197,6 +224,30 @@ fun ChecklistCard(
                 style = JarvisTheme.typography.bodyMedium,
                 color = JarvisTheme.colorScheme.onSurfaceVariant
             )
+
+            if (canResume) {
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    JarvisButton(
+                        onClick = onReset,
+                        enabled = true,
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text("Reset")
+                    }
+
+                    JarvisButton(
+                        onClick = onResume,
+                        enabled = true
+                    ) {
+                        Text("Resume")
+                    }
+                }
+            }
         }
     }
 }

@@ -14,11 +14,12 @@ import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
 // Navigation routes used in the app
 object JarvisDestinations {
     const val MAIN_ROUTE = "main"
-    const val CHECKLIST_ROUTE = "checklist/{checklistName}"
+    const val CHECKLIST_ROUTE = "checklist/{checklistName}?resumeFromSaved={resumeFromSaved}"
     const val SETTINGS_ROUTE = "settings"
 
     // Helper functions to create route strings with arguments
-    fun checklistRoute(checklistName: String): String = "checklist/$checklistName"
+    fun checklistRoute(checklistName: String, resumeFromSaved: Boolean = false): String =
+        "checklist/$checklistName?resumeFromSaved=$resumeFromSaved"
 }
 
 
@@ -41,20 +42,29 @@ fun JarvisNavHost(
                 },
                 onSettingsClick = {
                     navController.navigate(JarvisDestinations.SETTINGS_ROUTE)
+                },
+                onResumeChecklist = { checklist, resumeFromSaved ->
+                    navController.navigate(JarvisDestinations.checklistRoute(checklist, resumeFromSaved))
                 }
             )
         }
 
-        // Checklist screen with name parameter
+        // Checklist screen with name parameter and optional resume parameter
         composable(
             route = JarvisDestinations.CHECKLIST_ROUTE,
             arguments = listOf(
                 navArgument("checklistName") {
                     type = NavType.StringType
+                },
+                navArgument("resumeFromSaved") {
+                    type = NavType.BoolType
+                    defaultValue = false
                 }
             )
         ) { backStackEntry ->
             val checklistName = backStackEntry.arguments?.getString("checklistName") ?: ""
+            val resumeFromSaved = backStackEntry.arguments?.getBoolean("resumeFromSaved") == true
+
             ChecklistScreen(
                 checklistName = checklistName,
                 onNavigateHome = {
@@ -64,7 +74,8 @@ fun JarvisNavHost(
                             inclusive = true
                         }
                     }
-                }
+                },
+                resumeFromSaved = resumeFromSaved
             )
         }
 

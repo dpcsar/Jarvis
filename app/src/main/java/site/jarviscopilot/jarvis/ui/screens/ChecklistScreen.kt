@@ -26,13 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.ChecklistData
 import site.jarviscopilot.jarvis.data.ChecklistItem
-import site.jarviscopilot.jarvis.data.ChecklistList
 import site.jarviscopilot.jarvis.data.ChecklistRepository
-import site.jarviscopilot.jarvis.data.ChecklistSection
+import site.jarviscopilot.jarvis.data.ChecklistState
+import site.jarviscopilot.jarvis.data.ChecklistStateManager
 import site.jarviscopilot.jarvis.ui.components.ChecklistBar
 import site.jarviscopilot.jarvis.ui.components.ChecklistItem
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
@@ -110,12 +108,16 @@ private fun ChecklistListView(
 @Composable
 fun ChecklistScreen(
     checklistName: String,
-    onNavigateHome: () -> Unit
+    onNavigateHome: () -> Unit,
+    resumeFromSaved: Boolean = false
 ) {
     val context = LocalContext.current
 
     // Create a ChecklistRepository instance
     val repository = remember { ChecklistRepository(context) }
+
+    // Create a ChecklistStateManager instance
+    val stateManager = remember { ChecklistStateManager(context) }
 
     // Load checklist data from JSON file based on the checklist name
     val checklistData = remember(checklistName, repository) {
@@ -188,11 +190,59 @@ fun ChecklistScreen(
 
     // Track the currently active item
     val activeItemIndex = remember { mutableIntStateOf(0) }
+
     // Track whether the mic is active
     val isMicActive = remember { mutableStateOf(false) }
+
     // Function to find the first unchecked item
     val findFirstUnchecked = {
         checklistItems.indices.firstOrNull { it !in completedItems }
+    }
+
+    // Try to restore saved state if resuming
+    LaunchedEffect(checklistData, resumeFromSaved) {
+        if (checklistData != null && resumeFromSaved) {
+            val savedState = stateManager.getChecklistState(checklistName)
+
+            if (savedState != null) {
+                // Restore section and list indices
+                selectedSectionIndex.intValue = savedState.sectionIndex
+                selectedListIndex.intValue = savedState.listIndex
+                activeItemIndex.intValue = savedState.activeItemIndex
+
+                // Restore completed items
+                try {
+                    savedState.completedItems.forEachIndexed { sectionIdx, sectionLists ->
+                        sectionLists.forEachIndexed { listIdx, completedIndices ->
+                            completedItemsBySection[sectionIdx][listIdx].clear()
+                            completedItemsBySection[sectionIdx][listIdx].addAll(completedIndices)
+                        }
+                    }
+                } catch (_: Exception) {
+                    // Handle potential index out of bounds if checklist structure changed
+                }
+            }
+        }
+    }
+
+    // Save state when component is disposed or when values change
+    LaunchedEffect(selectedSectionIndex.intValue, selectedListIndex.intValue, activeItemIndex.intValue) {
+        if (checklistData != null) {
+            // Convert completedItemsBySection to a regular List for serialization
+            val serializedCompletedItems = completedItemsBySection.map { sectionLists ->
+                sectionLists.map { it.toList() }
+            }
+
+            val state = ChecklistState(
+                checklistFilename = checklistName,
+                sectionIndex = selectedSectionIndex.intValue,
+                listIndex = selectedListIndex.intValue,
+                activeItemIndex = activeItemIndex.intValue,
+                completedItems = serializedCompletedItems
+            )
+
+            stateManager.saveChecklistState(state)
+        }
     }
 
     // Helper function to handle task completion logic
@@ -209,6 +259,11 @@ fun ChecklistScreen(
                 completedItems.remove(itemIndex)
             }
         }
+    }
+
+    // Helper function to handle navigation home
+    val handleNavigateHome = {
+        onNavigateHome()
     }
 
     // Helper function to handle skipping to the next item
@@ -290,7 +345,7 @@ fun ChecklistScreen(
                 }
 
                 ChecklistBar(
-                    onNavigateHome = onNavigateHome,
+                    onNavigateHome = handleNavigateHome,
                     onCheckItem = { handleTaskCompletion(activeItemIndex.intValue) },
                     onSkipItem = handleSkipItem,
                     onSearchItem = handleSearchItem,
@@ -409,20 +464,12 @@ fun ChecklistScreen(
                                         // Reset active item when changing lists
                                         activeItemIndex.intValue = 0
                                     },
-                                    category = sectionType // Pass the section type as the category
+                                    category = sectionType // Pass the section type
                                 )
                             }
                         }
                     } else {
-                        // Back button to return to tile grid
-                        JarvisIconButton(
-                            icon = Icons.AutoMirrored.Filled.ArrowBack,
-                            onClick = { showingTileGrid.value = true },
-                            modifier = Modifier.padding(bottom = 8.dp),
-                            text = "Back to tiles"
-                        )
-
-                        // Show selected list using the new composable
+                        // Show individual list view when a tile has been selected
                         ChecklistListView(
                             checklistItems = checklistItems,
                             completedItems = completedItems,
@@ -432,432 +479,32 @@ fun ChecklistScreen(
                                 handleTaskCompletion(index)
                             }
                         )
+
+                        JarvisIconButton(
+                            onClick = {
+                                // Go back to tile grid view
+                                showingTileGrid.value = true
+                            },
+                            icon = Icons.AutoMirrored.Filled.ArrowBack,
+                            text = "Back to categories",
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
                     }
+                }
+                else -> {
+                    // Fallback to normal list view if listView property is not recognized
+                    ChecklistListView(
+                        checklistItems = checklistItems,
+                        completedItems = completedItems,
+                        activeItemIndex = activeItemIndex.intValue,
+                        onItemClick = { index -> activeItemIndex.intValue = index },
+                        onToggleComplete = { index ->
+                            handleTaskCompletion(index)
+                        }
+                    )
                 }
             }
         }
     }
 }
 
-// A composable that displays the ChecklistScreen with mock data for previews
-@Composable
-fun ChecklistScreenPreview(
-    darkTheme: Boolean = false,
-    checklistName: String = "Pre-Flight Checklist",
-    previewSection: Int = 0 // 0 for normalListView, 1 for tileListView, 2 for emergency, 3 for reference
-) {
-    // Create mock checklist data with multiple sections
-    val mockChecklistData = remember {
-        ChecklistData(
-            title = checklistName,
-            titleAudio = "",
-            description = "A sample checklist for previewing the UI",
-            sections = listOf(
-                ChecklistSection(
-                    sectionType = "standard",
-                    sectionTitle = "Pre-flight Section",
-                    sectionTitleAudio = "",
-                    sectionSelectorName = "Pre-flight",
-                    listView = "normalListView",
-                    lists = listOf(
-                        ChecklistList(
-                            listTitle = "Critical Items",
-                            listTitleAudio = "",
-                            listSelectorName = "Critical",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Check fuel level",
-                                    challengeAudio = "",
-                                    response = "Minimum 30% required",
-                                    responseAudio = "",
-                                    mandatory = true,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                ),
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Verify systems",
-                                    challengeAudio = "",
-                                    response = "All systems operational",
-                                    responseAudio = "",
-                                    mandatory = true,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        ),
-                        ChecklistList(
-                            listTitle = "Secondary Items",
-                            listTitleAudio = "",
-                            listSelectorName = "Secondary",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Flight plan",
-                                    challengeAudio = "",
-                                    response = "Filed and approved",
-                                    responseAudio = "",
-                                    mandatory = false,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                ),
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Passenger briefing",
-                                    challengeAudio = "",
-                                    response = "Completed",
-                                    responseAudio = "",
-                                    mandatory = false,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        )
-                    )
-                ),
-                ChecklistSection(
-                    sectionType = "standard",
-                    sectionTitle = "Flight Section",
-                    sectionTitleAudio = "",
-                    sectionSelectorName = "Flight",
-                    listView = "tileListView",
-                    lists = listOf(
-                        ChecklistList(
-                            listTitle = "Takeoff Items",
-                            listTitleAudio = "",
-                            listSelectorName = "Takeoff",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Navigation",
-                                    challengeAudio = "",
-                                    response = "Route confirmed",
-                                    responseAudio = "",
-                                    mandatory = false,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        ),
-                        ChecklistList(
-                            listTitle = "Cruise Items",
-                            listTitleAudio = "",
-                            listSelectorName = "Cruise",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Altitude check",
-                                    challengeAudio = "",
-                                    response = "Maintaining assigned altitude",
-                                    responseAudio = "",
-                                    mandatory = true,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        ),
-                        ChecklistList(
-                            listTitle = "Landing Items",
-                            listTitleAudio = "",
-                            listSelectorName = "Landing",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "standard",
-                                    challenge = "Landing gear",
-                                    challengeAudio = "",
-                                    response = "Down and locked",
-                                    responseAudio = "",
-                                    mandatory = true,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        )
-                    )
-                ),
-                // Add emergency section
-                ChecklistSection(
-                    sectionType = "emergency",
-                    sectionTitle = "Emergency Procedures",
-                    sectionTitleAudio = "",
-                    sectionSelectorName = "Emergency",
-                    listView = "tileListView",
-                    lists = listOf(
-                        ChecklistList(
-                            listTitle = "Engine Failure",
-                            listTitleAudio = "",
-                            listSelectorName = "Engine",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "emergency",
-                                    challenge = "Airspeed",
-                                    challengeAudio = "",
-                                    response = "Best glide speed",
-                                    responseAudio = "",
-                                    mandatory = true,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        ),
-                        ChecklistList(
-                            listTitle = "Fire Procedures",
-                            listTitleAudio = "",
-                            listSelectorName = "Fire",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "emergency",
-                                    challenge = "Fuel selector",
-                                    challengeAudio = "",
-                                    response = "Off",
-                                    responseAudio = "",
-                                    mandatory = true,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        )
-                    )
-                ),
-                // Add reference section
-                ChecklistSection(
-                    sectionType = "reference",
-                    sectionTitle = "Reference Materials",
-                    sectionTitleAudio = "",
-                    sectionSelectorName = "Reference",
-                    listView = "tileListView",
-                    lists = listOf(
-                        ChecklistList(
-                            listTitle = "Weather Codes",
-                            listTitleAudio = "",
-                            listSelectorName = "Weather",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "reference",
-                                    challenge = "METAR",
-                                    challengeAudio = "",
-                                    response = "Current weather observation",
-                                    responseAudio = "",
-                                    mandatory = false,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        ),
-                        ChecklistList(
-                            listTitle = "Radio Frequencies",
-                            listTitleAudio = "",
-                            listSelectorName = "Radio",
-                            listItems = listOf(
-                                ChecklistItem(
-                                    listItemType = "reference",
-                                    challenge = "Emergency frequency",
-                                    challengeAudio = "",
-                                    response = "121.5 MHz",
-                                    responseAudio = "",
-                                    mandatory = false,
-                                    suppressAudioChallenge = false,
-                                    suppressAudioResponse = false
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    }
-
-    // Mock state variables
-    val completedItems = remember { mutableStateListOf<Int>(0) }
-    val activeItemIndex = remember { mutableIntStateOf(1) }
-    val isMicActive = remember { mutableStateOf(false) }
-    val selectedSectionIndex = remember { mutableIntStateOf(previewSection) }
-    val selectedListIndex = remember { mutableIntStateOf(0) }
-
-    // Get current view mode from the selected section
-    val currentViewMode = mockChecklistData.sections[selectedSectionIndex.intValue].listView
-    // Get lists from the selected section
-    val currentSectionLists = mockChecklistData.sections[selectedSectionIndex.intValue].lists
-
-    JarvisTheme(darkTheme = darkTheme) {
-        Scaffold(
-            topBar = {
-                Column {
-                    TopBar()
-                }
-            },
-            bottomBar = {
-                Column {
-                    // Display ListSelector only in normalListView mode with multiple lists
-                    if (currentViewMode == "normalListView" && currentSectionLists.size > 1) {
-                        ListSelector(
-                            lists = currentSectionLists,
-                            selectedListIndex = selectedListIndex.intValue,
-                            onListSelected = { selectedListIndex.intValue = it }
-                        )
-                    }
-
-                    // Add SectionSelector if we have multiple sections
-                    SectionSelector(
-                        sections = mockChecklistData.sections,
-                        selectedSectionIndex = selectedSectionIndex.intValue,
-                        onSectionSelected = { selectedSectionIndex.intValue = it }
-                    )
-
-                    ChecklistBar(
-                        onNavigateHome = { },
-                        onCheckItem = { },
-                        onSkipItem = { },
-                        onSearchItem = { },
-                        onToggleMic = { isMicActive.value = !isMicActive.value },
-                        onEmergency = { },
-                        isMicActive = isMicActive.value,
-                        isActiveItemEnabled = true
-                    )
-                }
-            }
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .background(JarvisTheme.colorScheme.background)
-                    .padding(16.dp)
-            ) {
-                // Create a function to handle marking all items complete in preview
-                val handleMarkAllComplete = {
-                    val checklistItems = currentSectionLists[selectedListIndex.intValue].listItems
-                    // Add all indices to completedItems list
-                    checklistItems.indices.forEach { index ->
-                        if (index !in completedItems) {
-                            completedItems.add(index)
-                        }
-                    }
-                }
-
-                // Regular checklist title (not clickable)
-                Text(
-                    text = mockChecklistData.title,
-                    style = JarvisTheme.typography.headlineMedium,
-                    color = JarvisTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-
-                // Section title
-                val currentSection = mockChecklistData.sections[selectedSectionIndex.intValue]
-                Text(
-                    text = currentSection.sectionTitle,
-                    style = JarvisTheme.typography.titleMedium,
-                    color = JarvisTheme.colorScheme.onBackground,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center
-                )
-
-                // Display clickable list title in normal list view mode
-                if (currentViewMode == "normalListView" &&
-                    selectedListIndex.intValue < currentSectionLists.size
-                ) {
-                    val listTitle = currentSectionLists[selectedListIndex.intValue].listTitle
-                    if (listTitle.isNotEmpty()) {
-                        // Using ClickableListTitle for the list name in preview
-                        ClickableListTitle(
-                            title = listTitle,
-                            onClick = { /* Future TTS implementation */ },
-                            onLongClick = handleMarkAllComplete,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                    }
-                }
-
-                when (currentViewMode) {
-                    "normalListView" -> {
-                        // Normal list view displaying checklist items
-                        if (selectedListIndex.intValue < currentSectionLists.size) {
-                            val checklistItems =
-                                currentSectionLists[selectedListIndex.intValue].listItems
-                            ChecklistListView(
-                                checklistItems = checklistItems,
-                                completedItems = completedItems,
-                                activeItemIndex = activeItemIndex.intValue,
-                                onItemClick = {},
-                                onToggleComplete = { index ->
-                                    if (index in completedItems) {
-                                        completedItems.remove(index)
-                                    } else {
-                                        completedItems.add(index)
-                                    }
-                                }
-                            )
-                        }
-                    }
-
-                    "tileListView" -> {
-                        // Tile view showing grid of list tiles
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items(currentSectionLists) { list ->
-                                val listIndex = currentSectionLists.indexOf(list)
-                                ChecklistTile(
-                                    checklistList = list,
-                                    onTileClick = {
-                                        selectedListIndex.intValue = listIndex
-                                    },
-                                    category = when (currentSection.sectionType) {
-                                        "emergency" -> "emergency"
-                                        "reference" -> "reference"
-                                        else -> ""
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Preview(name = "Light Mode", apiLevel = 35, showBackground = true)
-@Composable
-fun ChecklistScreenLightPreview() {
-    ChecklistScreenPreview(darkTheme = false, previewSection = 0)
-}
-
-@Preview(name = "Dark Mode", apiLevel = 35, showBackground = true)
-@Composable
-fun ChecklistScreenDarkPreview() {
-    ChecklistScreenPreview(darkTheme = true, previewSection = 0)
-}
-
-@Preview(name = "Light Mode Emergency Tiles", apiLevel = 35, showBackground = true)
-@Composable
-fun ChecklistScreenLightEmergencyPreview() {
-    ChecklistScreenPreview(darkTheme = false, previewSection = 2)
-}
-
-@Preview(name = "Light Mode Emergency Tiles", apiLevel = 35, showBackground = true)
-@Composable
-fun ChecklistScreenDarkEmergencyPreview() {
-    ChecklistScreenPreview(darkTheme = true, previewSection = 2)
-}
-
-@Preview(name = "Light Mode Reference Tiles", apiLevel = 35, showBackground = true)
-@Composable
-fun ChecklistScreenLightReferencePreview() {
-    ChecklistScreenPreview(darkTheme = false, previewSection = 3)
-}
-
-@Preview(name = "Light Mode Reference Tiles", apiLevel = 35, showBackground = true)
-@Composable
-fun ChecklistScreenDarkReferencePreview() {
-    ChecklistScreenPreview(darkTheme = true, previewSection = 3)
-}
