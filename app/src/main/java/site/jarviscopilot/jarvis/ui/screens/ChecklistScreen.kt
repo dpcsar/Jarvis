@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.ChecklistData
@@ -36,6 +37,7 @@ import site.jarviscopilot.jarvis.ui.components.ChecklistBar
 import site.jarviscopilot.jarvis.ui.components.ChecklistItem
 import site.jarviscopilot.jarvis.ui.components.ChecklistItemType
 import site.jarviscopilot.jarvis.ui.components.ChecklistTile
+import site.jarviscopilot.jarvis.ui.components.ClickableListTitle
 import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
@@ -68,17 +70,19 @@ private fun ChecklistListView(
     LaunchedEffect(activeItemIndex) {
         if (checklistItems.isNotEmpty()) {
             // Get the item's layout info
-            listState.layoutInfo.visibleItemsInfo.find { it.index == activeItemIndex }?.let { itemInfo ->
-                // Calculate the center position of the viewport
-                val viewportCenter = (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
+            listState.layoutInfo.visibleItemsInfo.find { it.index == activeItemIndex }
+                ?.let { itemInfo ->
+                    // Calculate the center position of the viewport
+                    val viewportCenter =
+                        (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
 
-                // Calculate how much to scroll so the item's center aligns with viewport center
-                val itemCenter = itemInfo.offset + (itemInfo.size / 2)
-                val scrollBy = itemCenter - viewportCenter
+                    // Calculate how much to scroll so the item's center aligns with viewport center
+                    val itemCenter = itemInfo.offset + (itemInfo.size / 2)
+                    val scrollBy = itemCenter - viewportCenter
 
-                // Scroll by the calculated amount with animation
-                listState.animateScrollBy(scrollBy.toFloat())
-            } ?: run {
+                    // Scroll by the calculated amount with animation
+                    listState.animateScrollBy(scrollBy.toFloat())
+                } ?: run {
                 // Fallback to just scrolling to the item
                 listState.animateScrollToItem(activeItemIndex)
             }
@@ -127,7 +131,8 @@ fun ChecklistScreen(
     // Get current view mode from section (normalListView or tileListView)
     val currentViewMode = remember(checklistData, selectedSectionIndex.intValue) {
         if (checklistData != null &&
-            selectedSectionIndex.intValue < checklistData.sections.size) {
+            selectedSectionIndex.intValue < checklistData.sections.size
+        ) {
             checklistData.sections[selectedSectionIndex.intValue].listView
         } else {
             "normalListView" // Default to normal list view
@@ -137,7 +142,8 @@ fun ChecklistScreen(
     // Get lists from the selected section
     val currentSectionLists = remember(checklistData, selectedSectionIndex.intValue) {
         if (checklistData != null &&
-            selectedSectionIndex.intValue < checklistData.sections.size) {
+            selectedSectionIndex.intValue < checklistData.sections.size
+        ) {
             checklistData.sections[selectedSectionIndex.intValue].lists
         } else {
             emptyList()
@@ -145,15 +151,17 @@ fun ChecklistScreen(
     }
 
     // Extract checklist items from the loaded data based on selected section and list
-    val checklistItems = remember(checklistData, selectedSectionIndex.intValue, selectedListIndex.intValue) {
-        if (checklistData != null &&
-            selectedSectionIndex.intValue < checklistData.sections.size &&
-            selectedListIndex.intValue < checklistData.sections[selectedSectionIndex.intValue].lists.size) {
-            checklistData.sections[selectedSectionIndex.intValue].lists[selectedListIndex.intValue].listItems
-        } else {
-            emptyList()
+    val checklistItems =
+        remember(checklistData, selectedSectionIndex.intValue, selectedListIndex.intValue) {
+            if (checklistData != null &&
+                selectedSectionIndex.intValue < checklistData.sections.size &&
+                selectedListIndex.intValue < checklistData.sections[selectedSectionIndex.intValue].lists.size
+            ) {
+                checklistData.sections[selectedSectionIndex.intValue].lists[selectedListIndex.intValue].listItems
+            } else {
+                emptyList()
+            }
         }
-    }
 
     // Track which items are completed (per section and list)
     val completedItemsBySection = remember(checklistData) {
@@ -164,9 +172,14 @@ fun ChecklistScreen(
     }
 
     // Current section's and list's completed items
-    val completedItems = remember(selectedSectionIndex.intValue, selectedListIndex.intValue, completedItemsBySection) {
+    val completedItems = remember(
+        selectedSectionIndex.intValue,
+        selectedListIndex.intValue,
+        completedItemsBySection
+    ) {
         if (selectedSectionIndex.intValue < completedItemsBySection.size &&
-            selectedListIndex.intValue < completedItemsBySection[selectedSectionIndex.intValue].size) {
+            selectedListIndex.intValue < completedItemsBySection[selectedSectionIndex.intValue].size
+        ) {
             completedItemsBySection[selectedSectionIndex.intValue][selectedListIndex.intValue]
         } else {
             mutableStateListOf()
@@ -183,7 +196,7 @@ fun ChecklistScreen(
     }
 
     // Helper function to handle task completion logic
-    val handleTaskCompletion = { itemIndex: Int ->
+    val handleTaskCompletion: (Int) -> Unit = { itemIndex ->
         if (itemIndex < checklistItems.size) {
             if (itemIndex !in completedItems) {
                 completedItems.add(itemIndex)
@@ -196,6 +209,38 @@ fun ChecklistScreen(
                 completedItems.remove(itemIndex)
             }
         }
+    }
+
+    // Helper function to handle skipping to the next item
+    val handleSkipItem: () -> Unit = {
+        // Skip the current item and move to next without confirmation
+        val nextUncheckedItem =
+            checklistItems.indices.firstOrNull { it > activeItemIndex.intValue && it !in completedItems }
+                ?: activeItemIndex.intValue
+        activeItemIndex.intValue = nextUncheckedItem
+    }
+
+    // Helper function to find and navigate to skipped items
+    val handleSearchItem: () -> Unit = {
+        // Find the first skipped item (items that are not in completedItems)
+        val firstSkipped = checklistItems.indices.firstOrNull {
+            it !in completedItems && it != activeItemIndex.intValue
+        }
+        // If found, navigate to it
+        firstSkipped?.let {
+            activeItemIndex.intValue = it
+        }
+    }
+
+    // Helper function to toggle microphone state
+    val handleToggleMic: () -> Unit = {
+        isMicActive.value = !isMicActive.value
+    }
+
+    // Helper function to handle emergency actions
+    val handleEmergency: () -> Unit = {
+        // Action to display emergency checklists will go here
+        // TODO: Implement emergency action functionality
     }
 
     // Track whether we're showing tiles or a list in tile view mode
@@ -246,32 +291,11 @@ fun ChecklistScreen(
 
                 ChecklistBar(
                     onNavigateHome = onNavigateHome,
-                    onCheckItem = {
-                        handleTaskCompletion(activeItemIndex.intValue)
-                    },
-                    onSkipItem = {
-                        // Skip the current item and move to next without confirmation
-                        val nextUncheckedItem =
-                            checklistItems.indices.firstOrNull { it > activeItemIndex.intValue && it !in completedItems }
-                                ?: activeItemIndex.intValue
-                        activeItemIndex.intValue = nextUncheckedItem
-                    },
-                    onSearchItem = {
-                        // Find the first skipped item (items that are not in completedItems)
-                        val firstSkipped = checklistItems.indices.firstOrNull {
-                            it !in completedItems && it != activeItemIndex.intValue
-                        }
-                        // If found, navigate to it
-                        firstSkipped?.let {
-                            activeItemIndex.intValue = it
-                        }
-                    },
-                    onToggleMic = {
-                        isMicActive.value = !isMicActive.value
-                    },
-                    onEmergency = {
-                        // Action to display emergency checklists will go here
-                    },
+                    onCheckItem = { handleTaskCompletion(activeItemIndex.intValue) },
+                    onSkipItem = handleSkipItem,
+                    onSearchItem = handleSearchItem,
+                    onToggleMic = handleToggleMic,
+                    onEmergency = handleEmergency,
                     isMicActive = isMicActive.value,
                     isActiveItemEnabled = activeItemIndex.intValue < checklistItems.size
                 )
@@ -291,33 +315,57 @@ fun ChecklistScreen(
                 style = JarvisTheme.typography.headlineMedium,
                 color = JarvisTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
 
             // Section title if available
             if (checklistData != null && selectedSectionIndex.intValue < checklistData.sections.size) {
-                val sectionTitle = checklistData.sections[selectedSectionIndex.intValue].sectionTitle
+                val sectionTitle =
+                    checklistData.sections[selectedSectionIndex.intValue].sectionTitle
                 if (sectionTitle.isNotEmpty()) {
                     Text(
                         text = sectionTitle,
                         style = JarvisTheme.typography.titleMedium,
                         color = JarvisTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        textAlign = TextAlign.Center
                     )
                 }
             }
 
             // Display current list title only in list view mode or when showing a list in tile mode
             if ((currentViewMode == "normalListView" ||
-                (currentViewMode == "tileListView" && !showingTileGrid.value)) &&
+                        (currentViewMode == "tileListView" && !showingTileGrid.value)) &&
                 currentSectionLists.isNotEmpty() &&
-                selectedListIndex.intValue < currentSectionLists.size) {
+                selectedListIndex.intValue < currentSectionLists.size
+            ) {
                 val listTitle = currentSectionLists[selectedListIndex.intValue].listTitle
                 if (listTitle.isNotEmpty()) {
-                    Text(
-                        text = listTitle,
-                        style = JarvisTheme.typography.titleSmall,
-                        color = JarvisTheme.colorScheme.onBackground,
+                    // Create a function to handle marking all items as complete
+                    val handleMarkAllComplete = {
+                        // Add all indices to completedItems list - ensure we're using current list's items
+                        val currentCompletedItems = completedItemsBySection[selectedSectionIndex.intValue][selectedListIndex.intValue]
+                        val itemIndices = checklistItems.indices
+                        itemIndices.forEach { index ->
+                            if (index !in currentCompletedItems) {
+                                currentCompletedItems.add(index)
+                            }
+                        }
+                    }
+
+                    // Using ClickableListTitle for the list name
+                    ClickableListTitle(
+                        title = listTitle,
+                        onClick = {
+                            // Future TTS functionality will go here
+                            // For now we'll leave it empty
+                        },
+                        onLongClick = handleMarkAllComplete,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
@@ -337,6 +385,7 @@ fun ChecklistScreen(
                         }
                     )
                 }
+
                 "tileListView" -> {
                     if (showingTileGrid.value) {
                         // Show tile grid with all lists
@@ -347,7 +396,9 @@ fun ChecklistScreen(
                             items(currentSectionLists) { list ->
                                 val listIndex = currentSectionLists.indexOf(list)
                                 // Get the current section type to apply the correct theme
-                                val sectionType = checklistData?.sections?.get(selectedSectionIndex.intValue)?.sectionType ?: ""
+                                val sectionType =
+                                    checklistData?.sections?.get(selectedSectionIndex.intValue)?.sectionType
+                                        ?: ""
 
                                 ChecklistTile(
                                     checklistList = list,
@@ -674,13 +725,27 @@ fun ChecklistScreenPreview(
                     .background(JarvisTheme.colorScheme.background)
                     .padding(16.dp)
             ) {
-                // Checklist title
+                // Create a function to handle marking all items complete in preview
+                val handleMarkAllComplete = {
+                    val checklistItems = currentSectionLists[selectedListIndex.intValue].listItems
+                    // Add all indices to completedItems list
+                    checklistItems.indices.forEach { index ->
+                        if (index !in completedItems) {
+                            completedItems.add(index)
+                        }
+                    }
+                }
+
+                // Regular checklist title (not clickable)
                 Text(
                     text = mockChecklistData.title,
                     style = JarvisTheme.typography.headlineMedium,
                     color = JarvisTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
                 )
 
                 // Section title
@@ -689,18 +754,23 @@ fun ChecklistScreenPreview(
                     text = currentSection.sectionTitle,
                     style = JarvisTheme.typography.titleMedium,
                     color = JarvisTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    textAlign = TextAlign.Center
                 )
 
-                // Display list title only in normal list view mode
+                // Display clickable list title in normal list view mode
                 if (currentViewMode == "normalListView" &&
-                    selectedListIndex.intValue < currentSectionLists.size) {
+                    selectedListIndex.intValue < currentSectionLists.size
+                ) {
                     val listTitle = currentSectionLists[selectedListIndex.intValue].listTitle
                     if (listTitle.isNotEmpty()) {
-                        Text(
-                            text = listTitle,
-                            style = JarvisTheme.typography.titleSmall,
-                            color = JarvisTheme.colorScheme.onBackground,
+                        // Using ClickableListTitle for the list name in preview
+                        ClickableListTitle(
+                            title = listTitle,
+                            onClick = { /* Future TTS implementation */ },
+                            onLongClick = handleMarkAllComplete,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
@@ -710,7 +780,8 @@ fun ChecklistScreenPreview(
                     "normalListView" -> {
                         // Normal list view displaying checklist items
                         if (selectedListIndex.intValue < currentSectionLists.size) {
-                            val checklistItems = currentSectionLists[selectedListIndex.intValue].listItems
+                            val checklistItems =
+                                currentSectionLists[selectedListIndex.intValue].listItems
                             ChecklistListView(
                                 checklistItems = checklistItems,
                                 completedItems = completedItems,
@@ -726,6 +797,7 @@ fun ChecklistScreenPreview(
                             )
                         }
                     }
+
                     "tileListView" -> {
                         // Tile view showing grid of list tiles
                         LazyVerticalGrid(
