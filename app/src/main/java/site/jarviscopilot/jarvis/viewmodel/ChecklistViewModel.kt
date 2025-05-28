@@ -446,7 +446,16 @@ class ChecklistViewModel(
         sectionCompletedItems[listIndex] = listCompletedItems
         completedItems[sectionIndex] = sectionCompletedItems
 
-        _uiState.update { it.copy(completedItemsBySection = completedItems) }
+        // Create a new list to ensure Compose detects the state change
+        val newCompletedItemsList = listCompletedItems.toList()
+
+        _uiState.update {
+            it.copy(
+                completedItemsBySection = completedItems,
+                // Update the completedItems list as well to trigger UI refresh
+                completedItems = newCompletedItemsList
+            )
+        }
 
         // Save state after marking all complete
         saveCurrentState()

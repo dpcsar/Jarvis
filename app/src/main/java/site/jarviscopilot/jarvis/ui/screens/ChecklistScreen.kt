@@ -1,4 +1,4 @@
-package site.jarviscopilot.jarvis.ui.screens.checklist
+package site.jarviscopilot.jarvis.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -111,7 +112,7 @@ fun ChecklistScreen(
                 .padding(16.dp)
         ) {
             // Main Checklist title (no onLongClick functionality)
-            androidx.compose.material3.Text(
+            Text(
                 text = uiState.checklistTitle.ifEmpty { checklistName },
                 style = JarvisTheme.typography.headlineMedium,
                 color = JarvisTheme.colorScheme.onBackground,
@@ -125,7 +126,7 @@ fun ChecklistScreen(
             uiState.checklistData?.let { data ->
                 if (uiState.selectedSectionIndex < data.sections.size) {
                     val currentSection = data.sections[uiState.selectedSectionIndex]
-                    androidx.compose.material3.Text(
+                    Text(
                         text = currentSection.sectionTitle,
                         style = JarvisTheme.typography.titleMedium,
                         color = JarvisTheme.colorScheme.onSurfaceVariant,
