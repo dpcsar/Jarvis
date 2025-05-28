@@ -211,19 +211,51 @@ class ChecklistViewModel(
         val sectionCompletedItems = completedItems[sectionIndex].toMutableList()
         val listCompletedItems = sectionCompletedItems[listIndex].toMutableList()
 
-        if (itemIndex in listCompletedItems) {
+        val wasComplete = itemIndex in listCompletedItems
+
+        if (wasComplete) {
             listCompletedItems.remove(itemIndex)
         } else {
             listCompletedItems.add(itemIndex)
+
+            // Update the section's completed items list
+            sectionCompletedItems[listIndex] = listCompletedItems
+            completedItems[sectionIndex] = sectionCompletedItems
+
+            // If we're completing the currently active item, find and set the next unchecked item as active
+            if (itemIndex == currentState.activeItemIndex) {
+                // First update the state with the new completed items
+                _uiState.update {
+                    it.copy(
+                        completedItemsBySection = completedItems,
+                        completedItems = listCompletedItems
+                    )
+                }
+
+                // Then find the next unchecked item (now that our state is updated)
+                val nextUncheckedItem = findNextUncheckedItem()
+
+                // Only update the active item if we found a valid next unchecked item
+                if (nextUncheckedItem != -1) {
+                    _uiState.update {
+                        it.copy(activeItemIndex = nextUncheckedItem)
+                    }
+                }
+
+                // Save state and check completion after updating active item
+                saveCurrentState()
+                checkCompletion()
+                return
+            }
         }
 
+        // For the unchecking case or if we're not changing the active item
         sectionCompletedItems[listIndex] = listCompletedItems
         completedItems[sectionIndex] = sectionCompletedItems
 
         _uiState.update {
             it.copy(
                 completedItemsBySection = completedItems,
-                // Update the completedItems list as well to trigger UI refresh
                 completedItems = listCompletedItems
             )
         }
@@ -463,5 +495,37 @@ class ChecklistViewModel(
         // Check completion
         checkCompletion()
     }
-}
 
+    /**
+     * Find the next unchecked item in the current list
+     * Returns -1 if no unchecked items are found
+     */
+    private fun findNextUncheckedItem(): Int {
+        val currentState = _uiState.value
+        val completedItems = currentState.completedItems
+
+        // Start searching from the item after the active item
+        val startIndex = currentState.activeItemIndex + 1
+
+        // First try to find an unchecked item after the current active item
+        for (i in startIndex until currentState.checklistItemData.size) {
+            // Check if this item is a TASK item that can be checked
+            val item = currentState.checklistItemData.getOrNull(i)
+            if (item != null && !completedItems.contains(i) && item.listItemType.equals("TASK", ignoreCase = true)) {
+                return i
+            }
+        }
+
+        // If no unchecked items found after the active item, look from the beginning
+        for (i in 0 until startIndex) {
+            // Check if this item is a TASK item that can be checked
+            val item = currentState.checklistItemData.getOrNull(i)
+            if (item != null && !completedItems.contains(i) && item.listItemType.equals("TASK", ignoreCase = true)) {
+                return i
+            }
+        }
+
+        // No unchecked items found
+        return -1
+    }
+}
