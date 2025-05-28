@@ -139,6 +139,7 @@ class ChecklistViewModel(
             it.copy(
                 currentViewMode = currentSection.listView,
                 currentSectionType = currentSection.sectionType,
+                currentSectionLists = currentSection.lists,  // Update the currentSectionLists property when switching sections
                 hasMultipleLists = currentSection.lists.size > 1,
                 hasMultipleSections = data.sections.size > 1,
                 checklistItemData = items,              // Update the checklistItemData property
