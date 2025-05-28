@@ -72,31 +72,31 @@ fun ChecklistScreen(
                 if (uiState.currentViewMode == "normalListView" && uiState.hasMultipleLists) {
                     ListSelector(
                         lists = uiState.currentSectionLists,
-                        selectedListIndex = viewModel.selectedListIndex.intValue,
+                        selectedListIndex = uiState.selectedListIndex,
                         onListSelected = { newIndex -> viewModel.selectList(newIndex) },
                         isNormalListView = true,
-                        completedItemsByList = viewModel.completedItemsBySection[viewModel.selectedSectionIndex.intValue]
+                        completedItemsByList = uiState.completedItemsBySection[uiState.selectedSectionIndex]
                     )
                 }
 
                 // Place the SectionSelector below the ListSelector, but above the ChecklistBottomRibbon
                 if (uiState.hasMultipleSections) {
                     SectionSelector(
-                        sections = viewModel.checklistData.value?.sections ?: emptyList(),
-                        selectedSectionIndex = viewModel.selectedSectionIndex.intValue,
+                        sections = uiState.checklistData?.sections ?: emptyList(),
+                        selectedSectionIndex = uiState.selectedSectionIndex,
                         onSectionSelected = { newIndex -> viewModel.selectSection(newIndex) }
                     )
                 }
 
                 ChecklistBar(
                     onNavigateHome = onNavigateHome,
-                    onCheckItem = { viewModel.toggleCompleteItem(viewModel.activeItemIndex.intValue) },
+                    onCheckItem = { viewModel.toggleCompleteItem(uiState.activeItemIndex) },
                     onSkipItem = { viewModel.skipItem() },
                     onSearchItem = { viewModel.searchItem() },
                     onToggleMic = { viewModel.toggleMic() },
                     onEmergency = { viewModel.handleEmergency() },
-                    isMicActive = viewModel.isMicActive.value,
-                    isActiveItemEnabled = viewModel.activeItemIndex.intValue < uiState.checklistItems.size
+                    isMicActive = uiState.isMicActive,
+                    isActiveItemEnabled = uiState.activeItemIndex < uiState.checklistItems.size
                 )
             }
         },
@@ -120,9 +120,9 @@ fun ChecklistScreen(
             )
 
             // Section title if available
-            viewModel.checklistData.value?.let { data ->
-                if (viewModel.selectedSectionIndex.intValue < data.sections.size) {
-                    val currentSection = data.sections[viewModel.selectedSectionIndex.intValue]
+            uiState.checklistData?.let { data ->
+                if (uiState.selectedSectionIndex < data.sections.size) {
+                    val currentSection = data.sections[uiState.selectedSectionIndex]
                     androidx.compose.material3.Text(
                         text = currentSection.sectionTitle,
                         style = JarvisTheme.typography.titleMedium,
@@ -137,10 +137,10 @@ fun ChecklistScreen(
 
             // List title with onLongClick to mark all items complete
             if (uiState.currentSectionLists.isNotEmpty() &&
-                viewModel.selectedListIndex.intValue < uiState.currentSectionLists.size &&
-                (uiState.currentViewMode != "tileListView" || !viewModel.showingTileGrid.value)) {
+                uiState.selectedListIndex < uiState.currentSectionLists.size &&
+                (uiState.currentViewMode != "tileListView" || !uiState.showingTileGrid)) {
 
-                val currentList = uiState.currentSectionLists[viewModel.selectedListIndex.intValue]
+                val currentList = uiState.currentSectionLists[uiState.selectedListIndex]
                 ClickableListTitle(
                     title = currentList.listTitle,
                     onClick = { /* No action on normal click */ },
@@ -158,7 +158,7 @@ fun ChecklistScreen(
                     ChecklistListView(
                         checklistItems = uiState.checklistItems,
                         completedItems = uiState.completedItems,
-                        activeItemIndex = viewModel.activeItemIndex.intValue,
+                        activeItemIndex = uiState.activeItemIndex,
                         onItemClick = { index -> viewModel.selectChecklistItem(index) },
                         onToggleComplete = { index -> viewModel.toggleCompleteItem(index) }
                     )
@@ -166,7 +166,7 @@ fun ChecklistScreen(
 
                 // Tile view - show either a grid of tiles or a list based on user selection
                 "tileListView" -> {
-                    if (viewModel.showingTileGrid.value) {
+                    if (uiState.showingTileGrid) {
                         // Show grid of tiles
                         ChecklistGridView(
                             lists = uiState.currentSectionLists,
@@ -189,7 +189,7 @@ fun ChecklistScreen(
                         ChecklistListView(
                             checklistItems = uiState.checklistItems,
                             completedItems = uiState.completedItems,
-                            activeItemIndex = viewModel.activeItemIndex.intValue,
+                            activeItemIndex = uiState.activeItemIndex,
                             onItemClick = { index -> viewModel.selectChecklistItem(index) },
                             onToggleComplete = { index -> viewModel.toggleCompleteItem(index) }
                         )
@@ -201,7 +201,7 @@ fun ChecklistScreen(
                     ChecklistListView(
                         checklistItems = uiState.checklistItems,
                         completedItems = uiState.completedItems,
-                        activeItemIndex = viewModel.activeItemIndex.intValue,
+                        activeItemIndex = uiState.activeItemIndex,
                         onItemClick = { index -> viewModel.selectChecklistItem(index) },
                         onToggleComplete = { index -> viewModel.toggleCompleteItem(index) }
                     )

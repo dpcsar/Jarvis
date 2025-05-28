@@ -29,4 +29,11 @@ object ChecklistUtils {
         val percentage = (completed.toFloat() / total.toFloat() * 100).toInt()
         return "$percentage%"
     }
+
+    /**
+     * Determines if a checklist is complete
+    fun isChecklistComplete(completed: List<Int>, total: Int): Boolean {
+    return completed.size == total && total > 0
+    }
+     */
 }
