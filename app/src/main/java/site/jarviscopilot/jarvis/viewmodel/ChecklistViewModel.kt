@@ -124,6 +124,17 @@ class ChecklistViewModel(
             emptyList()
         }
 
+        // Find first task item to set as active
+        var firstTaskIndex = -1
+        for (i in items.indices) {
+            val item = items[i]
+            // Check if the item is a task (not a label, note, caution, or warning)
+            if (item.listItemType.equals("TASK", ignoreCase = true)) {
+                firstTaskIndex = i
+                break
+            }
+        }
+
         _uiState.update {
             it.copy(
                 currentViewMode = currentSection.listView,
@@ -132,7 +143,8 @@ class ChecklistViewModel(
                 hasMultipleSections = data.sections.size > 1,
                 checklistItemData = items,              // Update the checklistItemData property
                 completedItems = completedItemsList,    // Update the completedItems property
-                activeItemIndex = if (items.isNotEmpty()) 0 else -1  // Set the active item to the first item if available
+                // Set the active item to the first task item, not just the first item in the list
+                activeItemIndex = firstTaskIndex
             )
         }
 
