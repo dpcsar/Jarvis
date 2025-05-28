@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
+import site.jarviscopilot.jarvis.di.AppDependencies
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.ThemeMode
@@ -38,7 +39,8 @@ fun JarvisApp() {
     val userPreferences = remember { UserPreferences.getInstance(context) }
 
     // Collect the theme mode from UserPreferences
-    val themeMode = userPreferences.themeModeFlow.collectAsState(initial = userPreferences.getThemeMode())
+    val themeMode =
+        userPreferences.themeModeFlow.collectAsState(initial = userPreferences.getThemeMode())
 
     // Determine if dark theme should be used based on the selected theme mode
     val isDarkTheme = when (themeMode.value) {
@@ -46,6 +48,10 @@ fun JarvisApp() {
         ThemeMode.LIGHT -> false
         ThemeMode.DARK -> true
     }
+
+    // Create app dependencies that can be passed down the Compose hierarchy
+    val checklistRepository = remember { AppDependencies.provideChecklistRepository(context) }
+    val checklistStateManager = remember { AppDependencies.provideChecklistStateManager(context) }
 
     JarvisTheme(darkTheme = isDarkTheme) {
         val navController = rememberNavController()
@@ -57,8 +63,12 @@ fun JarvisApp() {
                     .padding(paddingValues),
                 color = JarvisTheme.colorScheme.background
             ) {
-                // Use the JarvisNavHost for navigation
-                JarvisNavHost(navController = navController)
+                // Pass dependencies to NavHost for use in various screens
+                JarvisNavHost(
+                    navController = navController,
+                    checklistRepository = checklistRepository,
+                    checklistStateManager = checklistStateManager
+                )
             }
         }
     }

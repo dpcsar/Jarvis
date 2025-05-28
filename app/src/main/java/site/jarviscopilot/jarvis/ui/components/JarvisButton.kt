@@ -88,7 +88,10 @@ fun JarvisIconButton(
             disabledContainerColor = JarvisTheme.colorScheme.surfaceVariant,
             disabledContentColor = JarvisTheme.colorScheme.onSurfaceVariant
         ),
-        contentPadding = PaddingValues(horizontal = if (text != null) 16.dp else 8.dp, vertical = 8.dp)
+        contentPadding = PaddingValues(
+            horizontal = if (text != null) 16.dp else 8.dp,
+            vertical = 8.dp
+        )
     ) {
         Icon(
             imageVector = icon,

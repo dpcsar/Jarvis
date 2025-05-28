@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.ChecklistList
+import site.jarviscopilot.jarvis.data.model.ChecklistList
 import site.jarviscopilot.jarvis.ui.components.ChecklistTile
 
 /**

@@ -30,36 +30,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.ChecklistInfo
-import site.jarviscopilot.jarvis.data.ChecklistRepository
-import site.jarviscopilot.jarvis.data.ChecklistStateManager
+import site.jarviscopilot.jarvis.data.model.ChecklistInfo
+import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
+import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
 fun MainScreen(
+    checklistRepository: IChecklistRepository,
+    checklistStateManager: ChecklistStateManager,
     onChecklistSelected: (String) -> Unit,
     onSettingsClick: () -> Unit,
     onResumeChecklist: (String, Boolean) -> Unit = { _, _ -> }
 ) {
-    val context = LocalContext.current
-    val repository = remember { ChecklistRepository(context) }
-    val stateManager = remember { ChecklistStateManager(context) }
-
     var checklistInfoList by remember { mutableStateOf<List<ChecklistInfo>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var resumableChecklists by remember { mutableStateOf<Set<String>>(emptySet()) }
 
     LaunchedEffect(key1 = true) {
-        checklistInfoList = repository.loadAllChecklists()
+        checklistInfoList = checklistRepository.getAvailableChecklists()
 
         // Get all checklists that can be resumed
-        resumableChecklists = stateManager.getSavedChecklistFilenames()
+        resumableChecklists = checklistStateManager.getSavedChecklistNames()
 
         isLoading = false
     }
@@ -177,7 +174,7 @@ fun MainScreen(
                             },
                             onReset = {
                                 // Clear saved state and start fresh
-                                stateManager.clearChecklistState(checklistInfo.filename)
+                                checklistStateManager.clearChecklistState(checklistInfo.filename)
                                 onChecklistSelected(checklistInfo.filename)
                             }
                         )

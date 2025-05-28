@@ -21,7 +21,7 @@
               "challengeAudio": "",
               "response": "Check for airworthiness certificate, registration, operating handbook",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -31,7 +31,7 @@
               "challengeAudio": "",
               "response": "REMOVE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -41,7 +41,7 @@
               "challengeAudio": "",
               "response": "REMOVE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -51,7 +51,7 @@
               "challengeAudio": "",
               "response": "CHECK QUANTITY and SECURE CAPS",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -61,7 +61,7 @@
               "challengeAudio": "",
               "response": "CHECK (Minimum 6 quarts)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -71,7 +71,7 @@
               "challengeAudio": "",
               "response": "CHECK for obstructions",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -81,7 +81,7 @@
               "challengeAudio": "",
               "response": "CHECK for damage and security",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -91,7 +91,7 @@
               "challengeAudio": "",
               "response": "CHECK tires, struts, and brakes",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -101,7 +101,7 @@
               "challengeAudio": "",
               "response": "CHECK for damage and freedom of movement",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -111,7 +111,7 @@
               "challengeAudio": "",
               "response": "CHECK for obstructions",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -121,7 +121,7 @@
               "challengeAudio": "",
               "response": "",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": true
             }
@@ -138,7 +138,7 @@
               "challengeAudio": "",
               "response": "FASTEN/ADJUST",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -148,7 +148,7 @@
               "challengeAudio": "",
               "response": "FULLEST TANK",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -158,7 +158,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -168,7 +168,7 @@
               "challengeAudio": "",
               "response": "CHECK IN",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -178,7 +178,7 @@
               "challengeAudio": "",
               "response": "TEST and SET",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -204,7 +204,7 @@
               "challengeAudio": "",
               "response": "FULL RICH",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -214,7 +214,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -224,7 +224,7 @@
               "challengeAudio": "",
               "response": "CLEAR",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -234,7 +234,7 @@
               "challengeAudio": "",
               "response": "AS REQUIRED (2-6 strokes)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -244,7 +244,7 @@
               "challengeAudio": "",
               "response": "ON",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -254,7 +254,7 @@
               "challengeAudio": "",
               "response": "ON",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -264,7 +264,7 @@
               "challengeAudio": "",
               "response": "CLEAR",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -274,7 +274,7 @@
               "challengeAudio": "",
               "response": "ENGAGE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -284,7 +284,7 @@
               "challengeAudio": "",
               "response": "CHECK (within 30 seconds)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -294,7 +294,7 @@
               "challengeAudio": "",
               "response": "ON as required",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -304,7 +304,7 @@
               "challengeAudio": "",
               "response": "",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": true
             }
@@ -330,7 +330,7 @@
               "challengeAudio": "",
               "response": "SET and CHECK",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -340,7 +340,7 @@
               "challengeAudio": "",
               "response": "SET (STANDBY or as directed)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -350,7 +350,7 @@
               "challengeAudio": "",
               "response": "CHECK and SET",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -360,7 +360,7 @@
               "challengeAudio": "",
               "response": "SET (current barometric pressure)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -370,7 +370,7 @@
               "challengeAudio": "",
               "response": "SET to magnetic compass",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -380,7 +380,7 @@
               "challengeAudio": "",
               "response": "FREE and CORRECT",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -397,7 +397,7 @@
               "challengeAudio": "",
               "response": "SET",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -407,7 +407,7 @@
               "challengeAudio": "",
               "response": "CHECK normal ranges",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -417,7 +417,7 @@
               "challengeAudio": "",
               "response": "1800-2000 RPM",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -427,7 +427,7 @@
               "challengeAudio": "",
               "response": "CHECK (RPM drop less than 175, difference less than 50)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -437,7 +437,7 @@
               "challengeAudio": "",
               "response": "CHECK (RPM drop expected)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -447,7 +447,7 @@
               "challengeAudio": "",
               "response": "CHECK (reduce to idle, then back to 1000 RPM)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -457,7 +457,7 @@
               "challengeAudio": "",
               "response": "FREE and CORRECT",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -467,7 +467,7 @@
               "challengeAudio": "",
               "response": "CHECK green ranges",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -493,7 +493,7 @@
               "challengeAudio": "",
               "response": "FREE and CORRECT",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -503,7 +503,7 @@
               "challengeAudio": "",
               "response": "SET and CHECK",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -513,7 +513,7 @@
               "challengeAudio": "",
               "response": "FULLEST TANK",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -523,7 +523,7 @@
               "challengeAudio": "",
               "response": "FULL RICH (unless high density altitude)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -533,7 +533,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -543,7 +543,7 @@
               "challengeAudio": "",
               "response": "OPEN",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -553,7 +553,7 @@
               "challengeAudio": "",
               "response": "CLOSED and LOCKED",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -563,7 +563,7 @@
               "challengeAudio": "",
               "response": "SECURE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -573,7 +573,7 @@
               "challengeAudio": "",
               "response": "ALT or as directed by ATC",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -590,7 +590,7 @@
               "challengeAudio": "",
               "response": "79 KIAS (normal climb)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -600,7 +600,7 @@
               "challengeAudio": "",
               "response": "LEAN as required above 3000 feet",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -610,7 +610,7 @@
               "challengeAudio": "",
               "response": "MONITOR",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -620,7 +620,7 @@
               "challengeAudio": "",
               "response": "ADJUST as required",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -646,7 +646,7 @@
               "challengeAudio": "",
               "response": "SET desired cruise power",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -656,7 +656,7 @@
               "challengeAudio": "",
               "response": "LEAN for best economy or performance",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -666,7 +666,7 @@
               "challengeAudio": "",
               "response": "ADJUST for proper engine temperature",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -676,7 +676,7 @@
               "challengeAudio": "",
               "response": "ADJUST",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -686,7 +686,7 @@
               "challengeAudio": "",
               "response": "MONITOR",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -703,7 +703,7 @@
               "challengeAudio": "",
               "response": "REDUCE as required",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -713,7 +713,7 @@
               "challengeAudio": "",
               "response": "ENRICH as required",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -723,7 +723,7 @@
               "challengeAudio": "",
               "response": "AS REQUIRED",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -733,7 +733,7 @@
               "challengeAudio": "",
               "response": "ADJUST as required",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -759,7 +759,7 @@
               "challengeAudio": "",
               "response": "SECURE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -769,7 +769,7 @@
               "challengeAudio": "",
               "response": "FULLEST TANK",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -779,7 +779,7 @@
               "challengeAudio": "",
               "response": "FULL RICH",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -789,7 +789,7 @@
               "challengeAudio": "",
               "response": "ON (as required)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -799,7 +799,7 @@
               "challengeAudio": "",
               "response": "ON",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -816,7 +816,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -826,7 +826,7 @@
               "challengeAudio": "",
               "response": "UP",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -836,7 +836,7 @@
               "challengeAudio": "",
               "response": "OPEN",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -846,7 +846,7 @@
               "challengeAudio": "",
               "response": "STANDBY",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -872,7 +872,7 @@
               "challengeAudio": "",
               "response": "SET",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -882,7 +882,7 @@
               "challengeAudio": "",
               "response": "1000 RPM for 30 seconds",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -892,7 +892,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -902,7 +902,7 @@
               "challengeAudio": "",
               "response": "IDLE CUT OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -912,7 +912,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -922,7 +922,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -932,7 +932,7 @@
               "challengeAudio": "",
               "response": "INSTALL",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -942,7 +942,7 @@
               "challengeAudio": "",
               "response": "INSTALL",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -968,7 +968,7 @@
               "challengeAudio": "",
               "response": "ESTABLISH BEST GLIDE (68 KIAS)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -978,7 +978,7 @@
               "challengeAudio": "",
               "response": "SELECT STRAIGHT AHEAD",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -988,7 +988,7 @@
               "challengeAudio": "",
               "response": "IDLE CUT OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -998,7 +998,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1008,7 +1008,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1018,7 +1018,7 @@
               "challengeAudio": "",
               "response": "AS REQUIRED",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1028,7 +1028,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1038,7 +1038,7 @@
               "challengeAudio": "",
               "response": "UNLATCH PRIOR TO TOUCHDOWN",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1048,7 +1048,7 @@
               "challengeAudio": "",
               "response": "SOFT FIELD TECHNIQUE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1058,7 +1058,7 @@
               "challengeAudio": "",
               "response": "APPLY MAXIMUM",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -1075,7 +1075,7 @@
               "challengeAudio": "",
               "response": "ESTABLISH BEST GLIDE (68 KIAS)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1085,7 +1085,7 @@
               "challengeAudio": "",
               "response": "SELECT and FLY TOWARD",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1095,7 +1095,7 @@
               "challengeAudio": "",
               "response": "SWITCH TANKS",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1105,7 +1105,7 @@
               "challengeAudio": "",
               "response": "FULL RICH",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1115,7 +1115,7 @@
               "challengeAudio": "",
               "response": "ON",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1125,7 +1125,7 @@
               "challengeAudio": "",
               "response": "IN and LOCKED",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1135,7 +1135,7 @@
               "challengeAudio": "",
               "response": "CHECK BOTH (then START if engine stops)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1145,7 +1145,7 @@
               "challengeAudio": "",
               "response": "TRANSMIT MAYDAY on 121.5 MHz",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1155,7 +1155,7 @@
               "challengeAudio": "",
               "response": "SQUAWK 7700",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -1172,7 +1172,7 @@
               "challengeAudio": "",
               "response": "CONTINUE CRANKING",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1182,7 +1182,7 @@
               "challengeAudio": "",
               "response": "",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": true
             },
@@ -1192,7 +1192,7 @@
               "challengeAudio": "",
               "response": "1800 RPM for a few minutes",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1202,7 +1202,7 @@
               "challengeAudio": "",
               "response": "SHUTDOWN and INSPECT",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1212,7 +1212,7 @@
               "challengeAudio": "",
               "response": "",
               "responseAudio": "",
-              "mandatory": false,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": true
             },
@@ -1222,7 +1222,7 @@
               "challengeAudio": "",
               "response": "IDLE CUT OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1232,7 +1232,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1242,7 +1242,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1252,7 +1252,7 @@
               "challengeAudio": "",
               "response": "OBTAIN ASSISTANCE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -1269,7 +1269,7 @@
               "challengeAudio": "",
               "response": "IDLE CUT OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1279,7 +1279,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1289,7 +1289,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1299,7 +1299,7 @@
               "challengeAudio": "",
               "response": "OFF (close if applicable)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1309,7 +1309,7 @@
               "challengeAudio": "",
               "response": "100 KIAS (if terrain permits)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1319,7 +1319,7 @@
               "challengeAudio": "",
               "response": "EXECUTE",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -1336,7 +1336,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1346,7 +1346,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1356,7 +1356,7 @@
               "challengeAudio": "",
               "response": "OPEN",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1366,7 +1366,7 @@
               "challengeAudio": "",
               "response": "USE if available",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1376,7 +1376,7 @@
               "challengeAudio": "",
               "response": "AS SOON AS PRACTICAL",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -1393,7 +1393,7 @@
               "challengeAudio": "",
               "response": "OFF",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1403,7 +1403,7 @@
               "challengeAudio": "",
               "response": "CLOSED (to avoid drafts)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1413,7 +1413,7 @@
               "challengeAudio": "",
               "response": "USE if available",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1423,7 +1423,7 @@
               "challengeAudio": "",
               "response": "IMMEDIATELY",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -1440,7 +1440,7 @@
               "challengeAudio": "",
               "response": "TO EXIT icing conditions",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1450,7 +1450,7 @@
               "challengeAudio": "",
               "response": "CHANGE to escape icing",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1460,7 +1460,7 @@
               "challengeAudio": "",
               "response": "INCREASE to minimize icing",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1470,7 +1470,7 @@
               "challengeAudio": "",
               "response": "ON (if available)",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1480,7 +1480,7 @@
               "challengeAudio": "",
               "response": "ON",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1490,7 +1490,7 @@
               "challengeAudio": "",
               "response": "PLAN immediately upon exiting icing",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }
@@ -1507,7 +1507,7 @@
               "challengeAudio": "",
               "response": "SQUAWK 7600",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1517,7 +1517,7 @@
               "challengeAudio": "",
               "response": "CHECK volume and squelch",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1527,7 +1527,7 @@
               "challengeAudio": "",
               "response": "TRY if available",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1537,7 +1537,7 @@
               "challengeAudio": "",
               "response": "FLY assigned or expected route",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1547,7 +1547,7 @@
               "challengeAudio": "",
               "response": "FLY assigned, expected, or MEA",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },
@@ -1557,7 +1557,7 @@
               "challengeAudio": "",
               "response": "PROCEED to destination",
               "responseAudio": "",
-              "mandatory": true,
+              "isRequired": true,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             }

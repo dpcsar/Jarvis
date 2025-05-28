@@ -13,10 +13,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
+import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
 import site.jarviscopilot.jarvis.ui.components.ChecklistBar
 import site.jarviscopilot.jarvis.ui.components.ClickableListTitle
 import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
@@ -36,15 +37,16 @@ import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModelFactory
 @Composable
 fun ChecklistScreen(
     checklistName: String,
+    checklistRepository: IChecklistRepository,
+    checklistStateManager: ChecklistStateManager,
     onNavigateHome: () -> Unit,
     resumeFromSaved: Boolean = false
 ) {
-    val context = LocalContext.current
-
-    // Create ViewModel using factory
+    // Create ViewModel using factory with injected dependencies
     val viewModel: ChecklistViewModel = viewModel(
         factory = ChecklistViewModelFactory(
-            context = context,
+            repository = checklistRepository,
+            stateManager = checklistStateManager,
             checklistName = checklistName,
             resumeFromSaved = resumeFromSaved
         )
@@ -90,7 +92,7 @@ fun ChecklistScreen(
 
                 ChecklistBar(
                     onNavigateHome = onNavigateHome,
-                    onCheckItem = { viewModel.toggleCompleteItem(uiState.activeItemIndex) },
+                    onCheckItem = { viewModel.toggleItemCompletion(uiState.activeItemIndex) },
                     onSkipItem = { viewModel.skipItem() },
                     onSearchItem = { viewModel.searchItem() },
                     onToggleMic = { viewModel.toggleMic() },
@@ -138,7 +140,8 @@ fun ChecklistScreen(
             // List title with onLongClick to mark all items complete
             if (uiState.currentSectionLists.isNotEmpty() &&
                 uiState.selectedListIndex < uiState.currentSectionLists.size &&
-                (uiState.currentViewMode != "tileListView" || !uiState.showingTileGrid)) {
+                (uiState.currentViewMode != "tileListView" || !uiState.showingTileGrid)
+            ) {
 
                 val currentList = uiState.currentSectionLists[uiState.selectedListIndex]
                 ClickableListTitle(
@@ -160,7 +163,7 @@ fun ChecklistScreen(
                         completedItems = uiState.completedItems,
                         activeItemIndex = uiState.activeItemIndex,
                         onItemClick = { index -> viewModel.selectChecklistItem(index) },
-                        onToggleComplete = { index -> viewModel.toggleCompleteItem(index) }
+                        onToggleComplete = { index -> viewModel.toggleItemCompletion(index) }
                     )
                 }
 
@@ -191,7 +194,7 @@ fun ChecklistScreen(
                             completedItems = uiState.completedItems,
                             activeItemIndex = uiState.activeItemIndex,
                             onItemClick = { index -> viewModel.selectChecklistItem(index) },
-                            onToggleComplete = { index -> viewModel.toggleCompleteItem(index) }
+                            onToggleComplete = { index -> viewModel.toggleItemCompletion(index) }
                         )
                     }
                 }
@@ -203,7 +206,7 @@ fun ChecklistScreen(
                         completedItems = uiState.completedItems,
                         activeItemIndex = uiState.activeItemIndex,
                         onItemClick = { index -> viewModel.selectChecklistItem(index) },
-                        onToggleComplete = { index -> viewModel.toggleCompleteItem(index) }
+                        onToggleComplete = { index -> viewModel.toggleItemCompletion(index) }
                     )
                 }
             }

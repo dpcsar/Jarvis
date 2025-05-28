@@ -18,7 +18,6 @@ val JarvisLightEmergency = Color(0xFFE53935) // Added emergency color for light 
 val JarvisLightEmergencyBackground = Color(0xFFFFCDD2) // Emergency background color for light theme
 val JarvisLightReference = Color(0xFF7E57C2) // Purple for reference items
 val JarvisLightReferenceBackground = Color(0xFFDCD3E9) // Light purple background (made darker)
-// Add warning and caution colors for light theme
 val JarvisLightWarning = Color(0xFFF57C00) // Orange for warning
 val JarvisLightWarningBackground = Color(0xFFFFE0B2) // Light orange background
 val JarvisLightCaution = Color(0xFFFFC107) // Amber for caution
@@ -35,7 +34,6 @@ val JarvisDarkEmergency = Color(0xFFFF5252) // Added emergency color for dark th
 val JarvisDarkEmergencyBackground = Color(0xFF590000) // Emergency background color for dark theme
 val JarvisDarkReference = Color(0xFFB39DDB) // Lighter purple for dark theme
 val JarvisDarkReferenceBackground = Color(0xFF4A148C) // Deep purple background
-// Add warning and caution colors for dark theme
 val JarvisDarkWarning = Color(0xFFFFB74D) // Lighter orange for dark theme
 val JarvisDarkWarningBackground = Color(0xFF773C00) // Dark orange background
 val JarvisDarkCaution = Color(0xFFFFD54F) // Lighter amber for dark theme

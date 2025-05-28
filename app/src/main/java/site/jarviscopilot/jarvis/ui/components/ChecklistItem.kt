@@ -170,6 +170,7 @@ fun ChecklistItem(
                                     modifier = Modifier.padding(end = 8.dp)
                                 )
                             }
+
                             ChecklistItemType.CAUTION -> {
                                 Icon(
                                     imageVector = Icons.Default.Warning,
@@ -178,7 +179,9 @@ fun ChecklistItem(
                                     modifier = Modifier.padding(end = 8.dp)
                                 )
                             }
-                            else -> { /* No icon for other types */ }
+
+                            else -> { /* No icon for other types */
+                            }
                         }
 
                         Text(

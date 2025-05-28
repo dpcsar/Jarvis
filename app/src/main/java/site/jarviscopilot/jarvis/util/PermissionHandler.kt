@@ -89,7 +89,7 @@ fun RequestAudioPermission(
             content = {
                 Text(
                     "Jarvis needs access to your microphone to enable voice control " +
-                    "features. Without this permission, voice-related features will be disabled."
+                            "features. Without this permission, voice-related features will be disabled."
                 )
             },
             buttons = {
@@ -123,7 +123,7 @@ fun RequestAudioPermission(
             content = {
                 Text(
                     "Microphone permission is required but has been permanently denied. " +
-                    "Please open app settings and manually grant the microphone permission."
+                            "Please open app settings and manually grant the microphone permission."
                 )
             },
             buttons = {

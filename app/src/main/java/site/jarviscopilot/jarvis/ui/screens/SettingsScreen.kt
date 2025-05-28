@@ -52,8 +52,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import site.jarviscopilot.jarvis.data.ChecklistInfo
-import site.jarviscopilot.jarvis.data.ChecklistRepository
+import site.jarviscopilot.jarvis.data.model.ChecklistInfo
+import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
 import site.jarviscopilot.jarvis.ui.components.JarvisConfirmationDialog
 import site.jarviscopilot.jarvis.ui.components.JarvisToast
@@ -66,14 +66,13 @@ import site.jarviscopilot.jarvis.util.UserPreferences
 
 @Composable
 fun SettingsScreen(
+    checklistRepository: IChecklistRepository, // Add parameter for repository
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     // Get instance of UserPreferences
     val userPreferences = remember { UserPreferences.getInstance(context) }
-    // Get checklist repository
-    val checklistRepository = remember { ChecklistRepository(context) }
     // State for settings - initialize from UserPreferences
     var useVoiceControl by remember { mutableStateOf(userPreferences.isVoiceControlEnabled()) }
     var themeMode by remember { mutableStateOf(userPreferences.getThemeMode()) }
@@ -90,7 +89,7 @@ fun SettingsScreen(
     // Load checklists when screen is shown
     LaunchedEffect(Unit) {
         isLoadingChecklists = true
-        checklists = checklistRepository.loadAllChecklists()
+        checklists = checklistRepository.getAvailableChecklists()
         isLoadingChecklists = false
     }
 
@@ -117,7 +116,7 @@ fun SettingsScreen(
                         toastMessage = "Checklist '${checklistInfo.name}' imported successfully"
                         showToast = true
                         // Reload the checklist list
-                        checklists = checklistRepository.loadAllChecklists()
+                        checklists = checklistRepository.getAvailableChecklists()
                     },
                     onFailure = { exception ->
                         toastMessage = "Failed to import checklist: ${exception.message}"
@@ -172,20 +171,17 @@ fun SettingsScreen(
                 checklistToDeleteCopy?.let { checklist ->
                     coroutineScope.launch {
                         try {
-                            val result = checklistRepository.deleteChecklist(checklist)
-                            result.fold(
-                                onSuccess = {
-                                    toastMessage = "Checklist deleted"
-                                    showToast = true
+                            val success = checklistRepository.deleteChecklist(checklist.id)
+                            if (success) {
+                                toastMessage = "Checklist deleted"
+                                showToast = true
 
-                                    // Reload checklists
-                                    checklists = checklistRepository.loadAllChecklists()
-                                },
-                                onFailure = { exception ->
-                                    toastMessage = "Failed to delete checklist: ${exception.message}"
-                                    showToast = true
-                                }
-                            )
+                                // Reload checklists
+                                checklists = checklistRepository.getAvailableChecklists()
+                            } else {
+                                toastMessage = "Failed to delete checklist"
+                                showToast = true
+                            }
                         } catch (e: Exception) {
                             toastMessage = "Error deleting checklist: ${e.message}"
                             showToast = true
@@ -294,7 +290,7 @@ fun SettingsScreen(
                 onThemeSelected = { newThemeMode ->
                     themeMode = newThemeMode
                     userPreferences.setThemeMode(newThemeMode)
-                    val themeName = when(newThemeMode) {
+                    val themeName = when (newThemeMode) {
                         ThemeMode.SYSTEM -> "System default"
                         ThemeMode.LIGHT -> "Light mode"
                         ThemeMode.DARK -> "Dark mode"

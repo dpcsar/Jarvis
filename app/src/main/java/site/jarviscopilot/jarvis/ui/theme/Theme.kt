@@ -150,6 +150,7 @@ fun JarvisTheme(
                 )
             }
         }
+
         darkTheme -> JarvisDarkExtendedColorScheme
         else -> JarvisLightExtendedColorScheme
     }

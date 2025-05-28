@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
-import site.jarviscopilot.jarvis.data.ChecklistItem
+import site.jarviscopilot.jarvis.data.model.ChecklistItem
 import site.jarviscopilot.jarvis.ui.components.ChecklistItem
 import site.jarviscopilot.jarvis.util.ChecklistUtils
 

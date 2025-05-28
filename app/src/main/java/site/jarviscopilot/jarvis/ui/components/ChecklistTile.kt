@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.ChecklistList
+import site.jarviscopilot.jarvis.data.model.ChecklistList
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
@@ -36,14 +36,30 @@ fun ChecklistTile(
 ) {
     // Determine colors based on category
     val containerColor = when {
-        category.equals("emergency", ignoreCase = true) -> JarvisTheme.colorScheme.emergencyContainer
-        category.equals("reference", ignoreCase = true) -> JarvisTheme.colorScheme.referenceContainer
+        category.equals(
+            "emergency",
+            ignoreCase = true
+        ) -> JarvisTheme.colorScheme.emergencyContainer
+
+        category.equals(
+            "reference",
+            ignoreCase = true
+        ) -> JarvisTheme.colorScheme.referenceContainer
+
         else -> JarvisTheme.colorScheme.surfaceVariant
     }
 
     val textColor = when {
-        category.equals("emergency", ignoreCase = true) -> JarvisTheme.colorScheme.onEmergencyContainer
-        category.equals("reference", ignoreCase = true) -> JarvisTheme.colorScheme.onReferenceContainer
+        category.equals(
+            "emergency",
+            ignoreCase = true
+        ) -> JarvisTheme.colorScheme.onEmergencyContainer
+
+        category.equals(
+            "reference",
+            ignoreCase = true
+        ) -> JarvisTheme.colorScheme.onReferenceContainer
+
         else -> JarvisTheme.colorScheme.onSurfaceVariant
     }
 

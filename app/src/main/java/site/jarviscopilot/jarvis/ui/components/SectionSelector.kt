@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.ChecklistSection
+import site.jarviscopilot.jarvis.data.model.ChecklistSection
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
@@ -47,18 +47,20 @@ fun SectionSelector(
         if (sections.isNotEmpty()) {
             // We need to scroll to position the item in the center
             // Get the item's layout info to calculate the centering offset
-            listState.layoutInfo.visibleItemsInfo.find { it.index == selectedSectionIndex }?.let { itemInfo ->
-                // Calculate the center position of the viewport
-                val viewportCenter = (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
+            listState.layoutInfo.visibleItemsInfo.find { it.index == selectedSectionIndex }
+                ?.let { itemInfo ->
+                    // Calculate the center position of the viewport
+                    val viewportCenter =
+                        (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
 
-                // Calculate how much to scroll so the item's center aligns with viewport center
-                // Half the item width is used to target the center of the item, not its leading edge
-                val itemCenter = itemInfo.offset + (itemInfo.size / 2)
-                val scrollBy = itemCenter - viewportCenter
+                    // Calculate how much to scroll so the item's center aligns with viewport center
+                    // Half the item width is used to target the center of the item, not its leading edge
+                    val itemCenter = itemInfo.offset + (itemInfo.size / 2)
+                    val scrollBy = itemCenter - viewportCenter
 
-                // Scroll by the calculated amount
-                listState.animateScrollBy(scrollBy.toFloat())
-            } ?: run {
+                    // Scroll by the calculated amount
+                    listState.animateScrollBy(scrollBy.toFloat())
+                } ?: run {
                 // Fallback if we can't find the item yet: just scroll to the item
                 // This will position the leading edge but will be corrected once layout info is available
                 listState.animateScrollToItem(selectedSectionIndex)
@@ -88,14 +90,19 @@ fun SectionSelector(
                         containerColor = when {
                             section.sectionType == "emergency" && isSelected ->
                                 JarvisTheme.colorScheme.emergencyContainer
+
                             section.sectionType == "emergency" && !isSelected ->
                                 JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
+
                             section.sectionType == "reference" && isSelected ->
                                 JarvisTheme.colorScheme.referenceContainer
+
                             section.sectionType == "reference" && !isSelected ->
                                 JarvisTheme.colorScheme.reference.copy(alpha = 0.7f)
+
                             isSelected ->
                                 JarvisTheme.colorScheme.primaryContainer
+
                             else ->
                                 JarvisTheme.colorScheme.surfaceVariant
                         }
@@ -104,22 +111,27 @@ fun SectionSelector(
                 ) {
                     Text(
                         text = if (section.sectionSelectorName.isNotEmpty())
-                                section.sectionSelectorName
-                              else
-                                section.sectionTitle,
+                            section.sectionSelectorName
+                        else
+                            section.sectionTitle,
                         style = JarvisTheme.typography.bodyMedium,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         color = when {
                             section.sectionType == "emergency" && isSelected ->
                                 JarvisTheme.colorScheme.onEmergencyContainer
+
                             section.sectionType == "emergency" && !isSelected ->
                                 JarvisTheme.colorScheme.onEmergency
+
                             section.sectionType == "reference" && isSelected ->
                                 JarvisTheme.colorScheme.onReferenceContainer
+
                             section.sectionType == "reference" && !isSelected ->
                                 JarvisTheme.colorScheme.onReference
+
                             isSelected ->
                                 JarvisTheme.colorScheme.onPrimaryContainer
+
                             else ->
                                 JarvisTheme.colorScheme.onSurfaceVariant
                         },
