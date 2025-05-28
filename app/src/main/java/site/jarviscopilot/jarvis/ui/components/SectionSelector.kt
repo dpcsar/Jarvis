@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.model.ChecklistSection
+import site.jarviscopilot.jarvis.data.model.ChecklistSectionData
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
@@ -34,7 +34,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionSelector(
-    sections: List<ChecklistSection>,
+    sections: List<ChecklistSectionData>,
     selectedSectionIndex: Int,
     onSectionSelected: (Int) -> Unit,
     modifier: Modifier = Modifier

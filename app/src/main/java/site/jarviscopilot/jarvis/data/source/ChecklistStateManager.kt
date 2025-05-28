@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import kotlinx.serialization.json.Json
-import site.jarviscopilot.jarvis.data.model.ChecklistState
+import site.jarviscopilot.jarvis.data.model.ChecklistStateData
 
 /**
  * Manages the state of checklists to support resume functionality
@@ -18,13 +18,13 @@ class ChecklistStateManager(context: Context) {
     /**
      * Save the state of a checklist
      */
-    fun saveChecklistState(state: ChecklistState): Boolean {
+    fun saveChecklistState(state: ChecklistStateData): Boolean {
         return try {
             // Create a unique key for this checklist's state
             val checklistKey = "checklist_${state.checklistName}"
 
             // Store the entire state as a JSON string
-            val stateJson = json.encodeToString(ChecklistState.serializer(), state)
+            val stateJson = json.encodeToString(ChecklistStateData.serializer(), state)
             preferences.edit {
                 putString(checklistKey, stateJson)
 
@@ -43,12 +43,12 @@ class ChecklistStateManager(context: Context) {
     /**
      * Get the saved state for a specific checklist, or null if no state is saved
      */
-    fun getChecklistState(checklistName: String): ChecklistState? {
+    fun getChecklistState(checklistName: String): ChecklistStateData? {
         val checklistKey = "checklist_${checklistName}"
         val stateJson = preferences.getString(checklistKey, null) ?: return null
 
         return try {
-            json.decodeFromString(ChecklistState.serializer(), stateJson)
+            json.decodeFromString(ChecklistStateData.serializer(), stateJson)
         } catch (e: Exception) {
             e.printStackTrace()
             null

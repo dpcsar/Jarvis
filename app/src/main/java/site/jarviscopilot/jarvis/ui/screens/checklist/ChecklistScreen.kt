@@ -98,7 +98,7 @@ fun ChecklistScreen(
                     onToggleMic = { viewModel.toggleMic() },
                     onEmergency = { viewModel.handleEmergency() },
                     isMicActive = uiState.isMicActive,
-                    isActiveItemEnabled = uiState.activeItemIndex < uiState.checklistItems.size
+                    isActiveItemEnabled = uiState.activeItemIndex < uiState.checklistItemData.size
                 )
             }
         },
@@ -159,7 +159,7 @@ fun ChecklistScreen(
                 // Normal list view - just show the checklist items
                 "normalListView" -> {
                     ChecklistListView(
-                        checklistItems = uiState.checklistItems,
+                        checklistItemData = uiState.checklistItemData,
                         completedItems = uiState.completedItems,
                         activeItemIndex = uiState.activeItemIndex,
                         onItemClick = { index -> viewModel.selectChecklistItem(index) },
@@ -190,7 +190,7 @@ fun ChecklistScreen(
 
                         // Show individual list view when a tile has been selected
                         ChecklistListView(
-                            checklistItems = uiState.checklistItems,
+                            checklistItemData = uiState.checklistItemData,
                             completedItems = uiState.completedItems,
                             activeItemIndex = uiState.activeItemIndex,
                             onItemClick = { index -> viewModel.selectChecklistItem(index) },
@@ -202,7 +202,7 @@ fun ChecklistScreen(
                 else -> {
                     // Fallback to normal list view if listView property is not recognized
                     ChecklistListView(
-                        checklistItems = uiState.checklistItems,
+                        checklistItemData = uiState.checklistItemData,
                         completedItems = uiState.completedItems,
                         activeItemIndex = uiState.activeItemIndex,
                         onItemClick = { index -> viewModel.selectChecklistItem(index) },

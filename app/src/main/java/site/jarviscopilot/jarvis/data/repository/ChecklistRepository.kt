@@ -9,8 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import site.jarviscopilot.jarvis.data.model.ChecklistData
-import site.jarviscopilot.jarvis.data.model.ChecklistInfo
-import site.jarviscopilot.jarvis.data.model.ChecklistState
+import site.jarviscopilot.jarvis.data.model.ChecklistInfoData
+import site.jarviscopilot.jarvis.data.model.ChecklistStateData
 import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
 import java.io.File
 import java.io.FileOutputStream
@@ -40,14 +40,14 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
     /**
      * Gets all available checklists
      */
-    override fun getAvailableChecklists(): List<ChecklistInfo> {
+    override fun getAvailableChecklists(): List<ChecklistInfoData> {
         val exampleChecklists = loadExampleChecklistInfo()
         val userChecklists = loadUserChecklistInfo()
         return exampleChecklists + userChecklists
     }
 
     // Load example checklists from assets
-    private fun loadExampleChecklistInfo(): List<ChecklistInfo> {
+    private fun loadExampleChecklistInfo(): List<ChecklistInfoData> {
         try {
             return context.assets.list("")
                 ?.filter { it.endsWith(".json") }
@@ -64,7 +64,7 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
                             val name = title.ifEmpty {
                                 filename.substringBefore(".json").replace("_", " ").capitalize()
                             }
-                            ChecklistInfo(filename, name, description, filename, true)
+                            ChecklistInfoData(filename, name, description, filename, true)
                         }
                     } catch (_: Exception) {
                         null
@@ -76,7 +76,7 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
     }
 
     // Load user-imported checklists
-    private fun loadUserChecklistInfo(): List<ChecklistInfo> {
+    private fun loadUserChecklistInfo(): List<ChecklistInfoData> {
         val userDir = getUserChecklistsDir()
         return userDir.listFiles()?.filter { it.isFile && it.name.endsWith(".json") }
             ?.mapNotNull { file ->
@@ -88,7 +88,7 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
                     val name = title.ifEmpty {
                         file.nameWithoutExtension.replace("_", " ").capitalize()
                     }
-                    ChecklistInfo(file.name, name, description, file.name, false)
+                    ChecklistInfoData(file.name, name, description, file.name, false)
                 } catch (_: Exception) {
                     null
                 }
@@ -118,7 +118,7 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
     /**
      * Import a checklist from a Uri (file selected by the user)
      */
-    override suspend fun importChecklist(uri: Uri): Result<ChecklistInfo> =
+    override suspend fun importChecklist(uri: Uri): Result<ChecklistInfoData> =
         withContext(Dispatchers.IO) {
             try {
                 // One-time read of the content from the URI
@@ -147,9 +147,9 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
                     }
 
                     // Return info about the imported checklist that's now stored in app's private directory
-                    val checklistInfo =
-                        ChecklistInfo(file.name, name, description, file.name, false)
-                    Result.success(checklistInfo)
+                    val checklistInfoData =
+                        ChecklistInfoData(file.name, name, description, file.name, false)
+                    Result.success(checklistInfoData)
                 } catch (_: JsonSyntaxException) {
                     Result.failure(IllegalArgumentException("Invalid checklist format: The file is not a valid JSON file"))
                 }
@@ -189,14 +189,14 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
     /**
      * Save the state of a checklist
      */
-    override fun saveChecklistState(checklistState: ChecklistState): Boolean {
-        return stateManager.saveChecklistState(checklistState)
+    override fun saveChecklistState(checklistStateData: ChecklistStateData): Boolean {
+        return stateManager.saveChecklistState(checklistStateData)
     }
 
     /**
      * Load a previously saved checklist state
      */
-    override fun loadChecklistState(checklistName: String): ChecklistState? {
+    override fun loadChecklistState(checklistName: String): ChecklistStateData? {
         return stateManager.getChecklistState(checklistName)
     }
 

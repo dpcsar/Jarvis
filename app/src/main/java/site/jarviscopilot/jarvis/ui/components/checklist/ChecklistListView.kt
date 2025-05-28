@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
-import site.jarviscopilot.jarvis.data.model.ChecklistItem
+import site.jarviscopilot.jarvis.data.model.ChecklistItemData
 import site.jarviscopilot.jarvis.ui.components.ChecklistItem
 import site.jarviscopilot.jarvis.util.ChecklistUtils
 
@@ -18,7 +18,7 @@ import site.jarviscopilot.jarvis.util.ChecklistUtils
  */
 @Composable
 fun ChecklistListView(
-    checklistItems: List<ChecklistItem>,
+    checklistItemData: List<ChecklistItemData>,
     completedItems: List<Int>,
     activeItemIndex: Int,
     onItemClick: (Int) -> Unit,
@@ -29,16 +29,16 @@ fun ChecklistListView(
     // This effect ensures we scroll to the active item on initial composition
     // or when resuming a saved checklist
     LaunchedEffect(Unit) {
-        if (checklistItems.isNotEmpty() && activeItemIndex < checklistItems.size) {
+        if (checklistItemData.isNotEmpty() && activeItemIndex < checklistItemData.size) {
             listState.scrollToItem(activeItemIndex)
         }
     }
 
     // Auto-scroll to active item when it changes
     LaunchedEffect(activeItemIndex) {
-        if (checklistItems.isNotEmpty()) {
+        if (checklistItemData.isNotEmpty()) {
             // First make sure the item is visible
-            if (activeItemIndex < checklistItems.size &&
+            if (activeItemIndex < checklistItemData.size &&
                 !listState.layoutInfo.visibleItemsInfo.any { it.index == activeItemIndex }
             ) {
                 listState.animateScrollToItem(activeItemIndex)
@@ -70,7 +70,7 @@ fun ChecklistListView(
         state = listState,
         modifier = Modifier.fillMaxWidth()
     ) {
-        itemsIndexed(checklistItems) { index, item ->
+        itemsIndexed(checklistItemData) { index, item ->
             ChecklistItem(
                 challenge = item.challenge,
                 response = item.response,
@@ -83,4 +83,5 @@ fun ChecklistListView(
         }
     }
 }
+
 

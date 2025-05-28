@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.model.ChecklistList
+import site.jarviscopilot.jarvis.data.model.ChecklistListData
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.ChecklistUtils
 
@@ -45,7 +45,7 @@ import site.jarviscopilot.jarvis.util.ChecklistUtils
 @Composable
 fun ListSelector(
     modifier: Modifier = Modifier,
-    lists: List<ChecklistList>,
+    lists: List<ChecklistListData>,
     selectedListIndex: Int,
     onListSelected: (Int) -> Unit,
     isNormalListView: Boolean = false,

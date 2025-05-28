@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.model.ChecklistInfo
+import site.jarviscopilot.jarvis.data.model.ChecklistInfoData
 import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
@@ -48,12 +48,12 @@ fun MainScreen(
     onSettingsClick: () -> Unit,
     onResumeChecklist: (String, Boolean) -> Unit = { _, _ -> }
 ) {
-    var checklistInfoList by remember { mutableStateOf<List<ChecklistInfo>>(emptyList()) }
+    var checklistInfoDataList by remember { mutableStateOf<List<ChecklistInfoData>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var resumableChecklists by remember { mutableStateOf<Set<String>>(emptySet()) }
 
     LaunchedEffect(key1 = true) {
-        checklistInfoList = checklistRepository.getAvailableChecklists()
+        checklistInfoDataList = checklistRepository.getAvailableChecklists()
 
         // Get all checklists that can be resumed
         resumableChecklists = checklistStateManager.getSavedChecklistNames()
@@ -131,7 +131,7 @@ fun MainScreen(
                         textAlign = TextAlign.Center
                     )
                 }
-            } else if (checklistInfoList.isEmpty()) {
+            } else if (checklistInfoDataList.isEmpty()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -158,11 +158,11 @@ fun MainScreen(
                 LazyColumn(
                     contentPadding = PaddingValues(vertical = 8.dp)
                 ) {
-                    items(checklistInfoList) { checklistInfo ->
+                    items(checklistInfoDataList) { checklistInfo ->
                         val canResume = resumableChecklists.contains(checklistInfo.filename)
 
                         ChecklistCard(
-                            checklistInfo = checklistInfo,
+                            checklistInfoData = checklistInfo,
                             canResume = canResume,
                             onSelected = {
                                 // Always start fresh when clicking the card itself
@@ -187,7 +187,7 @@ fun MainScreen(
 
 @Composable
 fun ChecklistCard(
-    checklistInfo: ChecklistInfo,
+    checklistInfoData: ChecklistInfoData,
     onSelected: () -> Unit,
     canResume: Boolean = false,
     onResume: () -> Unit = {},
@@ -207,7 +207,7 @@ fun ChecklistCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = checklistInfo.name,
+                text = checklistInfoData.name,
                 style = JarvisTheme.typography.titleMedium,
                 color = JarvisTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
@@ -216,7 +216,7 @@ fun ChecklistCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = checklistInfo.description,
+                text = checklistInfoData.description,
                 style = JarvisTheme.typography.bodyMedium,
                 color = JarvisTheme.colorScheme.onSurfaceVariant
             )

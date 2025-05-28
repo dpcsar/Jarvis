@@ -52,7 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import site.jarviscopilot.jarvis.data.model.ChecklistInfo
+import site.jarviscopilot.jarvis.data.model.ChecklistInfoData
 import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
 import site.jarviscopilot.jarvis.ui.components.JarvisConfirmationDialog
@@ -81,10 +81,10 @@ fun SettingsScreen(
     // State for permission handling
     var requestVoicePermission by remember { mutableStateOf(false) }
     // State for checklists
-    var checklists by remember { mutableStateOf<List<ChecklistInfo>>(emptyList()) }
+    var checklists by remember { mutableStateOf<List<ChecklistInfoData>>(emptyList()) }
     var isLoadingChecklists by remember { mutableStateOf(true) }
     var showDeleteDialog by remember { mutableStateOf(false) }
-    var checklistToDelete by remember { mutableStateOf<ChecklistInfo?>(null) }
+    var checklistToDelete by remember { mutableStateOf<ChecklistInfoData?>(null) }
 
     // Load checklists when screen is shown
     LaunchedEffect(Unit) {
@@ -382,7 +382,7 @@ fun SettingsScreen(
             } else {
                 checklists.forEach { checklist ->
                     ChecklistListItem(
-                        checklistInfo = checklist,
+                        checklistInfoData = checklist,
                         onDeleteClick = {
                             checklistToDelete = checklist
                             showDeleteDialog = true
@@ -399,7 +399,7 @@ fun SettingsScreen(
 
 @Composable
 fun ChecklistListItem(
-    checklistInfo: ChecklistInfo,
+    checklistInfoData: ChecklistInfoData,
     onDeleteClick: () -> Unit
 ) {
     Card(
@@ -418,15 +418,15 @@ fun ChecklistListItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = checklistInfo.name,
+                    text = checklistInfoData.name,
                     style = JarvisTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
 
-                if (checklistInfo.description.isNotEmpty()) {
+                if (checklistInfoData.description.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = checklistInfo.description,
+                        text = checklistInfoData.description,
                         style = JarvisTheme.typography.bodyMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -435,7 +435,7 @@ fun ChecklistListItem(
 
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = if (checklistInfo.isExample) "Example checklist" else "User checklist",
+                    text = if (checklistInfoData.isExample) "Example checklist" else "User checklist",
                     style = JarvisTheme.typography.bodySmall,
                     color = JarvisTheme.colorScheme.onSurfaceVariant
                 )

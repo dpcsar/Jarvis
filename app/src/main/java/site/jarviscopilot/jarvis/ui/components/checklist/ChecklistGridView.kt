@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.model.ChecklistList
+import site.jarviscopilot.jarvis.data.model.ChecklistListData
 import site.jarviscopilot.jarvis.ui.components.ChecklistTile
 
 /**
@@ -15,7 +15,7 @@ import site.jarviscopilot.jarvis.ui.components.ChecklistTile
  */
 @Composable
 fun ChecklistGridView(
-    lists: List<ChecklistList>,
+    lists: List<ChecklistListData>,
     sectionType: String,
     onTileClick: (Int) -> Unit
 ) {
@@ -26,7 +26,7 @@ fun ChecklistGridView(
         items(lists.indices.toList()) { listIndex ->
             val list = lists[listIndex]
             ChecklistTile(
-                checklistList = list,
+                checklistListData = list,
                 onTileClick = { onTileClick(listIndex) },
                 category = sectionType
             )

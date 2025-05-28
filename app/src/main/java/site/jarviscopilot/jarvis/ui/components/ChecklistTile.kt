@@ -16,13 +16,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import site.jarviscopilot.jarvis.data.model.ChecklistList
+import site.jarviscopilot.jarvis.data.model.ChecklistListData
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
  * A tile representation of a checklist list for the tile view.
  *
- * @param checklistList The checklist list data to represent as a tile
+ * @param checklistListData The checklist list data to represent as a tile
  * @param onTileClick Callback when the tile is clicked
  * @param category The category of the checklist ("emergency" or "reference")
  * @param modifier Optional modifier for the component
@@ -30,7 +30,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 @Composable
 fun ChecklistTile(
     modifier: Modifier = Modifier,
-    checklistList: ChecklistList,
+    checklistListData: ChecklistListData,
     onTileClick: () -> Unit,
     category: String = ""
 ) {
@@ -85,7 +85,7 @@ fun ChecklistTile(
         ) {
             // Title of the list
             Text(
-                text = checklistList.listTitle,
+                text = checklistListData.listTitle,
                 style = JarvisTheme.typography.titleMedium,
                 fontWeight = FontWeight.Normal,
                 color = textColor,
@@ -95,7 +95,7 @@ fun ChecklistTile(
 
             // Item count
             Text(
-                text = "${checklistList.listItems.size} items",
+                text = "${checklistListData.listItems.size} items",
                 style = JarvisTheme.typography.bodySmall,
                 color = textColor.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center

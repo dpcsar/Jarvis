@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import site.jarviscopilot.jarvis.data.model.ChecklistData
-import site.jarviscopilot.jarvis.data.model.ChecklistItem
-import site.jarviscopilot.jarvis.data.model.ChecklistState
+import site.jarviscopilot.jarvis.data.model.ChecklistItemData
+import site.jarviscopilot.jarvis.data.model.ChecklistStateData
 import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
 
@@ -21,15 +21,14 @@ data class ChecklistUiState(
     val selectedSectionIndex: Int = 0,
     val selectedListIndex: Int = 0,
     val currentSectionType: String = "",
-    val currentSectionLists: List<site.jarviscopilot.jarvis.data.model.ChecklistList> = emptyList(),
-    val currentListItems: List<ChecklistItem> = emptyList(),
+    val currentSectionLists: List<site.jarviscopilot.jarvis.data.model.ChecklistListData> = emptyList(),
     val completedItemsBySection: List<List<MutableList<Int>>> = emptyList(),
     val currentViewMode: String = "normalListView",
     val hasMultipleSections: Boolean = false,
     val hasMultipleLists: Boolean = false,
     val shouldShowCompletionDialog: Boolean = false,
     val activeItemIndex: Int = -1,
-    val checklistItems: List<ChecklistItem> = emptyList(),
+    val checklistItemData: List<ChecklistItemData> = emptyList(),
     val completedItems: List<Int> = emptyList(),
     val isMicActive: Boolean = false,
     val showingTileGrid: Boolean = true,
@@ -116,13 +115,24 @@ class ChecklistViewModel(
 
         val items = currentList?.listItems ?: emptyList()
 
+        // Get the completed items for the current section and list
+        val completedItemsList = if (sectionIndex < currentState.completedItemsBySection.size &&
+            listIndex < currentState.completedItemsBySection[sectionIndex].size
+        ) {
+            currentState.completedItemsBySection[sectionIndex][listIndex]
+        } else {
+            emptyList()
+        }
+
         _uiState.update {
             it.copy(
-                currentListItems = items,
                 currentViewMode = currentSection.listView,
                 currentSectionType = currentSection.sectionType,
                 hasMultipleLists = currentSection.lists.size > 1,
-                hasMultipleSections = data.sections.size > 1
+                hasMultipleSections = data.sections.size > 1,
+                checklistItemData = items,              // Update the checklistItemData property
+                completedItems = completedItemsList,    // Update the completedItems property
+                activeItemIndex = if (items.isNotEmpty()) 0 else -1  // Set the active item to the first item if available
             )
         }
 
@@ -143,7 +153,7 @@ class ChecklistViewModel(
     /**
      * Apply a restored state to the UI
      */
-    private fun applyRestoredState(state: ChecklistState) {
+    private fun applyRestoredState(state: ChecklistStateData) {
         _uiState.update { current ->
             current.copy(
                 selectedSectionIndex = state.currentSectionIndex,
@@ -345,14 +355,14 @@ class ChecklistViewModel(
         val currentListIndices = mutableMapOf<Int, Int>()
         currentListIndices[currentState.selectedSectionIndex] = currentState.selectedListIndex
 
-        val checklistState = ChecklistState(
+        val checklistStateData = ChecklistStateData(
             checklistName = checklistName,
             currentSectionIndex = currentState.selectedSectionIndex,
             currentListIndices = currentListIndices,
             completedItems = completedItems
         )
 
-        repository.saveChecklistState(checklistState)
+        repository.saveChecklistState(checklistStateData)
     }
 
     /**
@@ -363,7 +373,7 @@ class ChecklistViewModel(
         val nextIndex = currentState.activeItemIndex + 1
 
         // Only proceed if there are more items to skip to
-        if (nextIndex < currentState.checklistItems.size) {
+        if (nextIndex < currentState.checklistItemData.size) {
             _uiState.update { it.copy(activeItemIndex = nextIndex) }
         }
     }
@@ -402,7 +412,7 @@ class ChecklistViewModel(
      * Select a specific checklist item
      */
     fun selectChecklistItem(index: Int) {
-        if (index >= 0 && index < _uiState.value.checklistItems.size) {
+        if (index >= 0 && index < _uiState.value.checklistItemData.size) {
             _uiState.update { it.copy(activeItemIndex = index) }
         }
     }
@@ -423,7 +433,7 @@ class ChecklistViewModel(
         val listCompletedItems = sectionCompletedItems[listIndex].toMutableList()
 
         // Add all item indices to the completed items list
-        val allIndices = currentState.checklistItems.indices.toList()
+        val allIndices = currentState.checklistItemData.indices.toList()
         listCompletedItems.clear()
         listCompletedItems.addAll(allIndices)
 

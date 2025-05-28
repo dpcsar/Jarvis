@@ -7,29 +7,29 @@ data class ChecklistData(
     val title: String,
     val titleAudio: String,
     val description: String,
-    val sections: List<ChecklistSection>
+    val sections: List<ChecklistSectionData>
 )
 
 @Serializable
-data class ChecklistSection(
+data class ChecklistSectionData(
     val sectionType: String,
     val sectionTitle: String,
     val sectionTitleAudio: String,
     val sectionSelectorName: String,
     val listView: String,
-    val lists: List<ChecklistList>
+    val lists: List<ChecklistListData>
 )
 
 @Serializable
-data class ChecklistList(
+data class ChecklistListData(
     val listTitle: String,
     val listTitleAudio: String,
     val listSelectorName: String,
-    val listItems: List<ChecklistItem>
+    val listItems: List<ChecklistItemData>
 )
 
 @Serializable
-data class ChecklistItem(
+data class ChecklistItemData(
     val listItemType: String = "",
     val challenge: String = "",
     val challengeAudio: String = "",
@@ -41,14 +41,14 @@ data class ChecklistItem(
 )
 
 @Serializable
-data class ChecklistState(
+data class ChecklistStateData(
     val checklistName: String,
     val currentSectionIndex: Int = 0,
     val currentListIndices: MutableMap<Int, Int> = mutableMapOf(),
     val completedItems: MutableMap<String, MutableList<String>> = mutableMapOf()
 )
 
-data class ChecklistInfo(
+data class ChecklistInfoData(
     val id: String,
     val name: String,
     val description: String,
