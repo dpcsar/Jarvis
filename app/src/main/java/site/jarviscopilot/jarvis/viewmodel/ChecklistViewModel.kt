@@ -271,17 +271,37 @@ class ChecklistViewModel(
      * Select a specific section
      */
     fun selectSection(index: Int) {
-        if (index == _uiState.value.selectedSectionIndex) return
+        val currentState = _uiState.value
+        val currentSectionType = currentState.checklistData?.sections?.getOrNull(currentState.selectedSectionIndex)?.listView
 
-        _uiState.update {
-            it.copy(
-                selectedSectionIndex = index,
-                selectedListIndex = 0
-            )
+        // If clicking on the same section that uses tileListView and currently not showing tile grid,
+        // toggle back to tile grid view
+        if (index == currentState.selectedSectionIndex &&
+            currentSectionType == "tileListView" &&
+            !currentState.showingTileGrid) {
+
+            _uiState.update { it.copy(showingTileGrid = true) }
+            return
         }
 
-        saveCurrentState()
-        updateCurrentChecklistItems()
+        // If switching to a new section
+        if (index != currentState.selectedSectionIndex) {
+            val newSectionType = currentState.checklistData?.sections?.getOrNull(index)?.listView ?: "normalListView"
+
+            // Reset to showing the tile grid when switching to a section with tileListView
+            val resetTileGrid = newSectionType == "tileListView"
+
+            _uiState.update {
+                it.copy(
+                    selectedSectionIndex = index,
+                    selectedListIndex = 0,
+                    showingTileGrid = resetTileGrid  // Reset to showing tile grid when switching sections
+                )
+            }
+
+            saveCurrentState()
+            updateCurrentChecklistItems()
+        }
     }
 
     /**
