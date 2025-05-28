@@ -209,7 +209,7 @@ class ChecklistViewModel(
 
         val completedItems = currentState.completedItemsBySection.toMutableList()
         val sectionCompletedItems = completedItems[sectionIndex].toMutableList()
-        val listCompletedItems = sectionCompletedItems[listIndex]
+        val listCompletedItems = sectionCompletedItems[listIndex].toMutableList()
 
         if (itemIndex in listCompletedItems) {
             listCompletedItems.remove(itemIndex)
@@ -220,7 +220,13 @@ class ChecklistViewModel(
         sectionCompletedItems[listIndex] = listCompletedItems
         completedItems[sectionIndex] = sectionCompletedItems
 
-        _uiState.update { it.copy(completedItemsBySection = completedItems) }
+        _uiState.update {
+            it.copy(
+                completedItemsBySection = completedItems,
+                // Update the completedItems list as well to trigger UI refresh
+                completedItems = listCompletedItems
+            )
+        }
 
         // Save state after toggling
         saveCurrentState()
