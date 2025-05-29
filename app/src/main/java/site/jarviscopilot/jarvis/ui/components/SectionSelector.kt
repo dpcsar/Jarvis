@@ -71,13 +71,13 @@ fun SectionSelector(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 4.dp),  // Reduced from 8.dp to 4.dp
         color = JarvisTheme.colorScheme.surface,
         tonalElevation = 4.dp
     ) {
         LazyRow(
             state = listState,
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(6.dp),  // Reduced from 8.dp to 6.dp
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(sections.size) { index ->
@@ -136,7 +136,7 @@ fun SectionSelector(
                                 JarvisTheme.colorScheme.onSurfaceVariant
                         },
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)  // Reduced from vertical: 12.dp to 8.dp
                     )
                 }
             }

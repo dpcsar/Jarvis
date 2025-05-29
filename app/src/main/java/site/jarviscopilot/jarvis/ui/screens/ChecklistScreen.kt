@@ -65,12 +65,10 @@ fun ChecklistScreen(
 
     Scaffold(
         topBar = {
-            Column {
-                TopBar()
-            }
+            TopBar()
         },
         bottomBar = {
-            Column {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 // Display ListSelector only when in list view and there's more than one list
                 if (uiState.currentViewMode == "normalListView" && uiState.hasMultipleLists) {
                     ListSelector(
@@ -109,7 +107,7 @@ fun ChecklistScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(JarvisTheme.colorScheme.background)
-                .padding(16.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             // Main Checklist title (no onLongClick functionality)
             Text(
@@ -119,7 +117,7 @@ fun ChecklistScreen(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 4.dp)
             )
 
             // Section title if available
@@ -133,7 +131,7 @@ fun ChecklistScreen(
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp)
+                            .padding(bottom = 4.dp)
                     )
                 }
             }
@@ -151,7 +149,7 @@ fun ChecklistScreen(
                     onLongClick = { viewModel.markAllItemsComplete() },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp)
+                        .padding(bottom = 8.dp)
                 )
             }
 
@@ -186,7 +184,7 @@ fun ChecklistScreen(
                             onClick = { viewModel.toggleTileGridView(true) },
                             icon = Icons.AutoMirrored.Filled.ArrowBack,
                             text = "Back to categories",
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier.padding(top = 2.dp, bottom = 2.dp)
                         )
 
                         // Show individual list view when a tile has been selected

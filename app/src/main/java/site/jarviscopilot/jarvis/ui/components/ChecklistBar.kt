@@ -3,6 +3,7 @@ package site.jarviscopilot.jarvis.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
@@ -14,6 +15,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 @Composable
@@ -30,6 +32,7 @@ fun ChecklistBar(
     BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
         containerColor = JarvisTheme.colorScheme.primaryContainer,
+        contentPadding = PaddingValues(vertical = 6.dp)  // Added reduced padding
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

@@ -83,13 +83,13 @@ fun ListSelector(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 4.dp),  // Reduced from 8.dp to 4.dp
         color = JarvisTheme.colorScheme.surface,
         tonalElevation = 4.dp
     ) {
         LazyRow(
             state = listState,
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(6.dp),  // Reduced from 8.dp to 6.dp
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(lists.size) { index ->
@@ -108,7 +108,7 @@ fun ListSelector(
                         .clip(RoundedCornerShape(16.dp))
                 ) {
                     Column(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),  // Reduced from vertical: 12.dp to 8.dp
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -154,7 +154,7 @@ fun ListSelector(
                             // Custom progress indicator implementation
                             Box(
                                 modifier = Modifier
-                                    .padding(top = 8.dp)
+                                    .padding(top = 6.dp)  // Reduced from 8.dp to 6.dp
                                     .height(4.dp)
                                     .width(80.dp)  // Use a fixed width that's smaller than typical card width
                                     .background(
