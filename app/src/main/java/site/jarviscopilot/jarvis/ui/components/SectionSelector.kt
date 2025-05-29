@@ -42,10 +42,32 @@ fun SectionSelector(
     // Remember scroll state to control scrolling behavior
     val listState = rememberLazyListState()
 
+    // Find the index of the last checklist type section
+    val lastChecklistSectionIndex = sections.indexOfLast { it.sectionType == "checklist" }
+
     // When selected section changes, scroll to center it
     LaunchedEffect(selectedSectionIndex) {
         if (sections.isNotEmpty()) {
-            // We need to scroll to position the item in the center
+            // For the last checklist section, ensure it's visible before centering
+            if (selectedSectionIndex == lastChecklistSectionIndex) {
+                // First, directly scroll to ensure the section is visible
+                listState.scrollToItem(selectedSectionIndex)
+
+                // Wait for layout to complete - delay is the most reliable approach here
+                kotlinx.coroutines.delay(200)
+
+                // After layout is guaranteed complete, do a direct centering calculation
+                val item = listState.layoutInfo.visibleItemsInfo.find { it.index == selectedSectionIndex }
+                if (item != null) {
+                    val viewportCenter = (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
+                    val itemCenter = item.offset + (item.size / 2)
+                    val scrollBy = itemCenter - viewportCenter
+                    listState.animateScrollBy(scrollBy.toFloat())
+                    return@LaunchedEffect  // Skip the rest of the code for this section
+                }
+            }
+
+            // Standard centering for other sections
             // Get the item's layout info to calculate the centering offset
             listState.layoutInfo.visibleItemsInfo.find { it.index == selectedSectionIndex }
                 ?.let { itemInfo ->

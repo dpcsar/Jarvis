@@ -212,7 +212,7 @@ class ChecklistViewModel(
             }
 
             // Get the list to update
-            val completedList = completedItemsBySection[sectionIndex][listIndex] as MutableList<Int>
+            val completedList = completedItemsBySection[sectionIndex][listIndex]
 
             // For each item ID, find the corresponding index and add it to the completed list
             for (itemId in itemIds) {
