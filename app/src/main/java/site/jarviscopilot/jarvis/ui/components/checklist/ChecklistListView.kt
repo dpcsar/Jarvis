@@ -21,6 +21,7 @@ fun ChecklistListView(
     checklistItemData: List<ChecklistItemData>,
     completedItems: List<Int>,
     activeItemIndex: Int,
+    blockedTasks: List<Int> = emptyList(), // Add new parameter for blocked tasks
     onItemClick: (Int) -> Unit,
     onToggleComplete: (Int) -> Unit
 ) {
@@ -77,6 +78,7 @@ fun ChecklistListView(
                 isCompleted = index in completedItems,
                 type = ChecklistUtils.convertToItemType(item.listItemType),
                 isActive = index == activeItemIndex,
+                isBlocked = index in blockedTasks, // Pass the blocked status
                 onItemClick = { onItemClick(index) },
                 onCheckboxClick = {
                     // First make this the active item, then toggle its completion state

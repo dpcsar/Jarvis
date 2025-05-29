@@ -44,12 +44,14 @@ fun ChecklistItem(
     isCompleted: Boolean = false,
     type: ChecklistItemType = ChecklistItemType.TASK,
     isActive: Boolean = false,
+    isBlocked: Boolean = false, // New parameter to indicate if the task is blocked by a previous required task
     onItemClick: () -> Unit,
-    onCheckboxClick: () -> Unit // Remove default value to ensure it's explicitly provided
+    onCheckboxClick: () -> Unit
 ) {
     // Only TASK items can be completed or active
     val effectiveIsCompleted = if (type == ChecklistItemType.TASK) isCompleted else false
     val effectiveIsActive = if (type == ChecklistItemType.TASK) isActive else false
+    val effectiveIsBlocked = if (type == ChecklistItemType.TASK) isBlocked else false
 
     // Don't show response for LABEL items
     val displayResponse = if (type == ChecklistItemType.LABEL) "" else response
@@ -69,6 +71,14 @@ fun ChecklistItem(
             ChecklistItemType.LABEL -> JarvisTheme.colorScheme.tertiary
             ChecklistItemType.NOTE -> JarvisTheme.colorScheme.secondary
             ChecklistItemType.TASK -> Color.Transparent
+        }
+    )
+
+    // Apply different text color for blocked tasks
+    val textColor by animateColorAsState(
+        when {
+            effectiveIsBlocked -> JarvisTheme.colorScheme.onSurface.copy(alpha = 0.5f) // Dim text for blocked tasks
+            else -> JarvisTheme.colorScheme.onSurface
         }
     )
 
@@ -128,7 +138,7 @@ fun ChecklistItem(
                         Text(
                             text = challenge,
                             style = JarvisTheme.typography.bodyLarge,
-                            color = JarvisTheme.colorScheme.onSurface,
+                            color = textColor,
                             textDecoration = if (effectiveIsCompleted) TextDecoration.LineThrough else TextDecoration.None,
                             fontWeight = if (effectiveIsActive) FontWeight.Medium else FontWeight.Normal,
                             modifier = Modifier.weight(1f)
@@ -140,7 +150,7 @@ fun ChecklistItem(
                             Text(
                                 text = response,
                                 style = JarvisTheme.typography.bodyLarge,
-                                color = JarvisTheme.colorScheme.onSurface, // Same color as challenge text
+                                color = textColor, // Same color as challenge text
                                 fontWeight = if (effectiveIsActive) FontWeight.Medium else FontWeight.Normal,
                                 textAlign = TextAlign.End,
                                 textDecoration = if (effectiveIsCompleted) TextDecoration.LineThrough else TextDecoration.None,

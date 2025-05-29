@@ -492,7 +492,7 @@
               "challengeAudio": "",
               "response": "",
               "responseAudio": "",
-              "isRequired": true,
+              "isRequired": false,
               "suppressAudioChallenge": false,
               "suppressAudioResponse": false
             },

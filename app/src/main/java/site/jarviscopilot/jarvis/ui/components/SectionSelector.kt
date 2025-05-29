@@ -57,9 +57,11 @@ fun SectionSelector(
                 kotlinx.coroutines.delay(200)
 
                 // After layout is guaranteed complete, do a direct centering calculation
-                val item = listState.layoutInfo.visibleItemsInfo.find { it.index == selectedSectionIndex }
+                val item =
+                    listState.layoutInfo.visibleItemsInfo.find { it.index == selectedSectionIndex }
                 if (item != null) {
-                    val viewportCenter = (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
+                    val viewportCenter =
+                        (listState.layoutInfo.viewportEndOffset + listState.layoutInfo.viewportStartOffset) / 2
                     val itemCenter = item.offset + (item.size / 2)
                     val scrollBy = itemCenter - viewportCenter
                     listState.animateScrollBy(scrollBy.toFloat())

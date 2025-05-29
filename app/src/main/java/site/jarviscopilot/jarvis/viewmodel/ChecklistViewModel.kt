@@ -32,7 +32,8 @@ data class ChecklistUiState(
     val completedItems: List<Int> = emptyList(),
     val isMicActive: Boolean = false,
     val showingTileGrid: Boolean = true,
-    val error: String? = null
+    val error: String? = null,
+    val blockedTasks: List<Int> = emptyList() // New property to track tasks blocked by previous required tasks
 )
 
 /**
@@ -135,6 +136,9 @@ class ChecklistViewModel(
             }
         }
 
+        // Calculate which tasks are blocked by previous required tasks
+        val blockedTasks = calculateBlockedTasks(items, completedItemsList)
+
         _uiState.update {
             it.copy(
                 currentViewMode = currentSection.listView,
@@ -145,12 +149,55 @@ class ChecklistViewModel(
                 checklistItemData = items,              // Update the checklistItemData property
                 completedItems = completedItemsList,    // Update the completedItems property
                 // Set the active item to the first task item, not just the first item in the list
-                activeItemIndex = firstTaskIndex
+                activeItemIndex = firstTaskIndex,
+                blockedTasks = blockedTasks            // Update blocked tasks
             )
         }
 
         // Check if all items are completed to show completion dialog
         checkCompletion()
+    }
+
+    /**
+     * Calculate which tasks are blocked because previous required tasks are not completed
+     * Returns a list of indices of tasks that cannot be checked
+     */
+    private fun calculateBlockedTasks(
+        items: List<ChecklistItemData>,
+        completedItems: List<Int>
+    ): List<Int> {
+        val blockedTasks = mutableListOf<Int>()
+        var firstUncompletedRequiredTaskIndex = -1
+
+        // Find the first uncompleted required task
+        for (i in items.indices) {
+            val item = items[i]
+            val isComplete = i in completedItems
+
+            // Only consider task items
+            if (item.listItemType.equals("task", ignoreCase = true)) {
+                // If we encounter an uncompleted required task
+                if (item.isRequired && !isComplete) {
+                    firstUncompletedRequiredTaskIndex = i
+                    break
+                }
+            }
+        }
+
+        // If we found an uncompleted required task, block tasks that come after it
+        if (firstUncompletedRequiredTaskIndex >= 0) {
+            for (i in (firstUncompletedRequiredTaskIndex + 1) until items.size) {
+                val item = items[i]
+                val isComplete = i in completedItems
+
+                // Only task items can be blocked
+                if (item.listItemType.equals("task", ignoreCase = true) && !isComplete) {
+                    blockedTasks.add(i)
+                }
+            }
+        }
+
+        return blockedTasks
     }
 
     /**
@@ -264,6 +311,12 @@ class ChecklistViewModel(
 
         val wasComplete = itemIndex in listCompletedItems
 
+        // If attempting to check a task, verify it's not blocked by previous required tasks
+        if (!wasComplete && itemIndex in currentState.blockedTasks) {
+            // Task is blocked by a previous required task that's not completed
+            return
+        }
+
         if (wasComplete) {
             listCompletedItems.remove(itemIndex)
 
@@ -271,11 +324,16 @@ class ChecklistViewModel(
             sectionCompletedItems[listIndex] = listCompletedItems
             completedItems[sectionIndex] = sectionCompletedItems
 
-            // Update the state with the new completed items
+            // Recalculate blocked tasks based on the new completion status
+            val updatedBlockedTasks =
+                calculateBlockedTasks(currentState.checklistItemData, listCompletedItems)
+
+            // Update the state with the new completed items and blocked tasks
             _uiState.update {
                 it.copy(
                     completedItemsBySection = completedItems,
                     completedItems = listCompletedItems,
+                    blockedTasks = updatedBlockedTasks, // Update blocked tasks list
                     activeItemIndex = itemIndex // Set unchecked item as active
                 )
             }
@@ -290,11 +348,16 @@ class ChecklistViewModel(
             sectionCompletedItems[listIndex] = listCompletedItems
             completedItems[sectionIndex] = sectionCompletedItems
 
-            // First update the state with the new completed items
+            // Recalculate blocked tasks based on the new completion status
+            val updatedBlockedTasks =
+                calculateBlockedTasks(currentState.checklistItemData, listCompletedItems)
+
+            // First update the state with the new completed items and blocked tasks
             _uiState.update {
                 it.copy(
                     completedItemsBySection = completedItems,
-                    completedItems = listCompletedItems
+                    completedItems = listCompletedItems,
+                    blockedTasks = updatedBlockedTasks // Update blocked tasks list
                 )
             }
 

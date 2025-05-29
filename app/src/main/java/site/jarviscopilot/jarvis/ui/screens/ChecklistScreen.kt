@@ -162,6 +162,7 @@ fun ChecklistScreen(
                         checklistItemData = uiState.checklistItemData,
                         completedItems = uiState.completedItems,
                         activeItemIndex = uiState.activeItemIndex,
+                        blockedTasks = uiState.blockedTasks, // Pass blockedTasks to ChecklistListView
                         onItemClick = { index -> viewModel.selectChecklistItem(index) },
                         onToggleComplete = { index -> viewModel.toggleItemCompletion(index) }
                     )
@@ -193,6 +194,7 @@ fun ChecklistScreen(
                             checklistItemData = uiState.checklistItemData,
                             completedItems = uiState.completedItems,
                             activeItemIndex = uiState.activeItemIndex,
+                            blockedTasks = uiState.blockedTasks, // Pass blockedTasks to ChecklistListView
                             onItemClick = { index -> viewModel.selectChecklistItem(index) },
                             onToggleComplete = { index -> viewModel.toggleItemCompletion(index) }
                         )
