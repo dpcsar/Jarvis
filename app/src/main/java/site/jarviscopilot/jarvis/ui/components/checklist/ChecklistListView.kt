@@ -78,10 +78,13 @@ fun ChecklistListView(
                 type = ChecklistUtils.convertToItemType(item.listItemType),
                 isActive = index == activeItemIndex,
                 onItemClick = { onItemClick(index) },
-                onCheckboxClick = { onToggleComplete(index) }
+                onCheckboxClick = {
+                    // First make this the active item, then toggle its completion state
+                    onItemClick(index)
+                    onToggleComplete(index)
+                }
             )
         }
     }
 }
-
 

@@ -45,7 +45,7 @@ fun ChecklistItem(
     type: ChecklistItemType = ChecklistItemType.TASK,
     isActive: Boolean = false,
     onItemClick: () -> Unit,
-    onCheckboxClick: () -> Unit = onItemClick // Default to onItemClick for backward compatibility
+    onCheckboxClick: () -> Unit // Remove default value to ensure it's explicitly provided
 ) {
     // Only TASK items can be completed or active
     val effectiveIsCompleted = if (type == ChecklistItemType.TASK) isCompleted else false
