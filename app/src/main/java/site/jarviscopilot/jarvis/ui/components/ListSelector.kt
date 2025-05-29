@@ -108,7 +108,10 @@ fun ListSelector(
                         .clip(RoundedCornerShape(16.dp))
                 ) {
                     Column(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),  // Reduced from vertical: 12.dp to 8.dp
+                        modifier = Modifier.padding(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        ),  // Reduced from vertical: 12.dp to 8.dp
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(

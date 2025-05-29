@@ -94,6 +94,7 @@ fun ChecklistScreen(
                     onCheckItem = { viewModel.toggleItemCompletion(uiState.activeItemIndex) },
                     onSkipItem = { viewModel.skipItem() },
                     onSearchItem = { viewModel.searchItem() },
+                    onSearchRequiredItem = { viewModel.searchRequiredItem() },
                     onToggleMic = { viewModel.toggleMic() },
                     onEmergency = { viewModel.handleEmergency() },
                     isMicActive = uiState.isMicActive,

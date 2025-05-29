@@ -136,7 +136,10 @@ fun SectionSelector(
                                 JarvisTheme.colorScheme.onSurfaceVariant
                         },
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)  // Reduced from vertical: 12.dp to 8.dp
+                        modifier = Modifier.padding(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        )  // Reduced from vertical: 12.dp to 8.dp
                     )
                 }
             }

@@ -1,9 +1,9 @@
 package site.jarviscopilot.jarvis.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
@@ -24,6 +24,7 @@ fun ChecklistBar(
     onCheckItem: () -> Unit,
     onSkipItem: () -> Unit,
     onSearchItem: () -> Unit,
+    onSearchRequiredItem: () -> Unit,    // Added parameter for searching required items
     onToggleMic: () -> Unit,
     onEmergency: () -> Unit,
     isMicActive: Boolean,
@@ -58,10 +59,11 @@ fun ChecklistBar(
                 enabled = isActiveItemEnabled
             )
 
-            // Search button - find first skipped item
+            // Search button - find first unchecked item (click) or required item (long click)
             JarvisIconButton(
                 icon = Icons.Default.Search,
-                onClick = onSearchItem
+                onClick = onSearchItem,
+                onLongClick = onSearchRequiredItem
             )
 
             // Mic button - toggles listening for voice commands
