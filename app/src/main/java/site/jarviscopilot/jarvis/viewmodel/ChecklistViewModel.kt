@@ -160,6 +160,10 @@ class ChecklistViewModel(
         val savedState = stateManager.getChecklistState(checklistName)
         if (savedState != null) {
             applyRestoredState(savedState)
+
+            // After restoring the saved state, find and navigate to the first unchecked task
+            // or the last item if all tasks are complete
+            findFirstUncheckedTaskAcrossSections()
         }
     }
 
@@ -167,6 +171,9 @@ class ChecklistViewModel(
      * Apply a restored state to the UI
      */
     private fun applyRestoredState(state: ChecklistStateData) {
+        val data = _uiState.value.checklistData ?: return
+
+        // First, set the selected section and list indices
         _uiState.update { current ->
             current.copy(
                 selectedSectionIndex = state.currentSectionIndex,
@@ -174,7 +181,19 @@ class ChecklistViewModel(
             )
         }
 
-        // Apply completed items
+        // Create a new completedItemsBySection structure
+        val completedItemsBySection = mutableListOf<List<MutableList<Int>>>()
+
+        // Initialize the structure with all sections and lists from the loaded data
+        data.sections.forEachIndexed { sectionIdx, section ->
+            val sectionLists = mutableListOf<MutableList<Int>>()
+            section.lists.forEach { _ ->
+                sectionLists.add(mutableListOf()) // Empty list for each list in the section
+            }
+            completedItemsBySection.add(sectionLists)
+        }
+
+        // Now apply all completed items from the saved state
         for ((compoundKey, itemIds) in state.completedItems) {
             // Parse the compound key to get section and list indices
             val keyParts = compoundKey.split("_")
@@ -183,14 +202,33 @@ class ChecklistViewModel(
             val sectionIndex = keyParts[0].toIntOrNull() ?: continue
             val listIndex = keyParts[1].toIntOrNull() ?: continue
 
-            itemIds.forEach { itemId ->
+            // Skip if out of bounds
+            if (sectionIndex >= data.sections.size ||
+                sectionIndex >= completedItemsBySection.size ||
+                listIndex >= data.sections[sectionIndex].lists.size ||
+                listIndex >= completedItemsBySection[sectionIndex].size
+            ) {
+                continue
+            }
+
+            // Get the list to update
+            val completedList = completedItemsBySection[sectionIndex][listIndex] as MutableList<Int>
+
+            // For each item ID, find the corresponding index and add it to the completed list
+            for (itemId in itemIds) {
                 val index = findItemIndexById(itemId, sectionIndex, listIndex)
                 if (index != -1) {
-                    toggleItemCompletion(index)
+                    completedList.add(index)
                 }
             }
         }
 
+        // Update the UI state with the rebuilt completion data
+        _uiState.update { current ->
+            current.copy(completedItemsBySection = completedItemsBySection)
+        }
+
+        // Finally, update the current checklist items to show the right state
         updateCurrentChecklistItems()
     }
 
@@ -787,5 +825,97 @@ class ChecklistViewModel(
         saveCurrentState()
         updateCurrentChecklistItems()
         return true
+    }
+
+    /**
+     * Find the first unchecked task across all sections and lists.
+     * If all tasks are complete, returns the last item in the last section/list.
+     * Updates the UI state to navigate to the appropriate section and list.
+     */
+    private fun findFirstUncheckedTaskAcrossSections() {
+        val checklistData = _uiState.value.checklistData ?: return
+        val savedState = stateManager.getChecklistState(checklistName)
+        val completedItems = savedState?.completedItems ?: mutableMapOf()
+
+        // Variables to track the last item position (fallback if all tasks are complete)
+        var lastSectionIndex = 0
+        var lastListIndex = 0
+        var lastItemIndex = -1
+        var foundLastItem = false
+
+        // Start from the first section and search through all sections sequentially
+        for (sectionIndex in checklistData.sections.indices) {
+            val section = checklistData.sections[sectionIndex]
+            val lists = section.lists
+
+            // Skip non-checklist sections for initial task selection
+            if (section.sectionType != "checklist") continue
+
+            // For each list in the section
+            for (listIndex in lists.indices) {
+                val list = lists[listIndex]
+                val items = list.listItems
+
+                // Update last item position
+                if (!items.isEmpty()) {
+                    lastSectionIndex = sectionIndex
+                    lastListIndex = listIndex
+                    lastItemIndex = items.size - 1
+                    foundLastItem = true
+                }
+
+                // Get completed items for this section/list
+                val compoundKey = "${sectionIndex}_${listIndex}"
+                val completedInThisList = completedItems[compoundKey] ?: mutableListOf()
+
+                // Find first unchecked task item
+                for (itemIndex in items.indices) {
+                    // Get the identifier for this item (challenge or index)
+                    val item = items[itemIndex]
+                    val itemIdentifier = if (item.challenge.isNotEmpty()) {
+                        item.challenge
+                    } else {
+                        itemIndex.toString()
+                    }
+
+                    // Check if this is a TASK and it's unchecked
+                    if (!completedInThisList.contains(itemIdentifier) &&
+                        item.listItemType.equals("TASK", ignoreCase = true)
+                    ) {
+                        // Found an unchecked item - navigate to this section and list
+                        navigateToItem(sectionIndex, listIndex, itemIndex)
+                        return
+                    }
+                }
+            }
+        }
+
+        // If we get here, all tasks are complete or no tasks found
+        // Fall back to the last item in the last section/list
+        if (foundLastItem) {
+            navigateToItem(lastSectionIndex, lastListIndex, lastItemIndex)
+        }
+    }
+
+    /**
+     * Helper method to navigate to a specific item by section, list and item indices
+     */
+    private fun navigateToItem(sectionIndex: Int, listIndex: Int, itemIndex: Int) {
+        // Change section and list indices
+        _uiState.update {
+            it.copy(
+                selectedSectionIndex = sectionIndex,
+                selectedListIndex = listIndex
+            )
+        }
+
+        // Force a rebuild of the checklist items
+        updateCurrentChecklistItems()
+
+        // Set the active item after the UI has been updated with the correct item list
+        setActiveItem(itemIndex)
+
+        // Save the current state to persist these changes
+        saveCurrentState()
     }
 }
