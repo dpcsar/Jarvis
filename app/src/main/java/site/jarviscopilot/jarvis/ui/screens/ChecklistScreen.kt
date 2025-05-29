@@ -96,7 +96,7 @@ fun ChecklistScreen(
                     onSearchItem = { viewModel.searchItem() },
                     onSearchRequiredItem = { viewModel.searchRequiredItem() },
                     onToggleMic = { viewModel.toggleMic() },
-                    onEmergency = { viewModel.handleEmergency() },
+                    onEmergency = { viewModel.selectFirstEmergencySection() },
                     isMicActive = uiState.isMicActive,
                     isActiveItemEnabled = uiState.activeItemIndex < uiState.checklistItemData.size
                 )

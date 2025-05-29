@@ -643,14 +643,6 @@ class ChecklistViewModel(
     }
 
     /**
-     * Handle emergency procedures
-     */
-    fun handleEmergency() {
-        // Placeholder for emergency handling functionality
-        // This might navigate to emergency procedures or highlight critical checklist items
-    }
-
-    /**
      * Toggle between tile grid view and list view
      */
     fun toggleTileGridView(showGrid: Boolean) {
@@ -762,5 +754,38 @@ class ChecklistViewModel(
         if (index >= 0 && index < _uiState.value.checklistItemData.size) {
             _uiState.update { it.copy(activeItemIndex = index) }
         }
+    }
+
+    /**
+     * Finds and selects the first emergency section in the checklist.
+     * Used by the emergency button in the ChecklistBar.
+     *
+     * @return true if an emergency section was found and selected, false otherwise
+     */
+    fun selectFirstEmergencySection(): Boolean {
+        val currentState = _uiState.value
+        val data = currentState.checklistData ?: return false
+
+        // Find the first emergency section
+        val emergencySectionIndex = data.sections.indexOfFirst {
+            it.sectionType == "emergency"
+        }
+
+        // If no emergency section found
+        if (emergencySectionIndex == -1) return false
+
+        // Select the emergency section
+        _uiState.update {
+            it.copy(
+                selectedSectionIndex = emergencySectionIndex,
+                selectedListIndex = 0,
+                // Reset to showing tile grid if the emergency section is a tile list view
+                showingTileGrid = data.sections[emergencySectionIndex].listView == "tileListView"
+            )
+        }
+
+        saveCurrentState()
+        updateCurrentChecklistItems()
+        return true
     }
 }
