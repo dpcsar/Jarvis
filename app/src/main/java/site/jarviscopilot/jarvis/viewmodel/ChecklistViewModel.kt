@@ -210,6 +210,26 @@ class ChecklistViewModel(
     }
 
     /**
+     * Check if the item is the last task in the list
+     * @return true if this is the last task item in the sequence, false otherwise
+     */
+    private fun isLastTaskInSequence(itemIndex: Int): Boolean {
+        val currentState = _uiState.value
+        val items = currentState.checklistItemData
+
+        // Check if there are any more task items after this one
+        for (i in (itemIndex + 1) until items.size) {
+            val item = items[i]
+            if (item.listItemType.equals("TASK", ignoreCase = true)) {
+                return false // Found another task after this one
+            }
+        }
+
+        // If we didn't find any more task items, this is the last one
+        return true
+    }
+
+    /**
      * Toggle completion state of a checklist item
      */
     fun toggleItemCompletion(itemIndex: Int) {
@@ -225,6 +245,14 @@ class ChecklistViewModel(
         val listCompletedItems = sectionCompletedItems[listIndex].toMutableList()
 
         val wasComplete = itemIndex in listCompletedItems
+
+        // Store information about whether this is the last task in the sequence
+        val isLastTask = !wasComplete &&
+                currentState.checklistItemData.getOrNull(itemIndex)?.listItemType?.equals(
+                    "TASK",
+                    ignoreCase = true
+                ) == true &&
+                isLastTaskInSequence(itemIndex)
 
         if (wasComplete) {
             listCompletedItems.remove(itemIndex)
@@ -258,6 +286,12 @@ class ChecklistViewModel(
                 // Save state and check completion after updating active item
                 saveCurrentState()
                 checkCompletion()
+
+                // Check if we just completed the last task and should advance to the next list/section
+                if (isLastTask && nextUncheckedItem == -1) {
+                    // This was the last task item in the list, so advance to next list/section
+                    advanceToNextListOrSection()
+                }
                 return
             }
         }
@@ -278,6 +312,60 @@ class ChecklistViewModel(
 
         // Check completion after toggle
         checkCompletion()
+
+        // Check if we just completed the last task and should advance to the next list/section
+        if (isLastTask) {
+            // This was the last task item in the list
+            advanceToNextListOrSection()
+        }
+    }
+
+    /**
+     * Advances to the next appropriate list or section after completing all items in the current list.
+     * Only advances if current section type is "checklist" and doesn't advance to emergency or reference sections.
+     */
+    private fun advanceToNextListOrSection() {
+        val currentState = _uiState.value
+        val data = currentState.checklistData ?: return
+
+        val currentSectionIdx = currentState.selectedSectionIndex
+        val currentListIdx = currentState.selectedListIndex
+        val currentSection = data.sections.getOrNull(currentSectionIdx) ?: return
+
+        // Only proceed with auto-advancement if we're in a checklist section
+        if (currentSection.sectionType != "checklist") return
+
+        // First try to advance to the next list in the current section
+        if (currentListIdx < currentSection.lists.size - 1) {
+            // There's another list in this section, go to it
+            _uiState.update { it.copy(selectedListIndex = currentListIdx + 1) }
+            saveCurrentState()
+            updateCurrentChecklistItems()
+            return
+        }
+
+        // If we're at the last list in the section, try to find the next checklist section
+        var nextSectionIdx = currentSectionIdx + 1
+        while (nextSectionIdx < data.sections.size) {
+            val nextSection = data.sections[nextSectionIdx]
+            // Only advance to another checklist section, skip emergency and reference sections
+            if (nextSection.sectionType == "checklist") {
+                _uiState.update {
+                    it.copy(
+                        selectedSectionIndex = nextSectionIdx,
+                        selectedListIndex = 0,
+                        // Reset to showing tile grid if the next section is a tile list view
+                        showingTileGrid = nextSection.listView == "tileListView"
+                    )
+                }
+                saveCurrentState()
+                updateCurrentChecklistItems()
+                return
+            }
+            nextSectionIdx++
+        }
+
+        // If we get here, there are no more checklist sections to advance to
     }
 
     /**
@@ -285,13 +373,15 @@ class ChecklistViewModel(
      */
     fun selectSection(index: Int) {
         val currentState = _uiState.value
-        val currentSectionType = currentState.checklistData?.sections?.getOrNull(currentState.selectedSectionIndex)?.listView
+        val currentSectionType =
+            currentState.checklistData?.sections?.getOrNull(currentState.selectedSectionIndex)?.listView
 
         // If clicking on the same section that uses tileListView and currently not showing tile grid,
         // toggle back to tile grid view
         if (index == currentState.selectedSectionIndex &&
             currentSectionType == "tileListView" &&
-            !currentState.showingTileGrid) {
+            !currentState.showingTileGrid
+        ) {
 
             _uiState.update { it.copy(showingTileGrid = true) }
             return
@@ -299,7 +389,8 @@ class ChecklistViewModel(
 
         // If switching to a new section
         if (index != currentState.selectedSectionIndex) {
-            val newSectionType = currentState.checklistData?.sections?.getOrNull(index)?.listView ?: "normalListView"
+            val newSectionType =
+                currentState.checklistData?.sections?.getOrNull(index)?.listView ?: "normalListView"
 
             // Reset to showing the tile grid when switching to a section with tileListView
             val resetTileGrid = newSectionType == "tileListView"
@@ -527,6 +618,9 @@ class ChecklistViewModel(
 
         // Check completion
         checkCompletion()
+
+        // Advance to next list/section after marking all items complete
+        advanceToNextListOrSection()
     }
 
     /**
@@ -544,7 +638,11 @@ class ChecklistViewModel(
         for (i in startIndex until currentState.checklistItemData.size) {
             // Check if this item is a TASK item that can be checked
             val item = currentState.checklistItemData.getOrNull(i)
-            if (item != null && !completedItems.contains(i) && item.listItemType.equals("TASK", ignoreCase = true)) {
+            if (item != null && !completedItems.contains(i) && item.listItemType.equals(
+                    "TASK",
+                    ignoreCase = true
+                )
+            ) {
                 return i
             }
         }
@@ -553,7 +651,11 @@ class ChecklistViewModel(
         for (i in 0 until startIndex) {
             // Check if this item is a TASK item that can be checked
             val item = currentState.checklistItemData.getOrNull(i)
-            if (item != null && !completedItems.contains(i) && item.listItemType.equals("TASK", ignoreCase = true)) {
+            if (item != null && !completedItems.contains(i) && item.listItemType.equals(
+                    "TASK",
+                    ignoreCase = true
+                )
+            ) {
                 return i
             }
         }
