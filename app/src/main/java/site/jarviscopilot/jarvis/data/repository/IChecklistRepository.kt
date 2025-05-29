@@ -25,11 +25,6 @@ interface IChecklistRepository {
     fun saveChecklistState(checklistStateData: ChecklistStateData): Boolean
 
     /**
-     * Loads a previously saved checklist state
-     */
-    fun loadChecklistState(checklistName: String): ChecklistStateData?
-
-    /**
      * Imports a checklist from a URI
      */
     suspend fun importChecklist(uri: Uri): Result<ChecklistInfoData>

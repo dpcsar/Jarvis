@@ -193,13 +193,6 @@ class ChecklistRepository(private val context: Context) : IChecklistRepository {
         return stateManager.saveChecklistState(checklistStateData)
     }
 
-    /**
-     * Load a previously saved checklist state
-     */
-    override fun loadChecklistState(checklistName: String): ChecklistStateData? {
-        return stateManager.getChecklistState(checklistName)
-    }
-
     // Check if a checklist from assets is marked as deleted
     private fun isExampleChecklistDeleted(filename: String): Boolean {
         val markerFile = File(getUserChecklistsDir(), "deleted_$filename")
