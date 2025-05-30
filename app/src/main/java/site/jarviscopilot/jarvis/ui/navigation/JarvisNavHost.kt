@@ -7,8 +7,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
-import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
 import site.jarviscopilot.jarvis.ui.screens.ChecklistScreen
 import site.jarviscopilot.jarvis.ui.screens.MainScreen
 import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
@@ -29,8 +27,6 @@ object JarvisDestinations {
 @Composable
 fun JarvisNavHost(
     navController: NavHostController,
-    checklistRepository: IChecklistRepository,
-    checklistStateManager: ChecklistStateManager,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -41,8 +37,6 @@ fun JarvisNavHost(
         // Main screen
         composable(JarvisDestinations.MAIN_ROUTE) {
             MainScreen(
-                checklistRepository = checklistRepository,
-                checklistStateManager = checklistStateManager,
                 onChecklistSelected = { checklist ->
                     navController.navigate(JarvisDestinations.checklistRoute(checklist))
                 },
@@ -78,8 +72,7 @@ fun JarvisNavHost(
 
             ChecklistScreen(
                 checklistName = checklistName,
-                checklistRepository = checklistRepository,
-                checklistStateManager = checklistStateManager,
+                resumeFromSaved = resumeFromSaved,
                 onNavigateHome = {
                     navController.navigate(JarvisDestinations.MAIN_ROUTE) {
                         // Clear the back stack so pressing back won't return to the checklist
@@ -87,15 +80,13 @@ fun JarvisNavHost(
                             inclusive = true
                         }
                     }
-                },
-                resumeFromSaved = resumeFromSaved
+                }
             )
         }
 
         // Settings screen
         composable(JarvisDestinations.SETTINGS_ROUTE) {
             SettingsScreen(
-                checklistRepository = checklistRepository,
                 onNavigateBack = {
                     navController.navigateUp()
                 }

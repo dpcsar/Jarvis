@@ -170,6 +170,9 @@ class ChecklistViewModel(
         // Calculate which tasks are blocked by previous required tasks
         val blockedTasks = calculateBlockedTasks(items, completedItemsList)
 
+        // Determine if we should show tile grid based on the section's listView value
+        val showTileGrid = currentSection.listView == "tileListView"
+
         _uiState.update {
             it.copy(
                 currentViewMode = currentSection.listView,
@@ -180,7 +183,8 @@ class ChecklistViewModel(
                 checklistItemData = items,              // Update the checklistItemData property
                 completedItems = completedItemsList,    // Update the completedItems property
                 activeItemIndex = firstTaskIndex,       // Set the active item to the first task item, not just the first item in the list
-                blockedTasks = blockedTasks            // Update blocked tasks
+                blockedTasks = blockedTasks,            // Update blocked tasks
+                showingTileGrid = showTileGrid         // Set showingTileGrid based on the section's listView property
             )
         }
     }

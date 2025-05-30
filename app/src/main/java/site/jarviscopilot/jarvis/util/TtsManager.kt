@@ -43,7 +43,8 @@ class TtsManager private constructor(context: Context) {
                     _isTtsReady.value = true
 
                     // Set up progress listener
-                    textToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                    textToSpeech?.setOnUtteranceProgressListener(object :
+                        UtteranceProgressListener() {
                         override fun onStart(utteranceId: String?) {
                             _isSpeaking.value = true
                         }

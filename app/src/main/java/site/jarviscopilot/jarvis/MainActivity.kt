@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
-import site.jarviscopilot.jarvis.di.AppDependencies
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.ThemeMode
@@ -49,10 +48,6 @@ fun JarvisApp() {
         ThemeMode.DARK -> true
     }
 
-    // Create app dependencies that can be passed down the Compose hierarchy
-    val checklistRepository = remember { AppDependencies.provideChecklistRepository(context) }
-    val checklistStateManager = remember { AppDependencies.provideChecklistStateManager(context) }
-
     JarvisTheme(darkTheme = isDarkTheme) {
         val navController = rememberNavController()
 
@@ -63,11 +58,9 @@ fun JarvisApp() {
                     .padding(paddingValues),
                 color = JarvisTheme.colorScheme.background
             ) {
-                // Pass dependencies to NavHost for use in various screens
+                // No longer need to pass repository and state manager dependencies
                 JarvisNavHost(
-                    navController = navController,
-                    checklistRepository = checklistRepository,
-                    checklistStateManager = checklistStateManager
+                    navController = navController
                 )
             }
         }

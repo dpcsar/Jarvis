@@ -19,8 +19,12 @@ class TtsHandler private constructor(context: Context) {
     /**
      * Speak text if TTS is enabled in user preferences and wait for it to complete
      */
-    private suspend fun speakIfEnabledAndWait(text: String, queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
-        val isTtsEnabled = userPreferences.ttsEnabledFlow.firstOrNull() ?: userPreferences.isTtsEnabled()
+    private suspend fun speakIfEnabledAndWait(
+        text: String,
+        queueMode: Int = TextToSpeech.QUEUE_FLUSH
+    ) {
+        val isTtsEnabled =
+            userPreferences.ttsEnabledFlow.firstOrNull() ?: userPreferences.isTtsEnabled()
         if (isTtsEnabled && text.isNotBlank()) {
             // Use the new speakAndWait function that properly waits for speech to complete
             ttsManager.speakAndWait(text, queueMode)
@@ -30,7 +34,7 @@ class TtsHandler private constructor(context: Context) {
         }
     }
 
-   /**
+    /**
      * Handle checklist opening - speak title or titleAudio
      */
     suspend fun handleChecklistOpened(checklist: ChecklistData) {
@@ -80,7 +84,11 @@ class TtsHandler private constructor(context: Context) {
         // Read all labels before the active item
         for (i in 0 until activeItemIndex) {
             val item = items[i]
-            if (!item.listItemType.equals("task", ignoreCase = true) && item.challenge.isNotBlank()) {
+            if (!item.listItemType.equals(
+                    "task",
+                    ignoreCase = true
+                ) && item.challenge.isNotBlank()
+            ) {
                 speakIfEnabledAndWait(item.challenge)
             }
         }
@@ -97,7 +105,7 @@ class TtsHandler private constructor(context: Context) {
         }
     }
 
-   companion object {
+    companion object {
         @Volatile
         private var INSTANCE: TtsHandler? = null
 

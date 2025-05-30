@@ -38,11 +38,10 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,9 +50,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
 import site.jarviscopilot.jarvis.data.model.ChecklistInfoData
-import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
+import site.jarviscopilot.jarvis.di.AppDependencies
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
 import site.jarviscopilot.jarvis.ui.components.JarvisConfirmationDialog
 import site.jarviscopilot.jarvis.ui.components.JarvisToast
@@ -62,33 +61,27 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.util.PermissionHandler
 import site.jarviscopilot.jarvis.util.RequestAudioPermission
 import site.jarviscopilot.jarvis.util.ThemeMode
-import site.jarviscopilot.jarvis.util.UserPreferences
+import site.jarviscopilot.jarvis.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
-    checklistRepository: IChecklistRepository, // Add parameter for repository
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val userPreferences = remember { UserPreferences.getInstance(context) }
-    var useVoiceControl by remember { mutableStateOf(userPreferences.isVoiceControlEnabled()) }
-    var useTTS by remember { mutableStateOf(userPreferences.isTtsEnabled()) }
-    var themeMode by remember { mutableStateOf(userPreferences.getThemeMode()) }
-    var showToast by remember { mutableStateOf(false) }
-    var toastMessage by remember { mutableStateOf("") }
-    var requestVoicePermission by remember { mutableStateOf(false) }
-    var checklists by remember { mutableStateOf<List<ChecklistInfoData>>(emptyList()) }
-    var isLoadingChecklists by remember { mutableStateOf(true) }
+    val viewModelFactory = AppDependencies.provideSettingsViewModelFactory(context)
+    val viewModel: SettingsViewModel = viewModel(factory = viewModelFactory)
+
+    // Collect ViewModel states
+    val checklists by viewModel.checklists.collectAsState()
+    val isLoadingChecklists by viewModel.isLoading.collectAsState()
+    val themeMode by viewModel.themeMode.collectAsState()
+    val useVoiceControl by viewModel.useVoiceControl.collectAsState()
+    val useTTS by viewModel.useTts.collectAsState()
+    val toastEvent by viewModel.toastEvent.collectAsState()
+
     var showDeleteDialog by remember { mutableStateOf(false) }
     var checklistToDelete by remember { mutableStateOf<ChecklistInfoData?>(null) }
-
-    // Load checklists when screen is shown
-    LaunchedEffect(Unit) {
-        isLoadingChecklists = true
-        checklists = checklistRepository.getAvailableChecklists()
-        isLoadingChecklists = false
-    }
+    var requestVoicePermission by remember { mutableStateOf(false) }
 
     // File picker for importing checklists
     val filePickerLauncher = rememberLauncherForActivityResult(
@@ -104,31 +97,16 @@ fun SettingsScreen(
                 // Ignore permission errors - we'll still try to read the file
             }
 
-            // Import the checklist
-            coroutineScope.launch {
-                val result = checklistRepository.importChecklist(it)
-
-                result.fold(
-                    onSuccess = { checklistInfo ->
-                        toastMessage = "Checklist '${checklistInfo.name}' imported successfully"
-                        showToast = true
-                        // Reload the checklist list
-                        checklists = checklistRepository.getAvailableChecklists()
-                    },
-                    onFailure = { exception ->
-                        toastMessage = "Failed to import checklist: ${exception.message}"
-                        showToast = true
-                    }
-                )
-            }
+            // Import the checklist using ViewModel
+            viewModel.importChecklist(uri)
         }
     }
 
-    // Custom Jarvis-themed toast - only show when showToast is true
-    if (showToast) {
+    // Handle toast events
+    toastEvent?.let {
         JarvisToast(
-            message = toastMessage,
-            onDismiss = { showToast = false }
+            message = it.message,
+            onDismiss = { viewModel.clearToastEvent() }
         )
     }
 
@@ -136,17 +114,11 @@ fun SettingsScreen(
     if (requestVoicePermission) {
         RequestAudioPermission(
             onPermissionGranted = {
-                useVoiceControl = true
-                userPreferences.setVoiceControlEnabled(true)
-                toastMessage = "Voice control enabled"
-                showToast = true
+                viewModel.setVoiceControlEnabled(true)
                 requestVoicePermission = false
             },
             onPermissionDenied = {
-                useVoiceControl = false
-                userPreferences.setVoiceControlEnabled(false)
-                toastMessage = "Voice control disabled - microphone permission required"
-                showToast = true
+                viewModel.setVoiceControlEnabled(false)
                 requestVoicePermission = false
             }
         )
@@ -166,24 +138,7 @@ fun SettingsScreen(
 
                 // Only proceed if we have a valid checklist
                 checklistToDeleteCopy?.let { checklist ->
-                    coroutineScope.launch {
-                        try {
-                            val success = checklistRepository.deleteChecklist(checklist.id)
-                            if (success) {
-                                toastMessage = "Checklist deleted"
-                                showToast = true
-
-                                // Reload checklists
-                                checklists = checklistRepository.getAvailableChecklists()
-                            } else {
-                                toastMessage = "Failed to delete checklist"
-                                showToast = true
-                            }
-                        } catch (e: Exception) {
-                            toastMessage = "Error deleting checklist: ${e.message}"
-                            showToast = true
-                        }
-                    }
+                    viewModel.deleteChecklist(checklist.id)
                 }
 
                 showDeleteDialog = false
@@ -250,19 +205,13 @@ fun SettingsScreen(
                     if (isChecked) {
                         // Check for audio permission before enabling voice control
                         if (PermissionHandler.hasAudioPermission(context)) {
-                            useVoiceControl = true
-                            userPreferences.setVoiceControlEnabled(true)
-                            toastMessage = "Voice control enabled"
-                            showToast = true
+                            viewModel.setVoiceControlEnabled(true)
                         } else {
                             // Request permission if not granted
                             requestVoicePermission = true
                         }
                     } else {
-                        useVoiceControl = false
-                        userPreferences.setVoiceControlEnabled(false)
-                        toastMessage = "Voice control disabled"
-                        showToast = true
+                        viewModel.setVoiceControlEnabled(false)
                     }
                 }
             )
@@ -276,10 +225,7 @@ fun SettingsScreen(
                 icon = if (useTTS) Icons.Default.Mic else Icons.Default.MicOff,
                 isChecked = useTTS,
                 onCheckedChange = { isChecked ->
-                    useTTS = isChecked
-                    userPreferences.setTtsEnabled(isChecked)
-                    toastMessage = if (isChecked) "Text-to-Speech enabled" else "Text-to-Speech disabled"
-                    showToast = true
+                    viewModel.setTtsEnabled(isChecked)
                 }
             )
 
@@ -301,15 +247,7 @@ fun SettingsScreen(
             ThemeSelectionItem(
                 selectedTheme = themeMode,
                 onThemeSelected = { newThemeMode ->
-                    themeMode = newThemeMode
-                    userPreferences.setThemeMode(newThemeMode)
-                    val themeName = when (newThemeMode) {
-                        ThemeMode.SYSTEM -> "System default"
-                        ThemeMode.LIGHT -> "Light mode"
-                        ThemeMode.DARK -> "Dark mode"
-                    }
-                    toastMessage = "$themeName selected"
-                    showToast = true
+                    viewModel.setThemeMode(newThemeMode)
                 }
             )
 
@@ -330,8 +268,7 @@ fun SettingsScreen(
 
             JarvisButton(
                 onClick = {
-                    toastMessage = "Voice training started"
-                    showToast = true
+                    viewModel.startVoiceTraining()
                 }
             ) {
                 Text("Start Voice Training")

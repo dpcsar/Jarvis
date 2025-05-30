@@ -23,42 +23,55 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.viewmodel.compose.viewModel
 import site.jarviscopilot.jarvis.data.model.ChecklistInfoData
-import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
-import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
+import site.jarviscopilot.jarvis.di.AppDependencies
 import site.jarviscopilot.jarvis.ui.components.JarvisButton
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.viewmodel.MainViewModel
 
 @Composable
 fun MainScreen(
-    checklistRepository: IChecklistRepository,
-    checklistStateManager: ChecklistStateManager,
     onChecklistSelected: (String) -> Unit,
     onSettingsClick: () -> Unit,
     onResumeChecklist: (String, Boolean) -> Unit = { _, _ -> }
 ) {
-    var checklistInfoDataList by remember { mutableStateOf<List<ChecklistInfoData>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    var resumableChecklists by remember { mutableStateOf<Set<String>>(emptySet()) }
+    val context = LocalContext.current
+    val viewModelFactory = AppDependencies.provideMainViewModelFactory(context)
+    val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
 
-    LaunchedEffect(key1 = true) {
-        checklistInfoDataList = checklistRepository.getAvailableChecklists()
+    // Refresh checklists whenever screen is resumed.
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.loadChecklists()
+            }
+        }
 
-        resumableChecklists = checklistStateManager.getSavedChecklistNames()
+        lifecycleOwner.lifecycle.addObserver(observer)
 
-        isLoading = false
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
+
+    // Collect states from ViewModel
+    val checklistInfoDataList by viewModel.checklists.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val resumableChecklists by viewModel.resumableChecklists.collectAsState()
 
     Scaffold(
         topBar = {
@@ -101,80 +114,26 @@ fun MainScreen(
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            Text(
-                text = "Select a Checklist",
-                style = JarvisTheme.typography.titleLarge,
-                color = JarvisTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
             if (isLoading) {
-                // Show loading indicator while data is being loaded
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = JarvisTheme.colorScheme.primary
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Loading checklists...",
-                        style = JarvisTheme.typography.bodyLarge,
-                        color = JarvisTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            } else if (checklistInfoDataList.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "No checklists found",
-                        style = JarvisTheme.typography.bodyLarge,
-                        color = JarvisTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    JarvisButton(
-                        onClick = onSettingsClick
-                    ) {
-                        Text("Go to Settings")
-                    }
-                }
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(top = 24.dp),
+                    color = JarvisTheme.colorScheme.primary
+                )
             } else {
                 LazyColumn(
-                    contentPadding = PaddingValues(vertical = 8.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(checklistInfoDataList) { checklistInfo ->
-                        val canResume = resumableChecklists.contains(checklistInfo.filename)
-
+                    items(checklistInfoDataList) { checklist ->
                         ChecklistCard(
-                            checklistInfoData = checklistInfo,
-                            canResume = canResume,
-                            onSelected = {
-                                // Always start fresh when clicking the card itself
-                                onChecklistSelected(checklistInfo.filename)
-                            },
-                            onResume = {
-                                // Resume the checklist with saved progress
-                                onResumeChecklist(checklistInfo.filename, true)
-                            },
-                            onReset = {
-                                // Clear saved state and start fresh
-                                checklistStateManager.clearChecklistState(checklistInfo.filename)
-                                onChecklistSelected(checklistInfo.filename)
+                            checklist = checklist,
+                            canResume = resumableChecklists.contains(checklist.id),
+                            onStart = { onChecklistSelected(checklist.id) },
+                            onResume = { onResumeChecklist(checklist.id, true) },
+                            onRestart = {
+                                viewModel.clearChecklistState(checklist.id)
+                                onChecklistSelected(checklist.id)
                             }
                         )
                     }
@@ -186,64 +145,68 @@ fun MainScreen(
 
 @Composable
 fun ChecklistCard(
-    checklistInfoData: ChecklistInfoData,
-    onSelected: () -> Unit,
-    canResume: Boolean = false,
-    onResume: () -> Unit = {},
-    onReset: () -> Unit = {}
+    checklist: ChecklistInfoData,
+    canResume: Boolean,
+    onStart: () -> Unit,
+    onResume: () -> Unit,
+    onRestart: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { onSelected() },
-        colors = CardDefaults.cardColors(
-            containerColor = JarvisTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .clickable(onClick = onStart),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Text(
-                text = checklistInfoData.name,
-                style = JarvisTheme.typography.titleMedium,
-                color = JarvisTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                text = checklist.name,
+                style = JarvisTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = JarvisTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            if (checklist.description.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = checklist.description,
+                    style = JarvisTheme.typography.bodyMedium,
+                    color = JarvisTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-            Text(
-                text = checklistInfoData.description,
-                style = JarvisTheme.typography.bodyMedium,
-                color = JarvisTheme.colorScheme.onSurfaceVariant
-            )
+            Spacer(modifier = Modifier.height(16.dp))
 
             if (canResume) {
-                Spacer(modifier = Modifier.height(12.dp))
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     JarvisButton(
-                        onClick = onReset,
-                        enabled = true,
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
-                        Text("Reset")
-                    }
-
-                    JarvisButton(
                         onClick = onResume,
-                        enabled = true
+                        modifier = Modifier.weight(1f)
                     ) {
                         Text("Resume")
                     }
+
+                    JarvisButton(
+                        onClick = onRestart,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Restart")
+                    }
+                }
+            } else {
+                JarvisButton(
+                    onClick = onStart,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Start")
                 }
             }
         }
     }
 }
-
