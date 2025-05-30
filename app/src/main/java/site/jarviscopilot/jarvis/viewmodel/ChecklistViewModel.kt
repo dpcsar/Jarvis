@@ -31,14 +31,12 @@ data class ChecklistUiState(
     val currentViewMode: String = "normalListView",
     val hasMultipleSections: Boolean = false,
     val hasMultipleLists: Boolean = false,
-    val shouldShowCompletionDialog: Boolean = false,
     val activeItemIndex: Int = -1,
     val checklistItemData: List<ChecklistItemData> = emptyList(),
     val completedItems: List<Int> = emptyList(),
     val isMicActive: Boolean = false,
     val showingTileGrid: Boolean = true,
-    val error: String? = null,
-    val blockedTasks: List<Int> = emptyList() // New property to track tasks blocked by previous required tasks
+    val blockedTasks: List<Int> = emptyList()
 )
 
 /**
@@ -96,7 +94,6 @@ class ChecklistViewModel(
                 isLoading = false
             )
         }
-
         updateCurrentChecklistItems()
     }
 
@@ -157,17 +154,13 @@ class ChecklistViewModel(
                 hasMultipleSections = data.sections.size > 1,
                 checklistItemData = items,              // Update the checklistItemData property
                 completedItems = completedItemsList,    // Update the completedItems property
-                // Set the active item to the first task item, not just the first item in the list
-                activeItemIndex = firstTaskIndex,
+                activeItemIndex = firstTaskIndex,       // Set the active item to the first task item, not just the first item in the list
                 blockedTasks = blockedTasks            // Update blocked tasks
             )
         }
 
         // After updating the UI state, speak the checklist elements
         performTextToSpeech(currentSection, currentList, items, firstTaskIndex)
-
-        // Check if all items are completed to show completion dialog
-        checkCompletion()
     }
 
     /**
@@ -417,12 +410,10 @@ class ChecklistViewModel(
 
                 // Save state and check completion after updating active item
                 saveCurrentState()
-                checkCompletion()
             } else {
                 // No more unchecked items in this list
                 // Save state and check completion
                 saveCurrentState()
-                checkCompletion()
 
                 // Always advance to the next list/section when we've completed all items in current list
                 advanceToNextListOrSection()
@@ -547,50 +538,6 @@ class ChecklistViewModel(
             viewModelScope.launch {
                 ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
             }
-        }
-    }
-
-    /**
-     * Check if the current checklist is completed
-     */
-    private fun checkCompletion() {
-        val currentState = _uiState.value
-        val data = currentState.checklistData ?: return
-
-        var allCompleted = true
-
-        for (sectionIdx in data.sections.indices) {
-            val section = data.sections[sectionIdx]
-
-            for (listIdx in section.lists.indices) {
-                val list = section.lists[listIdx]
-
-                // Get required items
-                val requiredItems = list.listItems
-                    .mapIndexedNotNull { idx, item -> if (item.isRequired) idx else null }
-
-                // Check if all required items are completed
-                if (sectionIdx < currentState.completedItemsBySection.size &&
-                    listIdx < currentState.completedItemsBySection[sectionIdx].size
-                ) {
-
-                    val completedItems = currentState.completedItemsBySection[sectionIdx][listIdx]
-
-                    if (!requiredItems.all { it in completedItems }) {
-                        allCompleted = false
-                        break
-                    }
-                } else if (requiredItems.isNotEmpty()) {
-                    allCompleted = false
-                    break
-                }
-            }
-
-            if (!allCompleted) break
-        }
-
-        if (allCompleted && currentState.shouldShowCompletionDialog == false) {
-            _uiState.update { it.copy(shouldShowCompletionDialog = true) }
         }
     }
 
@@ -859,9 +806,6 @@ class ChecklistViewModel(
 
         // Save state after marking all complete
         saveCurrentState()
-
-        // Check completion
-        checkCompletion()
 
         // Advance to next list/section after marking all items complete
         advanceToNextListOrSection()

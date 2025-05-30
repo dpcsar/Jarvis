@@ -21,11 +21,6 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 /**
  * A tile representation of a checklist list for the tile view.
- *
- * @param checklistListData The checklist list data to represent as a tile
- * @param onTileClick Callback when the tile is clicked
- * @param category The category of the checklist ("emergency" or "reference")
- * @param modifier Optional modifier for the component
  */
 @Composable
 fun ChecklistTile(

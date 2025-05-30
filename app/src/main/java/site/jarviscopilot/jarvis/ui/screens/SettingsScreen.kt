@@ -71,17 +71,13 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    // Get instance of UserPreferences
     val userPreferences = remember { UserPreferences.getInstance(context) }
-    // State for settings - initialize from UserPreferences
     var useVoiceControl by remember { mutableStateOf(userPreferences.isVoiceControlEnabled()) }
     var useTTS by remember { mutableStateOf(userPreferences.isTtsEnabled()) }
     var themeMode by remember { mutableStateOf(userPreferences.getThemeMode()) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
-    // State for permission handling
     var requestVoicePermission by remember { mutableStateOf(false) }
-    // State for checklists
     var checklists by remember { mutableStateOf<List<ChecklistInfoData>>(emptyList()) }
     var isLoadingChecklists by remember { mutableStateOf(true) }
     var showDeleteDialog by remember { mutableStateOf(false) }

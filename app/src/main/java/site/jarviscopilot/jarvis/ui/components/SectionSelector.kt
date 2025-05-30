@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,13 +24,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 /**
  * A composable that displays a horizontal row of selectable section cards.
  * Used to allow users to switch between different sections of a checklist.
- *
- * @param sections The list of available checklist sections
- * @param selectedSectionIndex The index of the currently selected section
- * @param onSectionSelected Callback when a section is selected
- * @param modifier Optional modifier for the component
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionSelector(
     sections: List<ChecklistSectionData>,

@@ -14,7 +14,7 @@ import site.jarviscopilot.jarvis.ui.components.ChecklistTile
  * A composable that displays a grid of checklist tiles.
  */
 @Composable
-fun ChecklistGridView(
+fun ChecklistTileView(
     lists: List<ChecklistListData>,
     sectionType: String,
     onTileClick: (Int) -> Unit

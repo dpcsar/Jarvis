@@ -27,7 +27,7 @@ import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.TopBar
-import site.jarviscopilot.jarvis.ui.components.checklist.ChecklistGridView
+import site.jarviscopilot.jarvis.ui.components.checklist.ChecklistTileView
 import site.jarviscopilot.jarvis.ui.components.checklist.ChecklistListView
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
@@ -178,7 +178,7 @@ fun ChecklistScreen(
                 "tileListView" -> {
                     if (uiState.showingTileGrid) {
                         // Show grid of tiles
-                        ChecklistGridView(
+                        ChecklistTileView(
                             lists = uiState.currentSectionLists,
                             sectionType = uiState.currentSectionType,
                             onTileClick = { listIndex ->

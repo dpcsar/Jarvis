@@ -55,7 +55,6 @@ fun MainScreen(
     LaunchedEffect(key1 = true) {
         checklistInfoDataList = checklistRepository.getAvailableChecklists()
 
-        // Get all checklists that can be resumed
         resumableChecklists = checklistStateManager.getSavedChecklistNames()
 
         isLoading = false

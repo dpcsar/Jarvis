@@ -44,7 +44,7 @@ fun ChecklistItem(
     isCompleted: Boolean = false,
     type: ChecklistItemType = ChecklistItemType.TASK,
     isActive: Boolean = false,
-    isBlocked: Boolean = false, // New parameter to indicate if the task is blocked by a previous required task
+    isBlocked: Boolean = false,
     onItemClick: () -> Unit,
     onCheckboxClick: () -> Unit
 ) {

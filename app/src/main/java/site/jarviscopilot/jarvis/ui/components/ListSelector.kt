@@ -33,13 +33,6 @@ import site.jarviscopilot.jarvis.util.ChecklistUtils
 /**
  * A composable that displays a horizontal row of selectable list cards.
  * Used to allow users to switch between different lists within a section.
- *
- * @param lists The list of available checklist lists
- * @param selectedListIndex The index of the currently selected list
- * @param onListSelected Callback when a list is selected
- * @param isNormalListView Whether this is displayed in normal list view mode
- * @param completedItemsByList List of completed items for each list (indices match the lists parameter)
- * @param modifier Optional modifier for the component
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
