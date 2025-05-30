@@ -2,6 +2,7 @@ package site.jarviscopilot.jarvis.util
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import site.jarviscopilot.jarvis.data.model.ChecklistData
 import site.jarviscopilot.jarvis.data.model.ChecklistItemData
@@ -16,23 +17,20 @@ class TtsHandler private constructor(context: Context) {
     private val userPreferences: UserPreferences = UserPreferences.getInstance(context)
 
     /**
-     * Speak text if TTS is enabled in user preferences
+     * Speak text if TTS is enabled in user preferences and wait for it to complete
      */
-    private suspend fun speakIfEnabled(text: String, queueMode: Int = TextToSpeech.QUEUE_ADD) {
+    private suspend fun speakIfEnabledAndWait(text: String, queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
         val isTtsEnabled = userPreferences.ttsEnabledFlow.firstOrNull() ?: userPreferences.isTtsEnabled()
         if (isTtsEnabled && text.isNotBlank()) {
-            ttsManager.speak(text, queueMode)
+            // Use the new speakAndWait function that properly waits for speech to complete
+            ttsManager.speakAndWait(text, queueMode)
+
+            // Add a small pause between speeches for natural flow
+            delay(300)
         }
     }
 
-    /**
-     * Stop any ongoing speech
-     */
-    fun stopSpeech() {
-        ttsManager.stop()
-    }
-
-    /**
+   /**
      * Handle checklist opening - speak title or titleAudio
      */
     suspend fun handleChecklistOpened(checklist: ChecklistData) {
@@ -41,7 +39,7 @@ class TtsHandler private constructor(context: Context) {
         else
             checklist.title
 
-        speakIfEnabled(textToSpeak, TextToSpeech.QUEUE_FLUSH)
+        speakIfEnabledAndWait(textToSpeak)
     }
 
     /**
@@ -53,7 +51,7 @@ class TtsHandler private constructor(context: Context) {
         else
             section.sectionTitle
 
-        speakIfEnabled(textToSpeak, TextToSpeech.QUEUE_FLUSH)
+        speakIfEnabledAndWait(textToSpeak)
     }
 
     /**
@@ -65,7 +63,7 @@ class TtsHandler private constructor(context: Context) {
         else
             listTitle
 
-        speakIfEnabled(textToSpeak, TextToSpeech.QUEUE_FLUSH)
+        speakIfEnabledAndWait(textToSpeak)
     }
 
     /**
@@ -77,56 +75,29 @@ class TtsHandler private constructor(context: Context) {
     suspend fun handleItemsAndTask(items: List<ChecklistItemData>, activeItemIndex: Int) {
         // Reset speech queue
         ttsManager.stop()
+        delay(200) // Small delay to ensure TTS has stopped
 
-        // Find the range of items to read
-        var endIndex = activeItemIndex
-
-        // If the active item is not a task, find the next task
-        if (!items[activeItemIndex].listItemType.equals("task", ignoreCase = true)) {
-            for (i in activeItemIndex until items.size) {
-                if (items[i].listItemType.equals("task", ignoreCase = true)) {
-                    endIndex = i
-                    break
-                }
-            }
-        }
-
-        // Read all items from active item to the task
-        for (i in activeItemIndex..endIndex) {
+        // Read all labels before the active item
+        for (i in 0 until activeItemIndex) {
             val item = items[i]
-
-            if (item.listItemType.equals("task", ignoreCase = true)) {
-                // For tasks, read challenge and response
-                // Read challenge
-                val challengeText = if (item.challengeAudio.isNotBlank())
-                    item.challengeAudio
-                else
-                    item.challenge
-
-                speakIfEnabled(challengeText)
-            } else {
-                // For non-task items, just read the content (if available)
-                // Using challenge as content since there's no separate content field
-                if (item.challenge.isNotBlank()) {
-                    speakIfEnabled(item.challenge)
-                }
+            if (!item.listItemType.equals("task", ignoreCase = true) && item.challenge.isNotBlank()) {
+                speakIfEnabledAndWait(item.challenge)
             }
+        }
+
+        // Now read the active item
+        if (activeItemIndex < items.size) {
+            val activeItem = items[activeItemIndex]
+            val textToSpeak = if (activeItem.challengeAudio.isNotBlank()) {
+                activeItem.challengeAudio
+            } else {
+                activeItem.challenge
+            }
+            speakIfEnabledAndWait(textToSpeak)
         }
     }
 
-    /**
-     * Handle task completion - speak the response
-     */
-    suspend fun handleTaskCompleted(item: ChecklistItemData) {
-        val responseText = if (item.responseAudio.isNotBlank())
-            item.responseAudio
-        else
-            item.response
-
-        speakIfEnabled(responseText)
-    }
-
-    companion object {
+   companion object {
         @Volatile
         private var INSTANCE: TtsHandler? = null
 

@@ -2,8 +2,6 @@ package site.jarviscopilot.jarvis.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,6 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import site.jarviscopilot.jarvis.data.model.ChecklistData
 import site.jarviscopilot.jarvis.data.model.ChecklistItemData
+import site.jarviscopilot.jarvis.data.model.ChecklistSectionData
 import site.jarviscopilot.jarvis.data.model.ChecklistStateData
 import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
@@ -47,7 +46,7 @@ data class ChecklistUiState(
  * following MVVM architecture principles
  */
 class ChecklistViewModel(
-    private val application: Application,
+    application: Application,
     private val repository: IChecklistRepository,
     private val stateManager: ChecklistStateManager,
     private val checklistName: String,
@@ -99,13 +98,6 @@ class ChecklistViewModel(
         }
 
         updateCurrentChecklistItems()
-
-        // Speak the checklist title when it's opened
-        data?.let {
-            viewModelScope.launch {
-                ttsHandler.handleChecklistOpened(it)
-            }
-        }
     }
 
     /**
@@ -171,8 +163,43 @@ class ChecklistViewModel(
             )
         }
 
+        // After updating the UI state, speak the checklist elements
+        performTextToSpeech(currentSection, currentList, items, firstTaskIndex)
+
         // Check if all items are completed to show completion dialog
         checkCompletion()
+    }
+
+    /**
+     * Performs text-to-speech for checklist elements in the proper sequence
+     */
+    private fun performTextToSpeech(
+        currentSection: ChecklistSectionData,
+        currentList: site.jarviscopilot.jarvis.data.model.ChecklistListData?,
+        items: List<ChecklistItemData>,
+        activeItemIndex: Int
+    ) {
+        viewModelScope.launch {
+            // If this is the first time loading the checklist, the title will be spoken
+            // in loadChecklistData(). Avoid duplicating that speech here.
+            if (_uiState.value.isLoading) return@launch
+
+            // 1. Speak checklist title
+            ttsHandler.handleChecklistOpened(_uiState.value.checklistData!!)
+
+            // 2. Speak section title
+            ttsHandler.handleSectionOpened(currentSection)
+
+            // 3. Speak list title if available
+            currentList?.let {
+                ttsHandler.handleListOpened(it.listTitle, it.listTitleAudio)
+            }
+
+            // 4. Speak items until active item
+            if (activeItemIndex != -1 && items.isNotEmpty()) {
+                ttsHandler.handleItemsAndTask(items, activeItemIndex)
+            }
+        }
     }
 
     /**
@@ -518,7 +545,7 @@ class ChecklistViewModel(
 
         if (list != null) {
             viewModelScope.launch {
-                ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio ?: "")
+                ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
             }
         }
     }
@@ -896,7 +923,7 @@ class ChecklistViewModel(
 
             // Only speak the items if the active item has actually changed
             if (index != previousActiveIndex) {
-                val activeItem = _uiState.value.checklistItemData[index]
+                _uiState.value.checklistItemData[index]
 
                 // Speak the item content based on the TTS flow requirements
                 viewModelScope.launch {

@@ -5,10 +5,10 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.Locale
 import java.util.UUID
+import kotlin.coroutines.resume
 
 /**
  * TtsManager handles all Text-to-Speech operations in the app.
@@ -20,11 +20,9 @@ class TtsManager private constructor(context: Context) {
 
     // Whether TTS is initialized and ready to speak
     private val _isTtsReady = MutableStateFlow(false)
-    val isTtsReady: StateFlow<Boolean> = _isTtsReady.asStateFlow()
 
     // Whether TTS is currently speaking
     private val _isSpeaking = MutableStateFlow(false)
-    val isSpeaking: StateFlow<Boolean> = _isSpeaking.asStateFlow()
 
     // Initialize TTS engine
     init {
@@ -68,16 +66,49 @@ class TtsManager private constructor(context: Context) {
     }
 
     /**
-     * Speak the given text aloud.
+     * Speak the given text and suspend until speech is complete.
      * @param text The text to be spoken
-     * @param queueMode Whether to queue the speech or stop current speech (defaults to queue)
+     * @param queueMode Whether to queue the speech or stop current speech
+     * @return true if speech completed successfully, false otherwise
      */
-    fun speak(text: String, queueMode: Int = TextToSpeech.QUEUE_ADD) {
-        if (_isTtsReady.value) {
+    suspend fun speakAndWait(text: String, queueMode: Int = TextToSpeech.QUEUE_FLUSH): Boolean {
+        if (!_isTtsReady.value || text.isBlank()) {
+            return false
+        }
+
+        return suspendCancellableCoroutine { continuation ->
             val utteranceId = UUID.randomUUID().toString()
+
+            textToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) {
+                    _isSpeaking.value = true
+                }
+
+                override fun onDone(utteranceId: String?) {
+                    _isSpeaking.value = false
+                    if (continuation.isActive) {
+                        continuation.resume(true)
+                    }
+                }
+
+                @Deprecated("Deprecated in Java")
+                override fun onError(utteranceId: String?) {
+                    _isSpeaking.value = false
+                    if (continuation.isActive) {
+                        continuation.resume(false)
+                    }
+                }
+            })
+
             textToSpeech?.speak(text, queueMode, null, utteranceId)
-        } else {
-            Log.w(TAG, "Attempted to speak while TTS not ready: $text")
+
+            // If the speech doesn't start within a reasonable time, resume the coroutine
+            continuation.invokeOnCancellation {
+                if (_isSpeaking.value) {
+                    textToSpeech?.stop()
+                    _isSpeaking.value = false
+                }
+            }
         }
     }
 
