@@ -37,7 +37,7 @@ class UserPreferences(context: Context) {
     }
 
     fun isTtsEnabled(): Boolean {
-        return sharedPreferences.getBoolean(KEY_TTS_ENABLED, false)
+        return sharedPreferences.getBoolean(KEY_TTS_ENABLED, true)
     }
 
     fun setTtsEnabled(enabled: Boolean) {
