@@ -75,6 +75,7 @@ fun SettingsScreen(
     val userPreferences = remember { UserPreferences.getInstance(context) }
     // State for settings - initialize from UserPreferences
     var useVoiceControl by remember { mutableStateOf(userPreferences.isVoiceControlEnabled()) }
+    var useTTS by remember { mutableStateOf(userPreferences.isTtsEnabled()) }
     var themeMode by remember { mutableStateOf(userPreferences.getThemeMode()) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
@@ -267,6 +268,22 @@ fun SettingsScreen(
                         toastMessage = "Voice control disabled"
                         showToast = true
                     }
+                }
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Text-to-Speech Setting
+            SettingSwitchItem(
+                title = "Text-to-Speech",
+                description = "Read checklist items aloud as you navigate",
+                icon = if (useTTS) Icons.Default.Mic else Icons.Default.MicOff,
+                isChecked = useTTS,
+                onCheckedChange = { isChecked ->
+                    useTTS = isChecked
+                    userPreferences.setTtsEnabled(isChecked)
+                    toastMessage = if (isChecked) "Text-to-Speech enabled" else "Text-to-Speech disabled"
+                    showToast = true
                 }
             )
 

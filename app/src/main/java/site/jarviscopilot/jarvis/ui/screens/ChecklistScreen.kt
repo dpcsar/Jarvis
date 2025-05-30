@@ -1,5 +1,6 @@
 package site.jarviscopilot.jarvis.ui.screens
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,9 +45,13 @@ fun ChecklistScreen(
     onNavigateHome: () -> Unit,
     resumeFromSaved: Boolean = false
 ) {
+    // Get the current context to access the application
+    val context = LocalContext.current
+
     // Create ViewModel using factory with injected dependencies
     val viewModel: ChecklistViewModel = viewModel(
         factory = ChecklistViewModelFactory(
+            application = context.applicationContext as Application,
             repository = checklistRepository,
             stateManager = checklistStateManager,
             checklistName = checklistName,

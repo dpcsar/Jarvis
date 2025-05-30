@@ -1,15 +1,21 @@
 package site.jarviscopilot.jarvis.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import site.jarviscopilot.jarvis.data.model.ChecklistData
 import site.jarviscopilot.jarvis.data.model.ChecklistItemData
 import site.jarviscopilot.jarvis.data.model.ChecklistStateData
 import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
+import site.jarviscopilot.jarvis.util.TtsHandler
 
 /**
  * UI State class for the Checklist screen
@@ -41,15 +47,19 @@ data class ChecklistUiState(
  * following MVVM architecture principles
  */
 class ChecklistViewModel(
+    private val application: Application,
     private val repository: IChecklistRepository,
     private val stateManager: ChecklistStateManager,
     private val checklistName: String,
     resumeFromSaved: Boolean = false
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     // UI State
     private val _uiState = MutableStateFlow(ChecklistUiState())
     val uiState: StateFlow<ChecklistUiState> = _uiState.asStateFlow()
+
+    // TTS Handler for speaking items
+    private val ttsHandler = TtsHandler.getInstance(application)
 
     init {
         loadChecklistData()
@@ -89,6 +99,13 @@ class ChecklistViewModel(
         }
 
         updateCurrentChecklistItems()
+
+        // Speak the checklist title when it's opened
+        data?.let {
+            viewModelScope.launch {
+                ttsHandler.handleChecklistOpened(it)
+            }
+        }
     }
 
     /**
@@ -342,6 +359,7 @@ class ChecklistViewModel(
             saveCurrentState()
 
         } else {
+            // Item is being marked as complete
             listCompletedItems.add(itemIndex)
 
             // Update the section's completed items list
@@ -471,6 +489,13 @@ class ChecklistViewModel(
 
             saveCurrentState()
             updateCurrentChecklistItems()
+
+            // Speak the section title when a new section is selected
+            currentState.checklistData?.sections?.getOrNull(index)?.let { section ->
+                viewModelScope.launch {
+                    ttsHandler.handleSectionOpened(section)
+                }
+            }
         }
     }
 
@@ -484,6 +509,18 @@ class ChecklistViewModel(
 
         saveCurrentState()
         updateCurrentChecklistItems()
+
+        // Speak the list title when a new list is selected
+        val currentState = _uiState.value
+        val sectionIndex = currentState.selectedSectionIndex
+        val section = currentState.checklistData?.sections?.getOrNull(sectionIndex)
+        val list = section?.lists?.getOrNull(index)
+
+        if (list != null) {
+            viewModelScope.launch {
+                ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio ?: "")
+            }
+        }
     }
 
     /**
@@ -853,7 +890,21 @@ class ChecklistViewModel(
      */
     private fun setActiveItem(index: Int) {
         if (index >= 0 && index < _uiState.value.checklistItemData.size) {
+            val previousActiveIndex = _uiState.value.activeItemIndex
+
             _uiState.update { it.copy(activeItemIndex = index) }
+
+            // Only speak the items if the active item has actually changed
+            if (index != previousActiveIndex) {
+                val activeItem = _uiState.value.checklistItemData[index]
+
+                // Speak the item content based on the TTS flow requirements
+                viewModelScope.launch {
+                    // Get all items from the active item up to the next task
+                    val items = _uiState.value.checklistItemData
+                    ttsHandler.handleItemsAndTask(items, index)
+                }
+            }
         }
     }
 

@@ -22,6 +22,10 @@ class UserPreferences(context: Context) {
     private val _themeModeFlow = MutableStateFlow(getThemeMode())
     val themeModeFlow: StateFlow<ThemeMode> = _themeModeFlow.asStateFlow()
 
+    // StateFlow for TTS updates
+    private val _ttsEnabledFlow = MutableStateFlow(isTtsEnabled())
+    val ttsEnabledFlow: StateFlow<Boolean> = _ttsEnabledFlow.asStateFlow()
+
     fun isVoiceControlEnabled(): Boolean {
         return sharedPreferences.getBoolean(KEY_VOICE_CONTROL_ENABLED, false)
     }
@@ -30,6 +34,18 @@ class UserPreferences(context: Context) {
         sharedPreferences.edit {
             putBoolean(KEY_VOICE_CONTROL_ENABLED, enabled)
         }
+    }
+
+    fun isTtsEnabled(): Boolean {
+        return sharedPreferences.getBoolean(KEY_TTS_ENABLED, false)
+    }
+
+    fun setTtsEnabled(enabled: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(KEY_TTS_ENABLED, enabled)
+        }
+        // Update the StateFlow when TTS setting changes
+        _ttsEnabledFlow.value = enabled
     }
 
     fun getThemeMode(): ThemeMode {
@@ -53,6 +69,7 @@ class UserPreferences(context: Context) {
         private const val PREFS_NAME = "jarvis_preferences"
         private const val KEY_VOICE_CONTROL_ENABLED = "voice_control_enabled"
         private const val KEY_THEME_MODE = "theme_mode"
+        private const val KEY_TTS_ENABLED = "tts_enabled"
 
         // Singleton instance
         @Volatile
