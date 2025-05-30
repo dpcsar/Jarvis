@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import site.jarviscopilot.jarvis.data.model.ChecklistData
 import site.jarviscopilot.jarvis.data.model.ChecklistItemData
-import site.jarviscopilot.jarvis.data.model.ChecklistSectionData
 import site.jarviscopilot.jarvis.data.model.ChecklistStateData
 import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
@@ -94,7 +93,33 @@ class ChecklistViewModel(
                 isLoading = false
             )
         }
+
+        // Update checklist items (without TTS)
         updateCurrentChecklistItems()
+
+        // Find first task item to set as active
+        val sectionIndex = 0
+        val listIndex = 0
+
+        // Only proceed if we have valid data
+        if (data != null && data.sections.isNotEmpty() && data.sections[0].lists.isNotEmpty()) {
+            val items = data.sections[0].lists[0].listItems
+            var firstTaskIndex = -1
+
+            // Find first task item
+            for (i in items.indices) {
+                val item = items[i]
+                if (item.listItemType.equals("TASK", ignoreCase = true)) {
+                    firstTaskIndex = i
+                    break
+                }
+            }
+
+            // Use navigateToItem to handle setting the active item and TTS
+            if (firstTaskIndex != -1) {
+                navigateToItem(sectionIndex, listIndex, firstTaskIndex)
+            }
+        }
     }
 
     /**
@@ -157,41 +182,6 @@ class ChecklistViewModel(
                 activeItemIndex = firstTaskIndex,       // Set the active item to the first task item, not just the first item in the list
                 blockedTasks = blockedTasks            // Update blocked tasks
             )
-        }
-
-        // After updating the UI state, speak the checklist elements
-        performTextToSpeech(currentSection, currentList, items, firstTaskIndex)
-    }
-
-    /**
-     * Performs text-to-speech for checklist elements in the proper sequence
-     */
-    private fun performTextToSpeech(
-        currentSection: ChecklistSectionData,
-        currentList: site.jarviscopilot.jarvis.data.model.ChecklistListData?,
-        items: List<ChecklistItemData>,
-        activeItemIndex: Int
-    ) {
-        viewModelScope.launch {
-            // If this is the first time loading the checklist, the title will be spoken
-            // in loadChecklistData(). Avoid duplicating that speech here.
-            if (_uiState.value.isLoading) return@launch
-
-            // 1. Speak checklist title
-            ttsHandler.handleChecklistOpened(_uiState.value.checklistData!!)
-
-            // 2. Speak section title
-            ttsHandler.handleSectionOpened(currentSection)
-
-            // 3. Speak list title if available
-            currentList?.let {
-                ttsHandler.handleListOpened(it.listTitle, it.listTitleAudio)
-            }
-
-            // 4. Speak items until active item
-            if (activeItemIndex != -1 && items.isNotEmpty()) {
-                ttsHandler.handleItemsAndTask(items, activeItemIndex)
-            }
         }
     }
 
@@ -440,9 +430,30 @@ class ChecklistViewModel(
         // First try to advance to the next list in the current section
         if (currentListIdx < currentSection.lists.size - 1) {
             // There's another list in this section, go to it
-            _uiState.update { it.copy(selectedListIndex = currentListIdx + 1) }
+            val newListIndex = currentListIdx + 1
+            _uiState.update { it.copy(selectedListIndex = newListIndex) }
             saveCurrentState()
             updateCurrentChecklistItems()
+
+            // Speak the next list title and first unchecked item
+            val list = currentSection.lists.getOrNull(newListIndex)
+            if (list != null) {
+                viewModelScope.launch {
+                    ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+
+                    // Speak first unchecked item and previous labels
+                    val updatedState = _uiState.value
+                    if (updatedState.checklistItemData.isNotEmpty()) {
+                        val firstUncheckedIndex = findFirstUncheckedItem()
+                        if (firstUncheckedIndex != -1) {
+                            ttsHandler.handleItemsAndTask(
+                                updatedState.checklistItemData,
+                                firstUncheckedIndex
+                            )
+                        }
+                    }
+                }
+            }
             return
         }
 
@@ -462,6 +473,30 @@ class ChecklistViewModel(
                 }
                 saveCurrentState()
                 updateCurrentChecklistItems()
+
+                // Speak the section, list title, and first unchecked item
+                viewModelScope.launch {
+                    // Speak section name
+                    ttsHandler.handleSectionOpened(nextSection)
+
+                    // Speak list name if available
+                    if (nextSection.lists.isNotEmpty()) {
+                        val firstList = nextSection.lists.first()
+                        ttsHandler.handleListOpened(firstList.listTitle, firstList.listTitleAudio)
+
+                        // Speak first unchecked item and previous labels
+                        val updatedState = _uiState.value
+                        if (updatedState.checklistItemData.isNotEmpty()) {
+                            val firstUncheckedIndex = findFirstUncheckedItem()
+                            if (firstUncheckedIndex != -1) {
+                                ttsHandler.handleItemsAndTask(
+                                    updatedState.checklistItemData,
+                                    firstUncheckedIndex
+                                )
+                            }
+                        }
+                    }
+                }
                 return
             }
             nextSectionIdx++
@@ -484,7 +519,6 @@ class ChecklistViewModel(
             currentSectionType == "tileListView" &&
             !currentState.showingTileGrid
         ) {
-
             _uiState.update { it.copy(showingTileGrid = true) }
             return
         }
@@ -508,10 +542,29 @@ class ChecklistViewModel(
             saveCurrentState()
             updateCurrentChecklistItems()
 
-            // Speak the section title when a new section is selected
+            // Speak the section title, list title, and first unchecked item when a new section is selected
             currentState.checklistData?.sections?.getOrNull(index)?.let { section ->
                 viewModelScope.launch {
+                    // Speak the section title
                     ttsHandler.handleSectionOpened(section)
+
+                    // Also speak the first list title if available
+                    if (section.lists.isNotEmpty()) {
+                        val firstList = section.lists.first()
+                        ttsHandler.handleListOpened(firstList.listTitle, firstList.listTitleAudio)
+
+                        // Finally, speak the first unchecked item and previous labels
+                        val updatedState = _uiState.value
+                        if (updatedState.checklistItemData.isNotEmpty()) {
+                            val firstUncheckedIndex = findFirstUncheckedItem()
+                            if (firstUncheckedIndex != -1) {
+                                ttsHandler.handleItemsAndTask(
+                                    updatedState.checklistItemData,
+                                    firstUncheckedIndex
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -537,6 +590,18 @@ class ChecklistViewModel(
         if (list != null) {
             viewModelScope.launch {
                 ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+
+                // Also speak the first unchecked item and previous labels in the list
+                val updatedState = _uiState.value
+                if (updatedState.checklistItemData.isNotEmpty()) {
+                    val firstUncheckedIndex = findFirstUncheckedItem()
+                    if (firstUncheckedIndex != -1) {
+                        ttsHandler.handleItemsAndTask(
+                            updatedState.checklistItemData,
+                            firstUncheckedIndex
+                        )
+                    }
+                }
             }
         }
     }
@@ -812,7 +877,30 @@ class ChecklistViewModel(
     }
 
     /**
-     * Find the next unchecked item in the current list
+     * Find the first unchecked task item in the current list
+     * Used specifically for TTS purposes
+     * Returns -1 if no unchecked items are found
+     */
+    private fun findFirstUncheckedItem(): Int {
+        val currentState = _uiState.value
+        val completedItems = currentState.completedItems
+
+        // Search from the beginning of the list
+        for (i in currentState.checklistItemData.indices) {
+            val item = currentState.checklistItemData.getOrNull(i)
+            if (item != null && !completedItems.contains(i) &&
+                item.listItemType.equals("TASK", ignoreCase = true)
+            ) {
+                return i
+            }
+        }
+
+        // No unchecked items found
+        return -1
+    }
+
+    /**
+     * Find the next unchecked item in the current list, starting from the active item
      * Returns -1 if no unchecked items are found
      */
     private fun findNextUncheckedItem(): Int {
@@ -985,7 +1073,11 @@ class ChecklistViewModel(
     /**
      * Helper method to navigate to a specific item by section, list and item indices
      */
-    private fun navigateToItem(sectionIndex: Int, listIndex: Int, itemIndex: Int) {
+    private fun navigateToItem(
+        sectionIndex: Int,
+        listIndex: Int,
+        itemIndex: Int
+    ) {
         // Change section and list indices
         _uiState.update {
             it.copy(
@@ -1002,5 +1094,33 @@ class ChecklistViewModel(
 
         // Save the current state to persist these changes
         saveCurrentState()
+
+        // Explicitly speak the full context when navigating to an item (especially when resuming)
+        val currentState = _uiState.value
+        val data = currentState.checklistData ?: return
+
+        if (sectionIndex < data.sections.size) {
+            val section = data.sections[sectionIndex]
+            val list = if (listIndex < section.lists.size) section.lists[listIndex] else null
+
+            viewModelScope.launch {
+                // 1. Speak checklist title
+                ttsHandler.handleChecklistOpened(data)
+
+                // 2. Speak section title
+                ttsHandler.handleSectionOpened(section)
+
+                // 3. Speak list title if available
+                if (list != null) {
+                    ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+                }
+
+                // 4. Speak first unchecked item and previous labels
+                val items = currentState.checklistItemData
+                if (items.isNotEmpty() && itemIndex != -1) {
+                    ttsHandler.handleItemsAndTask(items, itemIndex)
+                }
+            }
+        }
     }
 }
