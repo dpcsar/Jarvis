@@ -49,7 +49,10 @@ class TtsHandler private constructor(context: Context) {
     /**
      * Handle section opening - speak sectionAudio or sectionTitle
      */
-    suspend fun handleSectionOpened(section: ChecklistSectionData, queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
+    suspend fun handleSectionOpened(
+        section: ChecklistSectionData,
+        queueMode: Int = TextToSpeech.QUEUE_FLUSH
+    ) {
         val textToSpeak = if (section.sectionTitleAudio.isNotBlank())
             section.sectionTitleAudio
         else
@@ -61,7 +64,11 @@ class TtsHandler private constructor(context: Context) {
     /**
      * Handle list opening - speak listTitleAudio or listTitle
      */
-    suspend fun handleListOpened(listTitle: String, listTitleAudio: String, queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
+    suspend fun handleListOpened(
+        listTitle: String,
+        listTitleAudio: String,
+        queueMode: Int = TextToSpeech.QUEUE_FLUSH
+    ) {
         val textToSpeak = if (listTitleAudio.isNotBlank())
             listTitleAudio
         else
@@ -71,53 +78,126 @@ class TtsHandler private constructor(context: Context) {
     }
 
     /**
-     * Handle item activation - This is more complex as it reads items until it gets to a task
-     * It should:
-     * 1. Read the items in sequence until it finds an active task
-     * 2. For a task, read the challengeAudio (or challenge) and responseAudio (or response)
+     * Handle item activation - This method reads items starting from the given index
+     * and continues reading until it finds a task, then returns that task's index
+     *
+     * @param items The list of checklist items
+     * @param activeItemIndex The starting index to begin reading from
+     * @param queueMode TTS queue mode (QUEUE_FLUSH or QUEUE_ADD)
+     * @param completedItems Optional list of completed item indices to skip
+     * @return The index of the unchecked task that was found and spoken, or -1 if none found
      */
     suspend fun handleItemsAndTask(
         items: List<ChecklistItemData>,
         activeItemIndex: Int,
-        queueMode: Int = TextToSpeech.QUEUE_FLUSH
-    ) {
-        // Read all labels before the active item
-        for (i in 0 until activeItemIndex) {
-            val item = items[i]
-            if (!item.listItemType.equals(
-                    "task",
-                    ignoreCase = true
-                ) && item.challenge.isNotBlank()
-            ) {
-                speakIfEnabledAndWait(item.challenge, queueMode)
+        queueMode: Int = TextToSpeech.QUEUE_FLUSH,
+        completedItems: List<Int> = emptyList()
+    ): Int {
+        // Start from the given index
+        var currentIndex = activeItemIndex
+
+        // Continue reading items until we find a task
+        while (currentIndex >= 0 && currentIndex < items.size) {
+            val currentItem = items[currentIndex]
+
+            // If this is a task
+            if (currentItem.listItemType.equals("task", ignoreCase = true)) {
+                // And it's not completed
+                if (!completedItems.contains(currentIndex)) {
+                    // Read the task and return its index
+                    handleItemDirectly(items, currentIndex, queueMode)
+                    return currentIndex
+                }
+            } else {
+                // If it's a label/non-task, read it and continue to the next item
+                if (currentItem.challenge.isNotBlank()) {
+                    speakIfEnabledAndWait(currentItem.challenge, queueMode)
+                }
             }
+
+            // Move to the next item
+            currentIndex++
         }
 
-        // Now read the active item
-        if (activeItemIndex < items.size) {
-            val activeItem = items[activeItemIndex]
+        // No unchecked task was found
+        return -1
+    }
 
-            // Handle challenge part based on suppressAudioChallenge flag
-            if (!activeItem.suppressAudioChallenge) {
-                val challengeToSpeak = if (activeItem.challengeAudio.isNotBlank()) {
-                    activeItem.challengeAudio
+    /**
+     * Handle speaking a specific item directly without searching for the next unchecked task.
+     * This function is used when we already know which item to speak.
+     *
+     * @param items The list of checklist items
+     * @param itemIndex The index of the item to speak
+     * @param queueMode TTS queue mode (QUEUE_FLUSH or QUEUE_ADD)
+     */
+    suspend fun handleItemDirectly(
+        items: List<ChecklistItemData>,
+        itemIndex: Int,
+        queueMode: Int = TextToSpeech.QUEUE_FLUSH
+    ) {
+        // Make sure the index is valid
+        if (itemIndex < 0 || itemIndex >= items.size) return
+
+        val item = items[itemIndex]
+
+        // Handle the item based on its type
+        if (item.listItemType.equals("task", ignoreCase = true)) {
+            // Speak the task challenge
+            if (!item.suppressAudioChallenge) {
+                val challengeToSpeak = if (item.challengeAudio.isNotBlank()) {
+                    item.challengeAudio
                 } else {
-                    activeItem.challenge
+                    item.challenge
                 }
                 speakIfEnabledAndWait(challengeToSpeak, queueMode)
             }
 
-            // Handle response part based on suppressAudioResponse flag
-            if (!activeItem.suppressAudioResponse &&
-                (activeItem.responseAudio.isNotBlank() || activeItem.response.isNotBlank())) {
-                val responseToSpeak = if (activeItem.responseAudio.isNotBlank()) {
-                    activeItem.responseAudio
+            // Speak the response part if present
+            if (!item.suppressAudioResponse &&
+                (item.responseAudio.isNotBlank() || item.response.isNotBlank())
+            ) {
+                val responseToSpeak = if (item.responseAudio.isNotBlank()) {
+                    item.responseAudio
                 } else {
-                    activeItem.response
+                    item.response
                 }
                 speakIfEnabledAndWait(responseToSpeak, TextToSpeech.QUEUE_ADD)
             }
         }
+        // For non-task items (labels, notes, etc.)
+        else if (item.challenge.isNotBlank()) {
+            speakIfEnabledAndWait(item.challenge, queueMode)
+        }
+    }
+
+    /**
+     * Find the next unchecked task index in the list
+     *
+     * @param items The list of checklist items
+     * @param startIndex The index to start searching from
+     * @param completedItems List of indices of completed items to skip
+     * @return The index of the next unchecked task, or -1 if none found
+     */
+    fun findNextUncheckedTask(
+        items: List<ChecklistItemData>,
+        startIndex: Int,
+        completedItems: List<Int>
+    ): Int {
+        // Start searching from the specified index
+        for (i in startIndex until items.size) {
+            // Check if this is an unchecked task
+            val item = items.getOrNull(i)
+            if (item != null &&
+                !completedItems.contains(i) &&
+                item.listItemType.equals("TASK", ignoreCase = true)
+            ) {
+                return i
+            }
+        }
+
+        // No unchecked task found
+        return -1
     }
 
     /**
