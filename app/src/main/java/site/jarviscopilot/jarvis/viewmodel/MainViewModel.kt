@@ -44,11 +44,9 @@ class MainViewModel(
         }
     }
 
-    fun clearChecklistState(checklistId: String) {
+    fun clearChecklistStateQuietly(checklistId: String) {
         viewModelScope.launch {
             checklistStateManager.clearChecklistState(checklistId)
-            // Reload resumable checklists
-            _resumableChecklists.value = checklistStateManager.getSavedChecklistNames()
         }
     }
 }

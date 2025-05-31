@@ -1,7 +1,6 @@
 package site.jarviscopilot.jarvis.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -132,7 +131,7 @@ fun MainScreen(
                             onStart = { onChecklistSelected(checklist.id) },
                             onResume = { onResumeChecklist(checklist.id, true) },
                             onRestart = {
-                                viewModel.clearChecklistState(checklist.id)
+                                viewModel.clearChecklistStateQuietly(checklist.id)
                                 onChecklistSelected(checklist.id)
                             }
                         )
@@ -153,8 +152,7 @@ fun ChecklistCard(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onStart),
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
