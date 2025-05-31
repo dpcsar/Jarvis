@@ -19,7 +19,6 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 fun ClickableListTitle(
     title: String,
     onClick: () -> Unit,
-    onLongClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -30,8 +29,7 @@ fun ClickableListTitle(
             .background(JarvisTheme.colorScheme.primaryContainer)
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onTap = { onClick() },
-                    onLongPress = { onLongClick() }
+                    onTap = { onClick() }
                 )
             }
             .padding(vertical = 10.dp, horizontal = 16.dp)

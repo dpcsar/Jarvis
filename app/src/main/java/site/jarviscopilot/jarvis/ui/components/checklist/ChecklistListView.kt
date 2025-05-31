@@ -69,7 +69,8 @@ fun ChecklistListView(
 
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         itemsIndexed(checklistItemData) { index, item ->
             ChecklistItem(

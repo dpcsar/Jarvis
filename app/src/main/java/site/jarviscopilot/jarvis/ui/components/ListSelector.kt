@@ -2,6 +2,7 @@ package site.jarviscopilot.jarvis.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,6 +41,7 @@ fun ListSelector(
     lists: List<ChecklistListData>,
     selectedListIndex: Int,
     onListSelected: (Int) -> Unit,
+    onLongClick: () -> Unit = {}, // Added onLongClick parameter with default empty implementation
     isNormalListView: Boolean = false,
     completedItemsByList: List<List<Int>> = emptyList()
 ) {
@@ -89,16 +90,20 @@ fun ListSelector(
                 val list = lists[index]
                 val isSelected = index == selectedListIndex
 
-                Card(
-                    onClick = { onListSelected(index) },
-                    colors = CardDefaults.cardColors(
-                        containerColor = if (isSelected)
-                            JarvisTheme.colorScheme.primaryContainer
-                        else
-                            JarvisTheme.colorScheme.surfaceVariant
-                    ),
+                // Replace Card with Box to have full control over touch gestures
+                Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
+                        .background(
+                            if (isSelected) JarvisTheme.colorScheme.primaryContainer
+                            else JarvisTheme.colorScheme.surfaceVariant
+                        )
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = { onListSelected(index) },
+                                onLongPress = { if (isSelected) onLongClick() }
+                            )
+                        }
                 ) {
                     Column(
                         modifier = Modifier.padding(

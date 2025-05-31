@@ -114,6 +114,9 @@ fun ChecklistScreen(
                         selectedListIndex = uiState.selectedListIndex,
                         onListSelected = { list ->
                             viewModel.selectList(list)
+                        },
+                        onLongClick = {
+                            viewModel.markAllItemsComplete()
                         }
                     )
                 }
@@ -182,9 +185,6 @@ fun ChecklistScreen(
                             title = currentList.listTitle,
                             onClick = {
                                 // Optional click action
-                            },
-                            onLongClick = {
-                                viewModel.markAllItemsComplete()
                             }
                         )
 
