@@ -412,9 +412,9 @@ class ChecklistViewModel(
                 // Check if we need to advance to next list or section
                 // If there are no more unchecked tasks, we need to advance
                 if (!items.drop(itemIndex + 1).any {
-                    it.listItemType.equals("task", ignoreCase = true) &&
-                    !_uiState.value.completedItems.contains(items.indexOf(it))
-                }) {
+                        it.listItemType.equals("task", ignoreCase = true) &&
+                                !_uiState.value.completedItems.contains(items.indexOf(it))
+                    }) {
                     advanceToNextListOrSection()
                 }
 
@@ -905,7 +905,39 @@ class ChecklistViewModel(
      * Toggle between tile grid view and list view
      */
     fun toggleTileGridView(showGrid: Boolean) {
+        val currentState = _uiState.value
+        val wasShowingGrid = currentState.showingTileGrid
+
+        // Update UI state
         _uiState.update { it.copy(showingTileGrid = showGrid) }
+
+        // If toggling from grid to list view, speak the list title and process items
+        if (wasShowingGrid && !showGrid) {
+            val sectionIndex = currentState.selectedSectionIndex
+            val listIndex = currentState.selectedListIndex
+            val section = currentState.checklistData?.sections?.getOrNull(sectionIndex)
+            val list = section?.lists?.getOrNull(listIndex)
+
+            if (list != null) {
+                viewModelScope.launch {
+                    // Speak the list title
+                    ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+
+                    // Process items until we find a task (this will speak the items)
+                    val updatedState = _uiState.value
+                    if (updatedState.checklistItemData.isNotEmpty()) {
+                        processItemsUntilTask(
+                            updatedState.checklistItemData,
+                            0, // Start from beginning of the list
+                            TextToSpeech.QUEUE_FLUSH
+                        )
+
+                        // Save the state with the updated active item
+                        saveCurrentState()
+                    }
+                }
+            }
+        }
     }
 
     /**
