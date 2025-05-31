@@ -101,7 +101,14 @@ fun ListSelector(
                         .pointerInput(Unit) {
                             detectTapGestures(
                                 onTap = { onListSelected(index) },
-                                onLongPress = { if (isSelected) onLongClick() }
+                                onLongPress = {
+                                    // Select the list first if it's not already selected
+                                    if (!isSelected) {
+                                        onListSelected(index)
+                                    }
+                                    // Then trigger the long click action
+                                    onLongClick()
+                                }
                             )
                         }
                 ) {

@@ -4,7 +4,6 @@ import android.app.Application
 import android.speech.tts.TextToSpeech
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -111,10 +110,14 @@ class ChecklistViewModel(
                 ttsHandler.handleChecklistOpened(data)
 
                 // Speak section title
-                ttsHandler.handleSectionOpened(section)
+                ttsHandler.handleSectionOpened(section, TextToSpeech.QUEUE_ADD)
 
                 // Speak list title if available
-                ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+                ttsHandler.handleListOpened(
+                    list.listTitle,
+                    list.listTitleAudio,
+                    TextToSpeech.QUEUE_ADD
+                )
 
                 // Process items until we find a task (this will speak the items)
                 processItemsUntilTask(
@@ -163,15 +166,25 @@ class ChecklistViewModel(
             emptyList()
         }
 
-        // Find first task item to set as active
-        var firstTaskIndex = -1
-        for (i in items.indices) {
-            val item = items[i]
-            // Check if the item is a task (not a label, note, caution, or warning)
-            if (item.listItemType.equals("TASK", ignoreCase = true)) {
-                firstTaskIndex = i
-                break
+        // Find first task item to set as active only if activeItemIndex is not already set
+        // or if it's out of bounds for the new item list
+        val existingActiveIndex = currentState.activeItemIndex
+        val useExistingIndex = existingActiveIndex >= 0 && existingActiveIndex < items.size
+
+        var newActiveIndex = if (useExistingIndex) {
+            existingActiveIndex  // Keep the existing active index if it's valid
+        } else {
+            // Otherwise find the first task item to set as active
+            var firstTaskIndex = -1
+            for (i in items.indices) {
+                val item = items[i]
+                // Check if the item is a task (not a label, note, caution, or warning)
+                if (item.listItemType.equals("TASK", ignoreCase = true)) {
+                    firstTaskIndex = i
+                    break
+                }
             }
+            firstTaskIndex
         }
 
         // Calculate which tasks are blocked by previous required tasks
@@ -189,7 +202,7 @@ class ChecklistViewModel(
                 hasMultipleSections = data.sections.size > 1,
                 checklistItemData = items,              // Update the checklistItemData property
                 completedItems = completedItemsList,    // Update the completedItems property
-                activeItemIndex = firstTaskIndex,       // Set the active item to the first task item, not just the first item in the list
+                activeItemIndex = newActiveIndex,       // Use the calculated active index (either preserved or new)
                 blockedTasks = blockedTasks,            // Update blocked tasks
                 showingTileGrid = showTileGrid         // Set showingTileGrid based on the section's listView property
             )
@@ -319,8 +332,29 @@ class ChecklistViewModel(
 
     /**
      * Find an item by its ID in the loaded checklist data
+     * The itemId is now in the format "sectionIndex_listIndex_itemIndex"
      */
     private fun findItemIndexById(itemId: String, sectionIndex: Int, listIndex: Int): Int {
+        // Parse the itemId to get the item index
+        val parts = itemId.split("_")
+
+        // If we have a position-based ID (should have 3 parts)
+        if (parts.size == 3) {
+            val storedSectionIndex = parts[0].toIntOrNull()
+            val storedListIndex = parts[1].toIntOrNull()
+            val storedItemIndex = parts[2].toIntOrNull()
+
+            // If this ID is for the current section and list, and we have a valid item index
+            if (storedSectionIndex == sectionIndex &&
+                storedListIndex == listIndex &&
+                storedItemIndex != null
+            ) {
+                return storedItemIndex
+            }
+        }
+
+        // Fallback for older format IDs that might be using just the challenge
+        // This helps with backward compatibility during transition
         val data = _uiState.value.checklistData ?: return -1
         if (sectionIndex >= data.sections.size) return -1
 
@@ -328,7 +362,7 @@ class ChecklistViewModel(
         if (listIndex >= section.lists.size) return -1
 
         val list = section.lists[listIndex]
-        // Use challenge as the identifier since itemId property doesn't exist in ChecklistItem
+        // Try to find the item by its challenge as a fallback
         return list.listItems.indexOfFirst { it.challenge == itemId }
     }
 
@@ -457,13 +491,12 @@ class ChecklistViewModel(
                     ttsHandler.handleListOpened(
                         list.listTitle,
                         list.listTitleAudio,
-                        TextToSpeech.QUEUE_ADD
+                        TextToSpeech.QUEUE_FLUSH
                     )
 
                     // Process items until we find a task (this will speak the items)
                     val updatedState = _uiState.value
                     if (updatedState.checklistItemData.isNotEmpty()) {
-                        delay(500) // Small delay to ensure TTS has stopped
                         processItemsUntilTask(
                             updatedState.checklistItemData,
                             0, // Start from beginning of the list
@@ -505,7 +538,8 @@ class ChecklistViewModel(
                         val firstList = nextSection.lists.first()
                         ttsHandler.handleListOpened(
                             firstList.listTitle,
-                            firstList.listTitleAudio
+                            firstList.listTitleAudio,
+                            TextToSpeech.QUEUE_ADD
                         )
 
                         // Process items until we find a task (this will speak the items)
@@ -513,7 +547,8 @@ class ChecklistViewModel(
                         if (updatedState.checklistItemData.isNotEmpty()) {
                             processItemsUntilTask(
                                 updatedState.checklistItemData,
-                                0 // Start from beginning of the list
+                                0,
+                                TextToSpeech.QUEUE_ADD
                             )
 
                             // Save the state with the updated active item
@@ -574,7 +609,10 @@ class ChecklistViewModel(
                     // Only speak the first list title if not showing tile grid (not in tile view mode)
                     if (section.lists.isNotEmpty() && section.listView != "tileListView") {
                         val firstList = section.lists.first()
-                        ttsHandler.handleListOpened(firstList.listTitle, firstList.listTitleAudio)
+                        ttsHandler.handleListOpened(
+                            firstList.listTitle, firstList.listTitleAudio,
+                            TextToSpeech.QUEUE_FLUSH
+                        )
 
                         // Process items until we find a task (this will speak the items)
                         val updatedState = _uiState.value
@@ -582,7 +620,7 @@ class ChecklistViewModel(
                             processItemsUntilTask(
                                 updatedState.checklistItemData,
                                 0,
-                                TextToSpeech.QUEUE_FLUSH
+                                TextToSpeech.QUEUE_ADD
                             )
 
                             // Save the state with the updated active item
@@ -622,7 +660,7 @@ class ChecklistViewModel(
                     processItemsUntilTask(
                         updatedState.checklistItemData,
                         0,
-                        TextToSpeech.QUEUE_FLUSH
+                        TextToSpeech.QUEUE_ADD
                     )
 
                     // Save the state with the updated active item
@@ -658,19 +696,14 @@ class ChecklistViewModel(
                             )?.listItems?.size ?: 0)
                         ) {
                             // Get the item
-                            val item =
-                                currentState.checklistData?.sections?.get(sectionIdx)?.lists?.get(
-                                    listIdx
-                                )?.listItems?.get(itemIdx)
+                            currentState.checklistData?.sections?.get(sectionIdx)?.lists?.get(
+                                listIdx
+                            )?.listItems?.get(itemIdx)
 
-                            // Use challenge as the identifier (or fallback to index)
-                            val identifier = if (!item?.challenge.isNullOrEmpty()) {
-                                item.challenge
-                            } else {
-                                itemIdx.toString() // Fallback to using the index as a string
-                            }
+                            // Use position-based unique identifier
+                            val identifier = "${sectionIdx}_${listIdx}_${itemIdx}"
 
-                            // Add the identifier to the list (no need to check if null)
+                            // Add the identifier to the list
                             itemIds.add(identifier)
                         }
                     }
@@ -742,17 +775,14 @@ class ChecklistViewModel(
 
                 // Find first unchecked task item
                 for (itemIndex in items.indices) {
-                    // Get the identifier for this item (challenge or index)
+                    // Get the identifier for this item (position-based unique identifier)
                     val item = items[itemIndex]
-                    val itemIdentifier = if (item.challenge.isNotEmpty()) {
-                        item.challenge
-                    } else {
-                        itemIndex.toString()
-                    }
+                    val itemIdentifier = "${sectionIndex}_${listIndex}_${itemIndex}"
 
                     // Only process TASK type items, but continue checking the rest of the list
                     if (item.listItemType.equals("TASK", ignoreCase = true) &&
-                        !completedInThisList.contains(itemIdentifier)) {
+                        !completedInThisList.contains(itemIdentifier)
+                    ) {
                         // Found an unchecked item - navigate to this section and list
                         foundItem = true  // Set flag that we found an item
 
@@ -789,7 +819,10 @@ class ChecklistViewModel(
 
                             // Only speak the list title if the list changed
                             if (listChanged) {
-                                ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+                                ttsHandler.handleListOpened(
+                                    list.listTitle, list.listTitleAudio,
+                                    TextToSpeech.QUEUE_ADD
+                                )
                             }
 
                             // Then speak the item itself
@@ -853,12 +886,8 @@ class ChecklistViewModel(
                 for (itemIndex in items.indices) {
                     val item = items[itemIndex]
 
-                    // Get the identifier for this item (challenge or index)
-                    val itemIdentifier = if (item.challenge.isNotEmpty()) {
-                        item.challenge
-                    } else {
-                        itemIndex.toString()
-                    }
+                    // Get the identifier for this item (position-based unique identifier)
+                    val itemIdentifier = "${sectionIndex}_${listIndex}_${itemIndex}"
 
                     if (item.isRequired &&
                         !completedInThisList.contains(itemIdentifier) &&
@@ -900,7 +929,10 @@ class ChecklistViewModel(
 
                             // Only speak the list title if the list changed
                             if (listChanged) {
-                                ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+                                ttsHandler.handleListOpened(
+                                    list.listTitle, list.listTitleAudio,
+                                    TextToSpeech.QUEUE_ADD
+                                )
                             }
 
                             // Then speak the item itself with any preceding labels
@@ -921,7 +953,10 @@ class ChecklistViewModel(
         @Suppress("SENSELESS_COMPARISON")
         if (!foundItem) {
             viewModelScope.launch {
-                ttsHandler.handleMessage("No incomplete required tasks found", TextToSpeech.QUEUE_FLUSH)
+                ttsHandler.handleMessage(
+                    "No incomplete required tasks found",
+                    TextToSpeech.QUEUE_FLUSH
+                )
             }
         }
     }
@@ -937,6 +972,9 @@ class ChecklistViewModel(
      * Toggle between tile grid view and list view
      */
     fun toggleTileGridView(showGrid: Boolean) {
+        // Set activeItemIndex to 0 before doing anything
+        _uiState.update { it.copy(activeItemIndex = 0) }
+
         val currentState = _uiState.value
         val wasShowingGrid = currentState.showingTileGrid
 
@@ -961,7 +999,7 @@ class ChecklistViewModel(
                         processItemsUntilTask(
                             updatedState.checklistItemData,
                             0, // Start from beginning of the list
-                            TextToSpeech.QUEUE_FLUSH
+                            TextToSpeech.QUEUE_ADD
                         )
 
                         // Save the state with the updated active item
@@ -1015,43 +1053,43 @@ class ChecklistViewModel(
         val sectionIndex = currentState.selectedSectionIndex
         val listIndex = currentState.selectedListIndex
 
+        // Get the current list's items
+        val currentItems = currentState.checklistItemData
+        if (currentItems.isEmpty()) return
+
+        // Verify the indices are valid for the current state
         if (sectionIndex >= currentState.completedItemsBySection.size) return
         if (listIndex >= currentState.completedItemsBySection[sectionIndex].size) return
 
-        val completedItems = currentState.completedItemsBySection.toMutableList()
-        val sectionCompletedItems = completedItems[sectionIndex].toMutableList()
-        val listCompletedItems = sectionCompletedItems[listIndex].toMutableList()
+        // Create deep copies of the nested list structure to ensure we don't modify the existing state directly
+        val completedItemsBySectionCopy = currentState.completedItemsBySection.map {
+            it.map { list -> list.toMutableList() }.toMutableList()
+        }.toMutableList()
 
-        // Add all item indices to the completed items list
-        val allIndices = currentState.checklistItemData.indices.toList()
-        listCompletedItems.clear()
-        listCompletedItems.addAll(allIndices)
+        // Get the list we want to mark as complete
+        val listToComplete = completedItemsBySectionCopy[sectionIndex][listIndex]
 
-        sectionCompletedItems[listIndex] = listCompletedItems
-        completedItems[sectionIndex] = sectionCompletedItems
+        // Clear the list and add all current indices
+        listToComplete.clear()
+        listToComplete.addAll(currentItems.indices)
 
-        // Create a new list to ensure Compose detects the state change
-        val newCompletedItemsList = listCompletedItems.toList()
-
-        _uiState.update {
-            it.copy(
-                completedItemsBySection = completedItems,
-                // Update the completedItems list as well to trigger UI refresh
-                completedItems = newCompletedItemsList
+        // Update the UI state with the new list
+        _uiState.update { state ->
+            state.copy(
+                completedItemsBySection = completedItemsBySectionCopy,
+                completedItems = listToComplete.toList() // Create a new list to ensure state update is detected
             )
         }
 
-        // Save state after marking all complete
+        // Save the state to persist changes between sessions
         saveCurrentState()
 
-        // Start a coroutine only for the TTS announcement
+        // Speak the confirmation
         viewModelScope.launch {
-            // Announce completion with TTS using our dedicated method
-            ttsHandler.handleMessage("All tasks marked complete")
+            ttsHandler.handleMessage("All tasks marked complete", TextToSpeech.QUEUE_FLUSH)
         }
 
-        // Advance to next list/section immediately, but use QUEUE_ADD for TTS to avoid interrupting
-        // the "All tasks marked complete" announcement
+        // Advance to the next list or section
         advanceToNextListOrSection()
     }
 
@@ -1131,13 +1169,9 @@ class ChecklistViewModel(
 
                 // Find first unchecked task item
                 for (itemIndex in items.indices) {
-                    // Get the identifier for this item (challenge or index)
+                    // Get the identifier for this item (position-based unique identifier)
                     val item = items[itemIndex]
-                    val itemIdentifier = if (item.challenge.isNotEmpty()) {
-                        item.challenge
-                    } else {
-                        itemIndex.toString()
-                    }
+                    val itemIdentifier = "${sectionIndex}_${listIndex}_${itemIndex}"
 
                     // Check if this is a TASK and it's unchecked
                     if (!completedInThisList.contains(itemIdentifier) &&
@@ -1166,11 +1200,12 @@ class ChecklistViewModel(
         listIndex: Int,
         itemIndex: Int
     ) {
-        // Change section and list indices
+        // Change section and list indices and set the active item index
         _uiState.update {
             it.copy(
                 selectedSectionIndex = sectionIndex,
-                selectedListIndex = listIndex
+                selectedListIndex = listIndex,
+                activeItemIndex = itemIndex  // Explicitly set the active item index
             )
         }
 
@@ -1194,13 +1229,19 @@ class ChecklistViewModel(
 
                 // Speak list title if available
                 if (list != null) {
-                    ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+                    ttsHandler.handleListOpened(
+                        list.listTitle, list.listTitleAudio,
+                        TextToSpeech.QUEUE_ADD
+                    )
                 }
 
                 // Speak the item
                 val items = currentState.checklistItemData
                 if (items.isNotEmpty() && itemIndex != -1) {
-                    ttsHandler.handleItem(items, itemIndex)
+                    ttsHandler.handleItem(
+                        items, itemIndex,
+                        TextToSpeech.QUEUE_ADD
+                    )
                 }
             }
         }
@@ -1219,11 +1260,24 @@ class ChecklistViewModel(
         startIndex: Int,
         queueMode: Int = TextToSpeech.QUEUE_FLUSH
     ) {
-        // Start from the given index
-        var currentIndex = startIndex
-
         // Get the most up-to-date completed items list from the current UI state
         val currentCompletedItems = _uiState.value.completedItems
+
+        // First check if all tasks in the checklist are complete
+        val allTasksComplete = items.withIndex().all { (index, item) ->
+            // If this is a task, verify it's in the completed items list, otherwise it's not a task so skip
+            !item.listItemType.equals("task", ignoreCase = true) || currentCompletedItems.contains(
+                index
+            )
+        }
+
+        // If all tasks are complete, return early
+        if (allTasksComplete) {
+            return
+        }
+
+        // Start from the given index
+        var currentIndex = startIndex
 
         // Continue reading items until we find a task
         while (currentIndex >= 0 && currentIndex < items.size) {
