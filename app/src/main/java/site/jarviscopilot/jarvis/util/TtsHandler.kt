@@ -149,10 +149,16 @@ class TtsHandler private constructor(context: Context) {
     }
 
     /**
-     * Handle announcement when all tasks are marked complete
+     * Handle announcement for any message
+     *
+     * @param message The message text to announce
+     * @param queueMode TTS queue mode (QUEUE_FLUSH or QUEUE_ADD)
      */
-    suspend fun handleAllTasksComplete() {
-        speakIfEnabledAndWait("All tasks marked complete")
+    suspend fun handleMessage(
+        message: String,
+        queueMode: Int = TextToSpeech.QUEUE_FLUSH
+    ) {
+        speakIfEnabledAndWait(message, queueMode)
     }
 
     companion object {

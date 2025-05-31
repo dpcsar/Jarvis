@@ -720,9 +720,15 @@ class ChecklistViewModel(
         val currentSectionIndex = _uiState.value.selectedSectionIndex
         val currentListIndex = _uiState.value.selectedListIndex
 
+        var foundItem = false  // Add a flag to track if we found an item
+
         // Start from the first section and search through all sections sequentially
         for (sectionIndex in checklistData.sections.indices) {
             val section = checklistData.sections[sectionIndex]
+
+            // Skip non-checklist sections (like emergency or reference sections)
+            if (section.sectionType != "checklist") continue
+
             val lists = section.lists
 
             // For each list in the section
@@ -734,7 +740,7 @@ class ChecklistViewModel(
                 val compoundKey = "${sectionIndex}_${listIndex}"
                 val completedInThisList = completedItems[compoundKey] ?: mutableListOf()
 
-                // Find first unchecked item
+                // Find first unchecked task item
                 for (itemIndex in items.indices) {
                     // Get the identifier for this item (challenge or index)
                     val item = items[itemIndex]
@@ -744,10 +750,11 @@ class ChecklistViewModel(
                         itemIndex.toString()
                     }
 
-                    if (!completedInThisList.contains(itemIdentifier) &&
-                        item.listItemType.equals("TASK", ignoreCase = true)
-                    ) {
+                    // Only process TASK type items, but continue checking the rest of the list
+                    if (item.listItemType.equals("TASK", ignoreCase = true) &&
+                        !completedInThisList.contains(itemIdentifier)) {
                         // Found an unchecked item - navigate to this section and list
+                        foundItem = true  // Set flag that we found an item
 
                         // Track if section or list changed
                         val sectionChanged = sectionIndex != currentSectionIndex
@@ -793,9 +800,19 @@ class ChecklistViewModel(
                             )
                         }
 
-                        return
+                        return  // Exit the function after finding and processing the first unchecked task
                     }
+                    // Continue checking the rest of the items in the list
                 }
+                // If we've gone through the entire list and didn't find any incomplete tasks, continue to the next list
+            }
+        }
+
+        // If we've gone through all sections and lists and didn't find any incomplete tasks
+        @Suppress("SENSELESS_COMPARISON")
+        if (!foundItem) {
+            viewModelScope.launch {
+                ttsHandler.handleMessage("No incomplete tasks found", TextToSpeech.QUEUE_FLUSH)
             }
         }
     }
@@ -812,9 +829,15 @@ class ChecklistViewModel(
         val currentSectionIndex = _uiState.value.selectedSectionIndex
         val currentListIndex = _uiState.value.selectedListIndex
 
+        var foundItem = false  // Add a flag to track if we found an item
+
         // Start from the first section and search through all sections sequentially
         for (sectionIndex in checklistData.sections.indices) {
             val section = checklistData.sections[sectionIndex]
+
+            // Skip non-checklist sections (like emergency or reference sections)
+            if (section.sectionType != "checklist") continue
+
             val lists = section.lists
 
             // For each list in the section
@@ -842,6 +865,7 @@ class ChecklistViewModel(
                         item.listItemType.equals("TASK", ignoreCase = true)
                     ) {
                         // Found an unchecked required item - navigate to this section and list
+                        foundItem = true  // Set flag that we found an item
 
                         // Track if section or list changed
                         val sectionChanged = sectionIndex != currentSectionIndex
@@ -890,6 +914,14 @@ class ChecklistViewModel(
                         return
                     }
                 }
+            }
+        }
+
+        // If we've gone through all sections and lists and didn't find any incomplete required tasks
+        @Suppress("SENSELESS_COMPARISON")
+        if (!foundItem) {
+            viewModelScope.launch {
+                ttsHandler.handleMessage("No incomplete required tasks found", TextToSpeech.QUEUE_FLUSH)
             }
         }
     }
@@ -1015,7 +1047,7 @@ class ChecklistViewModel(
         // Start a coroutine only for the TTS announcement
         viewModelScope.launch {
             // Announce completion with TTS using our dedicated method
-            ttsHandler.handleAllTasksComplete()
+            ttsHandler.handleMessage("All tasks marked complete")
         }
 
         // Advance to next list/section immediately, but use QUEUE_ADD for TTS to avoid interrupting
