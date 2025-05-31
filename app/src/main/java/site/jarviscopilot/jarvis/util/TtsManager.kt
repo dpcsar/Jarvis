@@ -114,14 +114,6 @@ class TtsManager private constructor(context: Context) {
     }
 
     /**
-     * Immediately stop TTS speech
-     */
-    fun stop() {
-        textToSpeech?.stop()
-        _isSpeaking.value = false
-    }
-
-    /**
      * Release TTS resources. Call this when the app is closing or TTS is no longer needed.
      */
     fun shutdown() {

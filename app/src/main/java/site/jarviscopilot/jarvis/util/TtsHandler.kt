@@ -49,25 +49,25 @@ class TtsHandler private constructor(context: Context) {
     /**
      * Handle section opening - speak sectionAudio or sectionTitle
      */
-    suspend fun handleSectionOpened(section: ChecklistSectionData) {
+    suspend fun handleSectionOpened(section: ChecklistSectionData, queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
         val textToSpeak = if (section.sectionTitleAudio.isNotBlank())
             section.sectionTitleAudio
         else
             section.sectionTitle
 
-        speakIfEnabledAndWait(textToSpeak)
+        speakIfEnabledAndWait(textToSpeak, queueMode)
     }
 
     /**
      * Handle list opening - speak listTitleAudio or listTitle
      */
-    suspend fun handleListOpened(listTitle: String, listTitleAudio: String) {
+    suspend fun handleListOpened(listTitle: String, listTitleAudio: String, queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
         val textToSpeak = if (listTitleAudio.isNotBlank())
             listTitleAudio
         else
             listTitle
 
-        speakIfEnabledAndWait(textToSpeak)
+        speakIfEnabledAndWait(textToSpeak, queueMode)
     }
 
     /**
@@ -76,11 +76,11 @@ class TtsHandler private constructor(context: Context) {
      * 1. Read the items in sequence until it finds an active task
      * 2. For a task, read the challengeAudio (or challenge) and responseAudio (or response)
      */
-    suspend fun handleItemsAndTask(items: List<ChecklistItemData>, activeItemIndex: Int) {
-        // Reset speech queue
-        ttsManager.stop()
-        delay(200) // Small delay to ensure TTS has stopped
-
+    suspend fun handleItemsAndTask(
+        items: List<ChecklistItemData>,
+        activeItemIndex: Int,
+        queueMode: Int = TextToSpeech.QUEUE_FLUSH
+    ) {
         // Read all labels before the active item
         for (i in 0 until activeItemIndex) {
             val item = items[i]
@@ -89,20 +89,42 @@ class TtsHandler private constructor(context: Context) {
                     ignoreCase = true
                 ) && item.challenge.isNotBlank()
             ) {
-                speakIfEnabledAndWait(item.challenge)
+                speakIfEnabledAndWait(item.challenge, queueMode)
             }
         }
 
         // Now read the active item
         if (activeItemIndex < items.size) {
             val activeItem = items[activeItemIndex]
-            val textToSpeak = if (activeItem.challengeAudio.isNotBlank()) {
-                activeItem.challengeAudio
-            } else {
-                activeItem.challenge
+
+            // Handle challenge part based on suppressAudioChallenge flag
+            if (!activeItem.suppressAudioChallenge) {
+                val challengeToSpeak = if (activeItem.challengeAudio.isNotBlank()) {
+                    activeItem.challengeAudio
+                } else {
+                    activeItem.challenge
+                }
+                speakIfEnabledAndWait(challengeToSpeak, queueMode)
             }
-            speakIfEnabledAndWait(textToSpeak)
+
+            // Handle response part based on suppressAudioResponse flag
+            if (!activeItem.suppressAudioResponse &&
+                (activeItem.responseAudio.isNotBlank() || activeItem.response.isNotBlank())) {
+                val responseToSpeak = if (activeItem.responseAudio.isNotBlank()) {
+                    activeItem.responseAudio
+                } else {
+                    activeItem.response
+                }
+                speakIfEnabledAndWait(responseToSpeak, TextToSpeech.QUEUE_ADD)
+            }
         }
+    }
+
+    /**
+     * Handle announcement when all tasks are marked complete
+     */
+    suspend fun handleAllTasksComplete() {
+        speakIfEnabledAndWait("All tasks marked complete")
     }
 
     companion object {

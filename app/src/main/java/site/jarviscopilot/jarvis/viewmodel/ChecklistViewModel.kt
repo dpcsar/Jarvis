@@ -1,8 +1,10 @@
 package site.jarviscopilot.jarvis.viewmodel
 
 import android.app.Application
+import android.speech.tts.TextToSpeech
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -364,10 +366,12 @@ class ChecklistViewModel(
                 it.copy(
                     completedItemsBySection = completedItems,
                     completedItems = listCompletedItems,
-                    blockedTasks = updatedBlockedTasks, // Update blocked tasks list
-                    activeItemIndex = itemIndex // Set unchecked item as active
+                    blockedTasks = updatedBlockedTasks // Update blocked tasks list
                 )
             }
+
+            // Use setActiveItem instead of directly updating the state to ensure TTS is triggered
+            setActiveItem(itemIndex)
 
             // Save state after updating
             saveCurrentState()
@@ -398,11 +402,10 @@ class ChecklistViewModel(
 
             // Update the active item if we found a valid next unchecked item
             if (nextUncheckedItem != -1) {
-                _uiState.update {
-                    it.copy(activeItemIndex = nextUncheckedItem)
-                }
+                // Use setActiveItem instead of directly updating the state to ensure TTS is triggered
+                setActiveItem(nextUncheckedItem)
 
-                // Save state and check completion after updating active item
+                // Save state after updating active item
                 saveCurrentState()
             } else {
                 // No more unchecked items in this list
@@ -419,8 +422,11 @@ class ChecklistViewModel(
     /**
      * Advances to the next appropriate list or section after completing all items in the current list.
      * Only advances if current section type is "checklist" and doesn't advance to emergency or reference sections.
+     *
+     * @param useQueueAdd If true, TTS announcements will use QUEUE_ADD instead of QUEUE_FLUSH
+     *                    to avoid interrupting previous announcements
      */
-    private fun advanceToNextListOrSection() {
+    private fun advanceToNextListOrSection(useQueueAdd: Boolean = false) {
         val currentState = _uiState.value
         val data = currentState.checklistData ?: return
 
@@ -443,16 +449,20 @@ class ChecklistViewModel(
             val list = currentSection.lists.getOrNull(newListIndex)
             if (list != null) {
                 viewModelScope.launch {
-                    ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio)
+                    // Use TextToSpeech.QUEUE_ADD if useQueueAdd is true
+                    val queueMode = if (useQueueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
+                    ttsHandler.handleListOpened(list.listTitle, list.listTitleAudio, queueMode)
 
                     // Speak first unchecked item and previous labels
                     val updatedState = _uiState.value
                     if (updatedState.checklistItemData.isNotEmpty()) {
                         val firstUncheckedIndex = findFirstUncheckedItem()
                         if (firstUncheckedIndex != -1) {
+                            delay(500) // Small delay to ensure TTS has stopped
                             ttsHandler.handleItemsAndTask(
                                 updatedState.checklistItemData,
-                                firstUncheckedIndex
+                                firstUncheckedIndex,
+                                queueMode
                             )
                         }
                     }
@@ -480,13 +490,16 @@ class ChecklistViewModel(
 
                 // Speak the section, list title, and first unchecked item
                 viewModelScope.launch {
+                    // Use TextToSpeech.QUEUE_ADD if useQueueAdd is true
+                    val queueMode = if (useQueueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
+
                     // Speak section name
-                    ttsHandler.handleSectionOpened(nextSection)
+                    ttsHandler.handleSectionOpened(nextSection, queueMode)
 
                     // Speak list name if available
                     if (nextSection.lists.isNotEmpty()) {
                         val firstList = nextSection.lists.first()
-                        ttsHandler.handleListOpened(firstList.listTitle, firstList.listTitleAudio)
+                        ttsHandler.handleListOpened(firstList.listTitle, firstList.listTitleAudio, queueMode)
 
                         // Speak first unchecked item and previous labels
                         val updatedState = _uiState.value
@@ -495,7 +508,8 @@ class ChecklistViewModel(
                             if (firstUncheckedIndex != -1) {
                                 ttsHandler.handleItemsAndTask(
                                     updatedState.checklistItemData,
-                                    firstUncheckedIndex
+                                    firstUncheckedIndex,
+                                    queueMode
                                 )
                             }
                         }
@@ -552,8 +566,8 @@ class ChecklistViewModel(
                     // Speak the section title
                     ttsHandler.handleSectionOpened(section)
 
-                    // Also speak the first list title if available
-                    if (section.lists.isNotEmpty()) {
+                    // Only speak the first list title if not showing tile grid (not in tile view mode)
+                    if (section.lists.isNotEmpty() && section.listView != "tileListView") {
                         val firstList = section.lists.first()
                         ttsHandler.handleListOpened(firstList.listTitle, firstList.listTitleAudio)
 
@@ -835,7 +849,9 @@ class ChecklistViewModel(
      */
     fun selectChecklistItem(index: Int) {
         if (index >= 0 && index < _uiState.value.checklistItemData.size) {
-            _uiState.update { it.copy(activeItemIndex = index) }
+            // Use setActiveItem instead of directly updating the state
+            // This ensures TTS is triggered for the newly selected item
+            setActiveItem(index)
         }
     }
 
@@ -876,8 +892,15 @@ class ChecklistViewModel(
         // Save state after marking all complete
         saveCurrentState()
 
-        // Advance to next list/section after marking all items complete
-        advanceToNextListOrSection()
+        // Start a coroutine only for the TTS announcement
+        viewModelScope.launch {
+            // Announce completion with TTS using our dedicated method
+            ttsHandler.handleAllTasksComplete()
+        }
+
+        // Advance to next list/section immediately, but use QUEUE_ADD for TTS to avoid interrupting
+        // the "All tasks marked complete" announcement
+        advanceToNextListOrSection(useQueueAdd = true)
     }
 
     /**
@@ -1097,6 +1120,7 @@ class ChecklistViewModel(
         setActiveItem(itemIndex)
 
         // Save the current state to persist these changes
+
         saveCurrentState()
 
         // Explicitly speak the full context when navigating to an item (especially when resuming)
