@@ -184,7 +184,7 @@ fun ChecklistScreen(
                         ClickableListTitle(
                             title = currentList.listTitle,
                             onClick = {
-                                // Optional click action
+                                viewModel.handleChecklistTitleClick()
                             }
                         )
 

@@ -464,7 +464,7 @@ class ChecklistViewModel(
      * Advances to the next appropriate list or section after completing all items in the current list.
      * Only advances if current section type is "checklist" and doesn't advance to emergency or reference sections.
      */
-    private fun advanceToNextListOrSection() {
+    private fun advanceToNextListOrSection(queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
         val currentState = _uiState.value
         val data = currentState.checklistData ?: return
 
@@ -491,7 +491,7 @@ class ChecklistViewModel(
                     ttsHandler.handleListOpened(
                         list.listTitle,
                         list.listTitleAudio,
-                        TextToSpeech.QUEUE_FLUSH
+                        queueMode
                     )
 
                     // Process items until we find a task (this will speak the items)
@@ -1306,5 +1306,119 @@ class ChecklistViewModel(
             currentIndex++
         }
         // No unchecked task was found, we've reached the end of the list
+    }
+
+    /**
+     * Handles click on checklist title.
+     * Reads through all items in the current list one by one, marking each complete after reading it,
+     * then advances to the next list without reading it.
+     */
+    fun handleChecklistTitleClick() {
+        val currentState = _uiState.value
+        val sectionIndex = currentState.selectedSectionIndex
+        val listIndex = currentState.selectedListIndex
+        val currentItems = currentState.checklistItemData
+
+        // Verify the indices are valid for the current state
+        if (currentItems.isEmpty()) return
+        if (sectionIndex >= currentState.completedItemsBySection.size) return
+        if (listIndex >= currentState.completedItemsBySection[sectionIndex].size) return
+
+        // Announce that we're going to read through the list
+        viewModelScope.launch {
+            ttsHandler.handleMessage("Reading checklist items", TextToSpeech.QUEUE_FLUSH)
+
+            // Get information about the current section and list for later comparison
+            val initialSectionIndex = currentState.selectedSectionIndex
+            val initialListIndex = currentState.selectedListIndex
+
+            // Process each item one by one
+            for (itemIndex in currentItems.indices) {
+                // Check if the item is already complete
+                val isAlreadyComplete = itemIndex in _uiState.value.completedItems
+
+                // If not already complete, read it and mark it complete
+                if (!isAlreadyComplete) {
+                    // First, set this item as the active item for visual indication
+                    _uiState.update { it.copy(activeItemIndex = itemIndex) }
+
+                    // Read the current item
+                    ttsHandler.handleItem(
+                        currentItems,
+                        itemIndex,
+                        TextToSpeech.QUEUE_FLUSH
+                    )
+
+                    // Mark the item as complete without speaking it again
+                    markItemCompleteWithoutSpeaking(itemIndex)
+
+                    // Small delay between items
+                    kotlinx.coroutines.delay(300)
+                }
+            }
+
+            // Check if we successfully advanced to a new list
+            val newState = _uiState.value
+            if (newState.selectedSectionIndex != initialSectionIndex ||
+                newState.selectedListIndex != initialListIndex
+            ) {
+                // We've advanced - let the user know but don't read the items
+                ttsHandler.handleMessage("Advanced to next list", TextToSpeech.QUEUE_ADD)
+            } else {
+                // If we didn't advance, it means we're at the end of the checklist
+                ttsHandler.handleMessage("End of checklist reached", TextToSpeech.QUEUE_ADD)
+            }
+
+            // After all items have been read and marked complete,
+            // advance to the next list without reading it
+            advanceToNextListOrSection(TextToSpeech.QUEUE_ADD)
+        }
+    }
+
+    /**
+     * Marks an item complete without speaking it or any subsequent items.
+     * This is used by handleChecklistTitleClick to animate item completion.
+     */
+    private fun markItemCompleteWithoutSpeaking(itemIndex: Int) {
+        val currentState = _uiState.value
+        val sectionIndex = currentState.selectedSectionIndex
+        val listIndex = currentState.selectedListIndex
+
+        if (sectionIndex >= currentState.completedItemsBySection.size) return
+        if (listIndex >= currentState.completedItemsBySection[sectionIndex].size) return
+
+        // If the item is already complete or blocked, do nothing
+        if (itemIndex in currentState.completedItems || itemIndex in currentState.blockedTasks) {
+            return
+        }
+
+        // Create deep copies of the nested list structure to modify
+        val completedItems = currentState.completedItemsBySection.toMutableList()
+        val sectionCompletedItems = completedItems[sectionIndex].toMutableList()
+        val listCompletedItems = sectionCompletedItems[listIndex].toMutableList()
+
+        // Mark the item as complete
+        listCompletedItems.add(itemIndex)
+
+        // Update the section's completed items list
+        sectionCompletedItems[listIndex] = listCompletedItems
+        completedItems[sectionIndex] = sectionCompletedItems
+
+        // Recalculate blocked tasks based on the new completion status
+        val updatedBlockedTasks =
+            calculateBlockedTasks(currentState.checklistItemData, listCompletedItems)
+
+        // Update the state with the new completed items and blocked tasks
+        _uiState.update {
+            it.copy(
+                completedItemsBySection = completedItems,
+                completedItems = listCompletedItems,
+                blockedTasks = updatedBlockedTasks,
+                activeItemIndex = itemIndex // Update active item index to the item we just completed
+            )
+        }
+
+        // Save state after updating
+        saveCurrentState()
     }
 }
