@@ -1121,6 +1121,11 @@ class ChecklistViewModel(
             )
         }
 
+        viewModelScope.launch {
+            //  Speak section title
+            ttsHandler.handleSectionOpened(data.sections[emergencySectionIndex])
+        }
+
         saveCurrentState()
         updateCurrentChecklistItems()
         return true
