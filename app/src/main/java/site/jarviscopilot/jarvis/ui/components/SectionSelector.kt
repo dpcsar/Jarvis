@@ -1,9 +1,15 @@
 package site.jarviscopilot.jarvis.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -20,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.model.ChecklistSectionData
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.util.ChecklistUtils
 
 /**
  * A composable that displays a horizontal row of selectable section cards.
@@ -30,8 +38,14 @@ fun SectionSelector(
     sections: List<ChecklistSectionData>,
     selectedSectionIndex: Int,
     onSectionSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    completedItemsBySection: List<List<MutableList<Int>>> = emptyList()
 ) {
+    // Calculate the total number of items in a section by summing up all items in all lists
+    fun calculateTotalItemsForSection(section: ChecklistSectionData): Int {
+        return section.lists.sumOf { it.listItems.size }
+    }
+
     // Remember scroll state to control scrolling behavior
     val listState = rememberLazyListState()
 
@@ -126,38 +140,99 @@ fun SectionSelector(
                     ),
                     modifier = Modifier.clip(RoundedCornerShape(16.dp))
                 ) {
-                    Text(
-                        text = if (section.sectionSelectorName.isNotEmpty())
-                            section.sectionSelectorName
-                        else
-                            section.sectionTitle,
-                        style = JarvisTheme.typography.bodyMedium,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = when {
-                            section.sectionType == "emergency" && isSelected ->
-                                JarvisTheme.colorScheme.onEmergencyContainer
-
-                            section.sectionType == "emergency" && !isSelected ->
-                                JarvisTheme.colorScheme.onEmergency
-
-                            section.sectionType == "reference" && isSelected ->
-                                JarvisTheme.colorScheme.onReferenceContainer
-
-                            section.sectionType == "reference" && !isSelected ->
-                                JarvisTheme.colorScheme.onReference
-
-                            isSelected ->
-                                JarvisTheme.colorScheme.onPrimaryContainer
-
-                            else ->
-                                JarvisTheme.colorScheme.onSurfaceVariant
-                        },
-                        textAlign = TextAlign.Center,
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(
                             horizontal = 16.dp,
                             vertical = 8.dp
                         )  // Reduced from vertical: 12.dp to 8.dp
-                    )
+                    ) {
+                        Text(
+                            text = if (section.sectionSelectorName.isNotEmpty())
+                                section.sectionSelectorName
+                            else
+                                section.sectionTitle,
+                            style = JarvisTheme.typography.bodyMedium,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            color = when {
+                                section.sectionType == "emergency" && isSelected ->
+                                    JarvisTheme.colorScheme.onEmergencyContainer
+
+                                section.sectionType == "emergency" && !isSelected ->
+                                    JarvisTheme.colorScheme.onEmergency
+
+                                section.sectionType == "reference" && isSelected ->
+                                    JarvisTheme.colorScheme.onReferenceContainer
+
+                                section.sectionType == "reference" && !isSelected ->
+                                    JarvisTheme.colorScheme.onReference
+
+                                isSelected ->
+                                    JarvisTheme.colorScheme.onPrimaryContainer
+
+                                else ->
+                                    JarvisTheme.colorScheme.onSurfaceVariant
+                            },
+                            textAlign = TextAlign.Center
+                        )
+
+                        // Only show progress for checklist sections
+                        if (section.sectionType == "checklist") {
+                            // Calculate total items across all lists in this section
+                            val totalItems = calculateTotalItemsForSection(section)
+
+                            // Get the completed items for this specific section
+                            val completedCount = if (index < completedItemsBySection.size) {
+                                // Sum up all items in all lists for this section
+                                completedItemsBySection[index].sumOf { it.size }
+                            } else {
+                                0
+                            }
+
+                            val progress =
+                                if (totalItems > 0) completedCount.toFloat() / totalItems else 0f
+
+                            // Add percentage text above the progress bar
+                            Text(
+                                text = ChecklistUtils.formatProgress(completedCount, totalItems),
+                                style = JarvisTheme.typography.labelSmall,
+                                color = if (isSelected)
+                                    JarvisTheme.colorScheme.primary
+                                else
+                                    JarvisTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                                modifier = Modifier.padding(bottom = 2.dp),
+                                textAlign = TextAlign.Center
+                            )
+
+                            // Custom progress indicator implementation
+                            Box(
+                                modifier = Modifier
+                                    .padding(top = 6.dp)
+                                    .height(4.dp)
+                                    .width(80.dp)
+                                    .background(
+                                        color = if (isSelected)
+                                            JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                                        else
+                                            JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .width(80.dp * progress)
+                                        .background(
+                                            color = if (isSelected)
+                                                JarvisTheme.colorScheme.onPrimaryContainer
+                                            else
+                                                JarvisTheme.colorScheme.onSurfaceVariant,
+                                            shape = RoundedCornerShape(4.dp)
+                                        )
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

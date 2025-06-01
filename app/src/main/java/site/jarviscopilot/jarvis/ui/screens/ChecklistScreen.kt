@@ -138,7 +138,8 @@ fun ChecklistScreen(
                         selectedSectionIndex = uiState.selectedSectionIndex,
                         onSectionSelected = { section ->
                             viewModel.selectSection(section)
-                        }
+                        },
+                        completedItemsBySection = uiState.completedItemsBySection
                     )
                 }
 
