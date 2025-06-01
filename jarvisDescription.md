@@ -228,3 +228,5 @@ Remember to consult the "High-Level Architecture for Wake Word Detection" and "W
                     * label
                     * caution
                     * warning
+                    * reference
+                    * referenceNote

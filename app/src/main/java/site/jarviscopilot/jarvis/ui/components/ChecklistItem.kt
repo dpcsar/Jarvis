@@ -33,7 +33,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 
 // Represents the different types of checklist items
 enum class ChecklistItemType {
-    TASK, NOTE, LABEL, CAUTION, WARNING
+    TASK, NOTE, LABEL, CAUTION, WARNING, REFERENCE, REFERENCENOTE
 }
 
 // A customized checklist item that uses the Jarvis theme colors
@@ -70,6 +70,8 @@ fun ChecklistItem(
             ChecklistItemType.CAUTION -> JarvisTheme.colorScheme.caution
             ChecklistItemType.LABEL -> JarvisTheme.colorScheme.tertiary
             ChecklistItemType.NOTE -> JarvisTheme.colorScheme.secondary
+            ChecklistItemType.REFERENCE -> JarvisTheme.colorScheme.reference
+            ChecklistItemType.REFERENCENOTE -> JarvisTheme.colorScheme.reference
             ChecklistItemType.TASK -> Color.Transparent
         }
     )
@@ -92,7 +94,7 @@ fun ChecklistItem(
                 color = borderColor,
                 shape = RoundedCornerShape(8.dp)
             )
-            // Make note, caution and warning items clickable at the container level for TTS
+            // Make note, caution, warning and reference items clickable at the container level for TTS
             .let {
                 if (type != ChecklistItemType.TASK && type != ChecklistItemType.LABEL) {
                     it.clickable { onItemClick() }
@@ -159,16 +161,45 @@ fun ChecklistItem(
                         }
                     }
                 }
-            } else {
-                // Non-task layout (unchanged)
+            } else if (type == ChecklistItemType.REFERENCE) {
+                // Reference layout similar to task but without checkbox
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onItemClick() },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                    // Challenge text on the left
+                    Text(
+                        text = challenge,
+                        style = JarvisTheme.typography.bodyLarge,
+                        color = textColor,
+                        fontWeight = FontWeight.Normal,
                         modifier = Modifier.weight(1f)
+                    )
+
+                    // Response on the right - only if not empty
+                    if (response.isNotEmpty()) {
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = response,
+                            style = JarvisTheme.typography.bodyLarge,
+                            color = textColor,
+                            textAlign = TextAlign.End,
+                            fontWeight = FontWeight.Normal,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            } else {
+                // Non-task layout (updated for challenge-response format)
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         // Icons for specific types
                         when (type) {
@@ -201,25 +232,32 @@ fun ChecklistItem(
                             fontWeight = when (type) {
                                 ChecklistItemType.LABEL -> FontWeight.Bold
                                 ChecklistItemType.NOTE -> FontWeight.Medium
+                                ChecklistItemType.REFERENCENOTE -> FontWeight.Medium
                                 else -> FontWeight.Normal
                             }
                         )
                     }
-                }
 
-                // Add response text if it's not empty and not a LABEL type
-                if (displayResponse.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = displayResponse,
-                        style = JarvisTheme.typography.bodyMedium,
-                        color = JarvisTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(start = if (type == ChecklistItemType.WARNING || type == ChecklistItemType.CAUTION) 32.dp else 0.dp)
-                    )
+                    // Add divider line and response text if it's not empty and not a LABEL type
+                    if (displayResponse.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp),
+                            color = JarvisTheme.colorScheme.outlineVariant
+                        ) {}
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = displayResponse,
+                            style = JarvisTheme.typography.bodyMedium,
+                            color = JarvisTheme.colorScheme.onSurfaceVariant,
+                            fontWeight = FontWeight.Normal,
+                            modifier = Modifier.padding(start = if (type == ChecklistItemType.WARNING || type == ChecklistItemType.CAUTION) 32.dp else 0.dp)
+                        )
+                    }
                 }
             }
         }
     }
 }
-

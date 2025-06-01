@@ -3921,7 +3921,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Takeoff Rotation",
               "challengeAudio": "",
               "response": "**55 KIAS**",
@@ -3931,7 +3931,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Normal Climb",
               "challengeAudio": "",
               "response": "**110-130 KIAS**",
@@ -3941,7 +3941,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Normal Approach, Flaps Up",
               "challengeAudio": "",
               "response": "**68 KIAS**",
@@ -3951,7 +3951,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Normal Approach, Flaps 45°",
               "challengeAudio": "",
               "response": "**63 KIAS**",
@@ -3961,7 +3961,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Go-Around, Max Power, Flaps 20°",
               "challengeAudio": "",
               "response": "**63 KIAS**",
@@ -3978,7 +3978,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Rotation",
               "challengeAudio": "",
               "response": "**55 KIAS**",
@@ -3988,7 +3988,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Normal Climb",
               "challengeAudio": "",
               "response": "**110-130 KIAS**",
@@ -3998,7 +3998,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Short Field Takeoff, Flaps 20°, Speed at 50 Feet",
               "challengeAudio": "",
               "response": "**80 KIAS**",
@@ -4008,7 +4008,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "En Route Climb Flaps Up",
               "challengeAudio": "",
               "response": "110-130 KIAS",
@@ -4018,7 +4018,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Best Rate of Climb, Sea Level",
               "challengeAudio": "",
               "response": "**75 KIAS**",
@@ -4028,7 +4028,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Best Angle of Climb, Sea Level",
               "challengeAudio": "",
               "response": "**63 KIAS**",
@@ -4038,7 +4038,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Approach, Flaps Up",
               "challengeAudio": "",
               "response": "**68-70 KIAS**",
@@ -4048,7 +4048,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Approach, Flaps 45°",
               "challengeAudio": "",
               "response": "**63-65 KIAS**",
@@ -4058,7 +4058,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Short Field Approach, Flaps 45°",
               "challengeAudio": "",
               "response": "**63 KIAS**",
@@ -4068,7 +4068,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Go-Around, Max Power, Flaps 20°",
               "challengeAudio": "",
               "response": "**63 KIAS**",
@@ -4078,7 +4078,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Max in Turbulence 1800 lbs.",
               "challengeAudio": "",
               "response": "115 KIAS",
@@ -4095,7 +4095,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Emergency Descent",
               "challengeAudio": "",
               "response": "180 KIAS",
@@ -4105,7 +4105,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Landing Approach",
               "challengeAudio": "",
               "response": "63-65 KIAS",
@@ -4115,7 +4115,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vne (Never Exceed)",
               "challengeAudio": "V N E (Never Exceed)",
               "response": "184 KIAS",
@@ -4125,7 +4125,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vno (Maximum structural)",
               "challengeAudio": "V N O (Maximum structural)",
               "response": "156 KIAS (1800 lbs), 135 KIAS (1650 lbs)",
@@ -4135,7 +4135,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Va (Maneuvering)",
               "challengeAudio": "V A Maneuvering",
               "response": "115 KIAS",
@@ -4145,7 +4145,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vfe (Flaps Extended)",
               "challengeAudio": "V F E Flaps Extended)",
               "response": "96 KIAS (20°), 87 KIAS (full)",
@@ -4155,7 +4155,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vg (Best Glide)",
               "challengeAudio": "V G (Best Glide)",
               "response": "80 KIAS",
@@ -4165,7 +4165,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vr (Rotation)",
               "challengeAudio": "V R (Rotation)",
               "response": "55 KIAS",
@@ -4175,7 +4175,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vs0 (Stall Landing)",
               "challengeAudio": "V S zero (Stall Landing)",
               "response": "48 KIAS",
@@ -4185,7 +4185,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vs1 (Stall Clean)",
               "challengeAudio": "V S one (Stall Clean)",
               "response": "52 KIAS",
@@ -4195,7 +4195,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vx (Best Angle of Climb)",
               "challengeAudio": "V X (Best Angle of Climb)",
               "response": "63 KIAS",
@@ -4205,7 +4205,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vy (Best Rate of Climb)",
               "challengeAudio": "V Y (Best Rate of Climb)",
               "response": "75 KIAS",
@@ -4215,7 +4215,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Vy (Cruise Climb)",
               "challengeAudio": "V Y (Cruise Climb)",
               "response": "110-130 KIAS",
@@ -4230,7 +4230,7 @@
     },
     {
       "sectionType": "reference",
-      "sectionTitle": "Reference",
+      "sectionTitle": "References",
       "sectionTitleAudio": "",
       "sectionSelectorName": "",
       "listView": "tileListView",
@@ -4241,7 +4241,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "What do I do if the engine runs rough during run-up?",
               "challengeAudio": "",
               "response": "",
@@ -4251,7 +4251,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "What if the mag drop is more than 200 rpm?",
               "challengeAudio": "",
               "response": "",
@@ -4261,7 +4261,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "How do I know if the engine is developing full power during takeoff?",
               "challengeAudio": "",
               "response": "",
@@ -4271,7 +4271,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "What is a hot magneto and how can I troubleshoot this?",
               "challengeAudio": "",
               "response": "",
@@ -4281,7 +4281,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Can I take off if the oil temperature isn’t in the green?",
               "challengeAudio": "",
               "response": "",
@@ -4291,7 +4291,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Why is my engine so hard to start, especially when hot, and what can I do about it?",
               "challengeAudio": "",
               "response": "",
@@ -4301,7 +4301,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "My engine runs very rough while it’s starting then smooths out as it warms up. Is there something wrong?",
               "challengeAudio": "",
               "response": "",
@@ -4311,7 +4311,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Can I hurt my engine by leaning too much?",
               "challengeAudio": "",
               "response": "",
@@ -4321,7 +4321,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Is it okay to lean below 3,000 feet?",
               "challengeAudio": "",
               "response": "",
@@ -4331,7 +4331,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "I learned what to do if the engine fails, but what do I do if there is just a partial power loss?",
               "challengeAudio": "",
               "response": "",
@@ -4348,7 +4348,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Engine",
               "challengeAudio": "",
               "response": "O-320-D1A 160 HP",
@@ -4358,7 +4358,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Max Baggage",
               "challengeAudio": "",
               "response": "100 lbs",
@@ -4368,7 +4368,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Max Gross T.O.",
               "challengeAudio": "max gross takeoff",
               "response": "1800 lbs",
@@ -4378,7 +4378,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Fuel Type",
               "challengeAudio": "",
               "response": "100LL (blue) /100 (green) /  91-96 (blue)",
@@ -4388,7 +4388,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Usable Fuel: Both Tanks",
               "challengeAudio": "",
               "response": "37 Gallons",
@@ -4398,7 +4398,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Usable Fuel: L/R Tank",
               "challengeAudio": "usable fuel left or right tank",
               "response": "18.5 Gallons",
@@ -4408,7 +4408,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Oil Capacity",
               "challengeAudio": "",
               "response": "8 Quarts _Keep level to 5.5-6.0 Quarts_",
@@ -4418,7 +4418,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Electrical",
               "challengeAudio": "",
               "response": "12-14 Volt",
@@ -4428,7 +4428,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Tire Pressure",
               "challengeAudio": "",
               "response": "Front 35 PSI, Main 45 PSI",
@@ -4445,7 +4445,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "Transponder Codes",
               "challengeAudio": "",
               "response": "",
@@ -4462,7 +4462,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "reference",
               "challenge": "ATC Light Gun Signals",
               "challengeAudio": "",
               "response": "",
@@ -4479,7 +4479,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "referenceNote",
               "challenge": "Arrival or Through Flight",
               "challengeAudio": "",
               "response": "Each person must establish two-way radio communications with the ATC facility providing air traffic services prior to entering that airspace and thereafter maintain those communications while within that airspace.",
@@ -4489,7 +4489,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "referenceNote",
               "challenge": "Departing with Tower",
               "challengeAudio": "",
               "response": "From the primary airport or satellite airport with an operating control tower must establish and maintain two-way radio communications with the control tower, and thereafter as instructed by ATC while operating in the Class C airspace area",
@@ -4499,7 +4499,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "referenceNote",
               "challenge": "Departing with No Tower",
               "challengeAudio": "",
               "response": "From a satellite airport without an operating control tower, must establish and maintain two-way radio communications with the ATC facility having jurisdiction over the Class C airspace area as soon as practicable after departing.",
@@ -4516,7 +4516,7 @@
           "listSelectorName": "",
           "listItems": [
             {
-              "listItemType": "task",
+              "listItemType": "referenceNote",
               "challenge": "Arrival or Through Flight",
               "challengeAudio": "",
               "response": "Class B airspace require a clearance from ATC. To receive the clearance, you need to \"request clearance into the Class Bravo\" from ATC prior to entering the airspace.",
@@ -4526,7 +4526,7 @@
               "suppressAudioResponse": false
             },
             {
-              "listItemType": "task",
+              "listItemType": "referenceNote",
               "challenge": "Departing",
               "challengeAudio": "",
               "response": "From the primary airport or satellite airport with an operating control tower must establish and maintain two-way radio communications with the control tower, and thereafter as instructed by ATC while operating in the Class B airspace area",

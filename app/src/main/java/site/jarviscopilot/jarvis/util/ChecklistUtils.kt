@@ -17,6 +17,8 @@ object ChecklistUtils {
             "label" -> ChecklistItemType.LABEL
             "caution" -> ChecklistItemType.CAUTION
             "warning" -> ChecklistItemType.WARNING
+            "reference" -> ChecklistItemType.REFERENCE
+            "referencenote" -> ChecklistItemType.REFERENCENOTE
             else -> ChecklistItemType.TASK // Default to TASK for any unknown types
         }
     }
