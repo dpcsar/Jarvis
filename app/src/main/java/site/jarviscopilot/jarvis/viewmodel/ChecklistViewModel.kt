@@ -36,7 +36,11 @@ data class ChecklistUiState(
     val completedItems: List<Int> = emptyList(),
     val isMicActive: Boolean = false,
     val showingTileGrid: Boolean = true,
-    val blockedTasks: List<Int> = emptyList()
+    val blockedTasks: List<Int> = emptyList(),
+    val isReadingList: Boolean = false,
+    val isReadingPaused: Boolean = false,
+    val currentReadingItemIndex: Int = -1,
+    val finishCurrentItemBeforePausing: Boolean = false
 )
 
 /**
@@ -1320,63 +1324,178 @@ class ChecklistViewModel(
      */
     fun handleListItemsTitleClick() {
         val currentState = _uiState.value
-        val sectionIndex = currentState.selectedSectionIndex
-        val listIndex = currentState.selectedListIndex
-        val currentItems = currentState.checklistItemData
+        val items = currentState.checklistItemData
 
-        // Verify the indices are valid for the current state
-        if (currentItems.isEmpty()) return
-        if (sectionIndex >= currentState.completedItemsBySection.size) return
-        if (listIndex >= currentState.completedItemsBySection[sectionIndex].size) return
+        // Verify we have items to read
+        if (items.isEmpty()) return
+
+        // If we're already in reading mode, toggle pause/resume
+        if (currentState.isReadingList) {
+            if (currentState.isReadingPaused) {
+                resumeReading()
+            } else {
+                pauseReading()
+            }
+            return
+        }
+
+        // Start reading mode
+        _uiState.update {
+            it.copy(
+                isReadingList = true,
+                isReadingPaused = false,
+                currentReadingItemIndex = 0
+            )
+        }
 
         // Announce that we're going to read through the list
         viewModelScope.launch {
             ttsHandler.handleMessage("Reading checklist items", TextToSpeech.QUEUE_FLUSH)
 
-            // Get information about the current section and list for later comparison
-            val initialSectionIndex = currentState.selectedSectionIndex
-            val initialListIndex = currentState.selectedListIndex
+            // Start reading from the beginning
+            continueReadingFromIndex(0)
+        }
+    }
 
-            // Process each item one by one
-            for (itemIndex in currentItems.indices) {
+    /**
+     * Pauses the current reading process
+     */
+    fun pauseReading() {
+        // Only pause if currently reading and not already paused
+        if (_uiState.value.isReadingList && !_uiState.value.isReadingPaused) {
+            // Set flag to finish current item before pausing
+            _uiState.update { it.copy(finishCurrentItemBeforePausing = true) }
+
+            // Don't announce pause state yet - will be announced after current item finishes
+        }
+    }
+
+    /**
+     * Resumes the reading process from where it was paused
+     */
+    fun resumeReading() {
+        val currentState = _uiState.value
+
+        // Only resume if we're in reading mode and currently paused
+        if (currentState.isReadingList && currentState.isReadingPaused) {
+            _uiState.update { it.copy(isReadingPaused = false) }
+
+            // Resume from current reading index without announcement
+            val itemIndex = currentState.currentReadingItemIndex
+            val items = currentState.checklistItemData
+
+            if (itemIndex >= 0 && itemIndex < items.size) {
+                // Continue reading from the current item
+                continueReadingFromIndex(itemIndex)
+            }
+        }
+    }
+
+    /**
+     * Stops the reading process completely
+     */
+    fun stopReading() {
+        if (_uiState.value.isReadingList) {
+            // Stop TTS
+            ttsHandler.stopSpeech()
+
+            // Reset reading state
+            _uiState.update {
+                it.copy(
+                    isReadingList = false,
+                    isReadingPaused = false,
+                    currentReadingItemIndex = -1
+                )
+            }
+        }
+    }
+
+    /**
+     * Continue reading list items from the specified index
+     */
+    private fun continueReadingFromIndex(startIndex: Int) {
+        val currentState = _uiState.value
+        val items = currentState.checklistItemData
+
+        // Make sure we're not paused and we have a valid index
+        if (currentState.isReadingPaused || startIndex < 0 || startIndex >= items.size) {
+            return
+        }
+
+        viewModelScope.launch {
+            // Starting from the given index
+            var currentIndex = startIndex
+
+            // Process each remaining item
+            while (currentIndex < items.size) {
+                // Update the current reading index
+                _uiState.update {
+                    it.copy(
+                        activeItemIndex = currentIndex,
+                        currentReadingItemIndex = currentIndex
+                    )
+                }
+
                 // Check if the item is already complete
-                val isAlreadyComplete = itemIndex in _uiState.value.completedItems
+                val isAlreadyComplete = currentIndex in _uiState.value.completedItems
 
                 // If not already complete, read it and mark it complete
                 if (!isAlreadyComplete) {
-                    // First, set this item as the active item for visual indication
-                    _uiState.update { it.copy(activeItemIndex = itemIndex) }
-
                     // Read the current item
                     ttsHandler.handleItem(
-                        currentItems,
-                        itemIndex,
-                        TextToSpeech.QUEUE_FLUSH
+                        items,
+                        currentIndex,
+                        TextToSpeech.QUEUE_ADD
                     )
 
                     // Mark the item as complete without speaking it again
-                    markItemCompleteWithoutSpeaking(itemIndex)
+                    markItemCompleteWithoutSpeaking(currentIndex)
 
-                    // Small delay between items
-                    kotlinx.coroutines.delay(300)
+                    // Check if we were asked to pause after finishing this item
+                    if (_uiState.value.finishCurrentItemBeforePausing) {
+                        // Set paused state and reset the flag
+                        _uiState.update {
+                            it.copy(
+                                isReadingPaused = true,
+                                finishCurrentItemBeforePausing = false
+                            )
+                        }
+
+                        // Announce pause state after finishing the current item
+                        ttsHandler.handleMessage("Reading paused", TextToSpeech.QUEUE_ADD)
+                        return@launch
+                    }
+                }
+
+                // Check if we were asked to stop
+                if (!_uiState.value.isReadingList) {
+                    return@launch
+                }
+
+                // Check if we're now paused (could happen while waiting for TTS to complete)
+                if (_uiState.value.isReadingPaused) {
+                    return@launch
+                }
+
+                // Move to the next item
+                currentIndex++
+            }
+
+            // After reading all items, we've reached the end of the list
+            if (_uiState.value.isReadingList && !_uiState.value.isReadingPaused) {
+                // Announce end of list
+                ttsHandler.handleMessage("End of list reached", TextToSpeech.QUEUE_ADD)
+
+                // Stop reading mode when done with the list
+                _uiState.update {
+                    it.copy(
+                        isReadingList = false,
+                        isReadingPaused = false,
+                        currentReadingItemIndex = -1,
+                        finishCurrentItemBeforePausing = false
+                    )
                 }
             }
-
-            // Check if we successfully advanced to a new list
-            val newState = _uiState.value
-            if (newState.selectedSectionIndex != initialSectionIndex ||
-                newState.selectedListIndex != initialListIndex
-            ) {
-                // We've advanced - let the user know but don't read the items
-                ttsHandler.handleMessage("Advanced to next list", TextToSpeech.QUEUE_ADD)
-            } else {
-                // If we didn't advance, it means we're at the end of the checklist
-                ttsHandler.handleMessage("End of checklist reached", TextToSpeech.QUEUE_ADD)
-            }
-
-            // After all items have been read and marked complete,
-            // advance to the next list without reading it
-            advanceToNextListOrSection()
         }
     }
 

@@ -27,6 +27,7 @@ import site.jarviscopilot.jarvis.ui.components.ChecklistBar
 import site.jarviscopilot.jarvis.ui.components.ClickableListTitle
 import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.ListSelector
+import site.jarviscopilot.jarvis.ui.components.ReadingControls
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.TopBar
 import site.jarviscopilot.jarvis.ui.components.checklist.ListItemsView
@@ -105,42 +106,60 @@ fun ChecklistScreen(
                 val hasMultipleLists = (currentSection?.lists?.size ?: 0) > 1
                 val isTileListView = currentSection?.listView == "tileListView"
 
-                // Display the list selector first (above section selector)
-                if (hasMultipleLists && !isTileListView) {
-                    val lists = currentSection?.lists ?: emptyList()
-
-                    // Get the completed items for the current section
-                    val completedItemsForSection =
-                        if (uiState.selectedSectionIndex < uiState.completedItemsBySection.size) {
-                            uiState.completedItemsBySection[uiState.selectedSectionIndex]
-                        } else {
-                            emptyList()
-                        }
-
-                    ListSelector(
-                        lists = lists,
-                        selectedListIndex = uiState.selectedListIndex,
-                        onListSelected = { list ->
-                            viewModel.selectList(list)
+                // If we're in reading mode, show the reading controls instead of the selectors
+                if (uiState.isReadingList) {
+                    ReadingControls(
+                        isPaused = uiState.isReadingPaused,
+                        onPauseResume = {
+                            if (uiState.isReadingPaused) {
+                                viewModel.resumeReading()
+                            } else {
+                                viewModel.pauseReading()
+                            }
                         },
-                        onLongClick = {
-                            viewModel.markAllItemsComplete()
+                        onClose = {
+                            viewModel.stopReading()
                         },
-                        isNormalListView = true, // Enable progress display
-                        completedItemsByList = completedItemsForSection
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
-                }
+                } else {
+                    // Display the list selector first (above section selector)
+                    if (hasMultipleLists && !isTileListView) {
+                        val lists = currentSection?.lists ?: emptyList()
 
-                // Then display the section selector
-                if (uiState.checklistData?.sections?.isNotEmpty() == true) {
-                    SectionSelector(
-                        sections = uiState.checklistData?.sections ?: emptyList(),
-                        selectedSectionIndex = uiState.selectedSectionIndex,
-                        onSectionSelected = { section ->
-                            viewModel.selectSection(section)
-                        },
-                        completedItemsBySection = uiState.completedItemsBySection
-                    )
+                        // Get the completed items for the current section
+                        val completedItemsForSection =
+                            if (uiState.selectedSectionIndex < uiState.completedItemsBySection.size) {
+                                uiState.completedItemsBySection[uiState.selectedSectionIndex]
+                            } else {
+                                emptyList()
+                            }
+
+                        ListSelector(
+                            lists = lists,
+                            selectedListIndex = uiState.selectedListIndex,
+                            onListSelected = { list ->
+                                viewModel.selectList(list)
+                            },
+                            onLongClick = {
+                                viewModel.markAllItemsComplete()
+                            },
+                            isNormalListView = true, // Enable progress display
+                            completedItemsByList = completedItemsForSection
+                        )
+                    }
+
+                    // Then display the section selector
+                    if (uiState.checklistData?.sections?.isNotEmpty() == true) {
+                        SectionSelector(
+                            sections = uiState.checklistData?.sections ?: emptyList(),
+                            selectedSectionIndex = uiState.selectedSectionIndex,
+                            onSectionSelected = { section ->
+                                viewModel.selectSection(section)
+                            },
+                            completedItemsBySection = uiState.completedItemsBySection
+                        )
+                    }
                 }
 
                 // Finally, the ChecklistBar

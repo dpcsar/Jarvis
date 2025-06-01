@@ -161,6 +161,13 @@ class TtsHandler private constructor(context: Context) {
         speakIfEnabledAndWait(message, queueMode)
     }
 
+    /**
+     * Stop any ongoing TTS speech immediately
+     */
+    fun stopSpeech() {
+        ttsManager.stopSpeech()
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: TtsHandler? = null
