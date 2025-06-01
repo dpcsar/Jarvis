@@ -65,7 +65,8 @@ fun ListTiles(
             .clip(RoundedCornerShape(16.dp))
             .clickable { onTileClick() },
         colors = CardDefaults.cardColors(
-            containerColor = containerColor
+            containerColor = containerColor,
+            contentColor = textColor
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp

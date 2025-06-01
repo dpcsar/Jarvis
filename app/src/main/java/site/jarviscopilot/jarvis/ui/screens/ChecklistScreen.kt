@@ -156,7 +156,9 @@ fun ChecklistScreen(
                     isActiveItemEnabled = uiState.activeItemIndex >= 0
                 )
             }
-        }
+        },
+        containerColor = JarvisTheme.colorScheme.background,
+        contentColor = JarvisTheme.colorScheme.onBackground
     ) { paddingValues ->
         Column(
             modifier = Modifier

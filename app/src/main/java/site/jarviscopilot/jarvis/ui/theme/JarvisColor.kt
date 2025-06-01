@@ -29,18 +29,25 @@ val JarvisLightWarningBackground = Color(0xFFFFE0B2) // Light orange background
 val JarvisLightCaution = Color(0xFFFFC107) // Amber for caution
 val JarvisLightCautionBackground = Color(0xFFFFF8E1) // Light amber background
 val JarvisLightSurfaceVariant = Color(0xFFE7E0EC) // Standard Material 3 light theme surfaceVariant
-val JarvisLightOnSurfaceVariant = Color(0xFF49454F) // Standard Material 3 light theme onSurfaceVariant
+val JarvisLightOnSurfaceVariant =
+    Color(0xFF49454F) // Standard Material 3 light theme onSurfaceVariant
 val JarvisLightOutline = Color(0xFF79747E) // Standard Material 3 light theme outline
 val JarvisLightOutlineVariant = Color(0xFFCAC4D0) // Standard Material 3 light theme outlineVariant
-val JarvisLightSurfaceContainer = Color(0xFFF3F1F6) // Standard Material 3 light theme surfaceContainer
-val JarvisLightSurfaceContainerHigh = Color(0xFFECE9F1) // Standard Material 3 light theme surfaceContainerHigh
-val JarvisLightSurfaceContainerHighest = Color(0xFFE6E0EB) // Standard Material 3 light theme surfaceContainerHighest
-val JarvisLightSurfaceContainerLow = Color(0xFFF7F5FA) // Standard Material 3 light theme surfaceContainerLow
-val JarvisLightSurfaceContainerLowest = Color(0xFFFFFFFF) // Standard Material 3 light theme surfaceContainerLowest
+val JarvisLightSurfaceContainer =
+    Color(0xFFF3F1F6) // Standard Material 3 light theme surfaceContainer
+val JarvisLightSurfaceContainerHigh =
+    Color(0xFFECE9F1) // Standard Material 3 light theme surfaceContainerHigh
+val JarvisLightSurfaceContainerHighest =
+    Color(0xFFE6E0EB) // Standard Material 3 light theme surfaceContainerHighest
+val JarvisLightSurfaceContainerLow =
+    Color(0xFFF7F5FA) // Standard Material 3 light theme surfaceContainerLow
+val JarvisLightSurfaceContainerLowest =
+    Color(0xFFFFFFFF) // Standard Material 3 light theme surfaceContainerLowest
 val JarvisLightSurfaceDim = Color(0xFFDED8E0) // Standard Material 3 light theme surfaceDim
 val JarvisLightSurfaceBright = Color(0xFFFDF8FD) // Standard Material 3 light theme surfaceBright
 val JarvisLightInverseSurface = Color(0xFF322F35) // Standard Material 3 light theme inverseSurface
-val JarvisLightInverseOnSurface = Color(0xFFF5F0F7) // Standard Material 3 light theme inverseOnSurface
+val JarvisLightInverseOnSurface =
+    Color(0xFFF5F0F7) // Standard Material 3 light theme inverseOnSurface
 val JarvisLightInversePrimary = Color(0xFF9ECAFF) // Standard Material 3 light theme inversePrimary
 val JarvisLightScrim = Color(0xFF000000) // Standard Material 3 light theme scrim (usually black)
 
@@ -66,17 +73,24 @@ val JarvisDarkWarningBackground = Color(0xFF773C00) // Dark orange background
 val JarvisDarkCaution = Color(0xFFFFD54F) // Lighter amber for dark theme
 val JarvisDarkCautionBackground = Color(0xFF705D00) // Dark amber background
 val JarvisDarkSurfaceVariant = Color(0xFF49454F) // Standard Material 3 dark theme surfaceVariant
-val JarvisDarkOnSurfaceVariant = Color(0xFFCAC4D0) // Standard Material 3 dark theme onSurfaceVariant
+val JarvisDarkOnSurfaceVariant =
+    Color(0xFFCAC4D0) // Standard Material 3 dark theme onSurfaceVariant
 val JarvisDarkOutline = Color(0xFF938F99) // Standard Material 3 dark theme outline
 val JarvisDarkOutlineVariant = Color(0xFF49454F) // Standard Material 3 dark theme outlineVariant
-val JarvisDarkSurfaceContainer = Color(0xFF201A24) // Standard Material 3 dark theme surfaceContainer
-val JarvisDarkSurfaceContainerHigh = Color(0xFF2B2531) // Standard Material 3 dark theme surfaceContainerHigh
-val JarvisDarkSurfaceContainerHighest = Color(0xFF36303C) // Standard Material 3 dark theme surfaceContainerHighest
-val JarvisDarkSurfaceContainerLow = Color(0xFF1D1B1F) // Standard Material 3 dark theme surfaceContainerLow
-val JarvisDarkSurfaceContainerLowest = Color(0xFF0F0D13) // Standard Material 3 dark theme surfaceContainerLowest
+val JarvisDarkSurfaceContainer =
+    Color(0xFF201A24) // Standard Material 3 dark theme surfaceContainer
+val JarvisDarkSurfaceContainerHigh =
+    Color(0xFF2B2531) // Standard Material 3 dark theme surfaceContainerHigh
+val JarvisDarkSurfaceContainerHighest =
+    Color(0xFF36303C) // Standard Material 3 dark theme surfaceContainerHighest
+val JarvisDarkSurfaceContainerLow =
+    Color(0xFF1D1B1F) // Standard Material 3 dark theme surfaceContainerLow
+val JarvisDarkSurfaceContainerLowest =
+    Color(0xFF0F0D13) // Standard Material 3 dark theme surfaceContainerLowest
 val JarvisDarkSurfaceDim = Color(0xFF141218) // Standard Material 3 dark theme surfaceDim
 val JarvisDarkSurfaceBright = Color(0xFF3B3540) // Standard Material 3 dark theme surfaceBright
 val JarvisDarkInverseSurface = Color(0xFFE6E0E9) // Standard Material 3 dark theme inverseSurface
-val JarvisDarkInverseOnSurface = Color(0xFF322F35) // Standard Material 3 dark theme inverseOnSurface
+val JarvisDarkInverseOnSurface =
+    Color(0xFF322F35) // Standard Material 3 dark theme inverseOnSurface
 val JarvisDarkInversePrimary = Color(0xFF0055D0) // Standard Material 3 dark theme inversePrimary
 val JarvisDarkScrim = Color(0xFF000000) // Standard Material 3 dark theme scrim (usually black)

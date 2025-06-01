@@ -35,7 +35,8 @@ fun JarvisDialog(
         Card(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = JarvisTheme.colorScheme.surface
+                containerColor = JarvisTheme.colorScheme.surface,
+                contentColor = JarvisTheme.colorScheme.onSurface
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 8.dp

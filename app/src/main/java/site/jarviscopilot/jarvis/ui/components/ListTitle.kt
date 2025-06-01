@@ -37,7 +37,7 @@ fun ClickableListTitle(
         Text(
             text = title,
             style = JarvisTheme.typography.titleLarge,
-            color = JarvisTheme.colorScheme.onBackground,
+            color = JarvisTheme.colorScheme.onPrimaryContainer,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )

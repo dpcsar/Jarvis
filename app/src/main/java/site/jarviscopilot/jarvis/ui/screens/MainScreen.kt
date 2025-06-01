@@ -94,7 +94,9 @@ fun MainScreen(
                     }
                 }
             }
-        }
+        },
+        containerColor = JarvisTheme.colorScheme.background,
+        contentColor = JarvisTheme.colorScheme.onBackground
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -153,6 +155,10 @@ fun ChecklistCard(
     Card(
         modifier = Modifier
             .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = JarvisTheme.colorScheme.surface,
+            contentColor = JarvisTheme.colorScheme.onSurface
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(

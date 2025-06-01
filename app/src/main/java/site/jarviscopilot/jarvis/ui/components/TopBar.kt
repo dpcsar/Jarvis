@@ -53,7 +53,8 @@ fun TopBar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = flightPlan ?: "No Flight Plan",
-                    style = JarvisTheme.typography.bodyLarge
+                    style = JarvisTheme.typography.bodyLarge,
+                    color = JarvisTheme.colorScheme.onPrimaryContainer
                 )
             }
 
@@ -63,17 +64,21 @@ fun TopBar(
                 ) {
                     Text(
                         text = "Local: $localTime",
-                        style = JarvisTheme.typography.bodyMedium
+                        style = JarvisTheme.typography.bodyMedium,
+                        color = JarvisTheme.colorScheme.onPrimaryContainer
                     )
                     Text(
                         text = "UTC: $utcTime",
-                        style = JarvisTheme.typography.bodyMedium
+                        style = JarvisTheme.typography.bodyMedium,
+                        color = JarvisTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }
         }
 
-        HorizontalDivider()
+        HorizontalDivider(
+            color = JarvisTheme.colorScheme.outline
+        )
     }
 }
 

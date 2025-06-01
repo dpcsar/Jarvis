@@ -56,7 +56,8 @@ fun JarvisApp() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                color = JarvisTheme.colorScheme.background
+                color = JarvisTheme.colorScheme.background,
+                contentColor = JarvisTheme.colorScheme.onBackground
             ) {
                 // No longer need to pass repository and state manager dependencies
                 JarvisNavHost(

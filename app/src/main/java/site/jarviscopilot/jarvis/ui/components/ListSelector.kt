@@ -76,6 +76,7 @@ fun ListSelector(
             .fillMaxWidth()
             .padding(vertical = 4.dp),  // Reduced from 8.dp to 4.dp
         color = JarvisTheme.colorScheme.surface,
+        contentColor = JarvisTheme.colorScheme.onSurface,
         tonalElevation = 4.dp
     ) {
         LazyRow(
@@ -87,16 +88,23 @@ fun ListSelector(
                 val list = lists[index]
                 val isSelected = index == selectedListIndex
 
+                // Define explicit background color for box
+                val backgroundColor = if (isSelected)
+                    JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                else
+                    JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+
+                // Define explicit text color for content
+                val textColor = if (isSelected)
+                    JarvisTheme.colorScheme.onPrimaryContainer
+                else
+                    JarvisTheme.colorScheme.onSurfaceVariant
+
                 // Replace Card with Box to have full control over touch gestures
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
-                        .background(
-                            if (isSelected)
-                                JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-                            else
-                                JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
-                        )
+                        .background(backgroundColor)
                         .pointerInput(Unit) {
                             detectTapGestures(
                                 onTap = { onListSelected(index) },
@@ -142,10 +150,7 @@ fun ListSelector(
                                     list.listTitle,
                                 style = JarvisTheme.typography.bodyMedium,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                color = if (isSelected)
-                                    JarvisTheme.colorScheme.onPrimaryContainer
-                                else
-                                    JarvisTheme.colorScheme.onSurfaceVariant,
+                                color = textColor,
                                 textAlign = TextAlign.Center
                             )
                         }

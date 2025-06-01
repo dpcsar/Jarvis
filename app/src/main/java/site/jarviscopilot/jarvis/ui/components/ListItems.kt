@@ -56,6 +56,7 @@ fun ListItems(
     // Don't show response for LABEL items
     val displayResponse = if (type == ChecklistItemType.LABEL) "" else response
 
+    // Define background color based on item state
     val backgroundColor by animateColorAsState(
         when {
             effectiveIsActive -> JarvisTheme.colorScheme.primaryContainer
@@ -64,6 +65,7 @@ fun ListItems(
         }
     )
 
+    // Define border color based on item type
     val borderColor by animateColorAsState(
         when (type) {
             ChecklistItemType.WARNING -> JarvisTheme.colorScheme.warning
@@ -80,6 +82,20 @@ fun ListItems(
     val textColor by animateColorAsState(
         when {
             effectiveIsBlocked -> JarvisTheme.colorScheme.onSurface.copy(alpha = 0.5f) // Dim text for blocked tasks
+            type == ChecklistItemType.WARNING -> JarvisTheme.colorScheme.onWarningContainer
+            type == ChecklistItemType.CAUTION -> JarvisTheme.colorScheme.onCautionContainer
+            type == ChecklistItemType.REFERENCE || type == ChecklistItemType.REFERENCENOTE -> JarvisTheme.colorScheme.onReferenceContainer
+            effectiveIsActive -> JarvisTheme.colorScheme.onPrimaryContainer
+            effectiveIsCompleted -> JarvisTheme.colorScheme.onSurfaceVariant
+            else -> JarvisTheme.colorScheme.onSurface
+        }
+    )
+
+    // Define content color based on background for proper contrast
+    val contentColor by animateColorAsState(
+        when {
+            effectiveIsActive -> JarvisTheme.colorScheme.onPrimaryContainer
+            effectiveIsCompleted -> JarvisTheme.colorScheme.onSurfaceVariant
             else -> JarvisTheme.colorScheme.onSurface
         }
     )
@@ -103,6 +119,7 @@ fun ListItems(
                 }
             },
         color = backgroundColor,
+        contentColor = contentColor,
         shadowElevation = if (effectiveIsActive) 4.dp else 1.dp
     ) {
         Column(

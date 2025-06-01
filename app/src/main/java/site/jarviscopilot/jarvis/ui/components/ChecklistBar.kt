@@ -33,6 +33,7 @@ fun ChecklistBar(
     BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
         containerColor = JarvisTheme.colorScheme.primaryContainer,
+        contentColor = JarvisTheme.colorScheme.onPrimaryContainer,
         contentPadding = PaddingValues(vertical = 6.dp)  // Added reduced padding
     ) {
         Row(
@@ -43,27 +44,35 @@ fun ChecklistBar(
             // Home button
             JarvisIconButton(
                 icon = Icons.Default.Home,
-                onClick = onNavigateHome
+                onClick = onNavigateHome,
+                iconTint = JarvisTheme.colorScheme.onPrimary,
+                containerColor = JarvisTheme.colorScheme.primary
             )
 
             // Check button - mark current item as complete
             JarvisIconButton(
                 icon = Icons.Default.Check,
-                onClick = onCheckItem
+                onClick = onCheckItem,
+                iconTint = JarvisTheme.colorScheme.onPrimary,
+                containerColor = JarvisTheme.colorScheme.primary
             )
 
             // Skip button - skip current item if allowed
             JarvisIconButton(
                 icon = Icons.Default.SkipNext,
                 onClick = onSkipItem,
-                enabled = isActiveItemEnabled
+                enabled = isActiveItemEnabled,
+                iconTint = JarvisTheme.colorScheme.onPrimary,
+                containerColor = JarvisTheme.colorScheme.primary
             )
 
             // Search button - find first unchecked item (click) or required item (long click)
             JarvisIconButton(
                 icon = Icons.Default.Search,
                 onClick = onSearchItem,
-                onLongClick = onSearchRequiredItem
+                onLongClick = onSearchRequiredItem,
+                iconTint = JarvisTheme.colorScheme.onPrimary,
+                containerColor = JarvisTheme.colorScheme.primary
             )
 
             // Mic button - toggles listening for voice commands
@@ -73,14 +82,15 @@ fun ChecklistBar(
                 iconTint = if (isMicActive)
                     JarvisTheme.colorScheme.tertiary
                 else
-                    JarvisTheme.colorScheme.onPrimary
+                    JarvisTheme.colorScheme.onPrimary,
+                containerColor = JarvisTheme.colorScheme.primary
             )
 
             // Emergency button - displays emergency checklists
             JarvisIconButton(
                 icon = Icons.Default.Warning,
                 onClick = onEmergency,
-                iconTint = JarvisTheme.colorScheme.emergency,
+                iconTint = JarvisTheme.colorScheme.onEmergencyContainer,
                 containerColor = JarvisTheme.colorScheme.emergencyContainer
             )
         }

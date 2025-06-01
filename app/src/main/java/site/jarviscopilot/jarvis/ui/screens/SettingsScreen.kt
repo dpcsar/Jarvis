@@ -185,7 +185,9 @@ fun SettingsScreen(
                     )
                 }
             }
-        }
+        },
+        containerColor = JarvisTheme.colorScheme.background,
+        contentColor = JarvisTheme.colorScheme.onBackground
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -356,6 +358,10 @@ fun ChecklistListItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = JarvisTheme.colorScheme.surface,
+            contentColor = JarvisTheme.colorScheme.onSurface
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -370,7 +376,8 @@ fun ChecklistListItem(
                 Text(
                     text = checklistInfoData.name,
                     style = JarvisTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    color = JarvisTheme.colorScheme.onSurface
                 )
 
                 if (checklistInfoData.description.isNotEmpty()) {
@@ -379,7 +386,8 @@ fun ChecklistListItem(
                         text = checklistInfoData.description,
                         style = JarvisTheme.typography.bodyMedium,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        color = JarvisTheme.colorScheme.onSurface
                     )
                 }
 

@@ -100,6 +100,7 @@ fun SectionSelector(
             .fillMaxWidth()
             .padding(vertical = 4.dp),  // Reduced from 8.dp to 4.dp
         color = JarvisTheme.colorScheme.surface,
+        contentColor = JarvisTheme.colorScheme.onSurface,
         tonalElevation = 4.dp
     ) {
         LazyRow(
@@ -111,37 +112,65 @@ fun SectionSelector(
                 val section = sections[index]
                 val isSelected = index == selectedSectionIndex
 
+                // Define background color based on section type and selection state
+                val backgroundColor = when {
+                    section.sectionType == "emergency" && isSelected ->
+                        JarvisTheme.colorScheme.emergencyContainer
+
+                    section.sectionType == "emergency" && !isSelected ->
+                        JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
+
+                    section.sectionType == "reference" && isSelected ->
+                        JarvisTheme.colorScheme.referenceContainer
+
+                    section.sectionType == "reference" && !isSelected ->
+                        JarvisTheme.colorScheme.reference.copy(alpha = 0.7f)
+
+                    section.sectionType == "checklist" ->
+                        if (isSelected)
+                            JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                        else
+                            JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+
+                    isSelected ->
+                        JarvisTheme.colorScheme.primaryContainer
+
+                    else ->
+                        JarvisTheme.colorScheme.surfaceVariant
+                }
+
+                // Define text color based on background for proper contrast
+                val textColor = when {
+                    section.sectionType == "emergency" && isSelected ->
+                        JarvisTheme.colorScheme.onEmergencyContainer
+
+                    section.sectionType == "emergency" && !isSelected ->
+                        JarvisTheme.colorScheme.onEmergency
+
+                    section.sectionType == "reference" && isSelected ->
+                        JarvisTheme.colorScheme.onReferenceContainer
+
+                    section.sectionType == "reference" && !isSelected ->
+                        JarvisTheme.colorScheme.onReference
+
+                    section.sectionType == "checklist" ->
+                        if (isSelected)
+                            JarvisTheme.colorScheme.onPrimaryContainer
+                        else
+                            JarvisTheme.colorScheme.onSurfaceVariant
+
+                    isSelected ->
+                        JarvisTheme.colorScheme.onPrimaryContainer
+
+                    else ->
+                        JarvisTheme.colorScheme.onSurfaceVariant
+                }
+
                 // Replace Card with Box to have full control over layout and gestures
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
-                        .background(
-                            when {
-                                section.sectionType == "emergency" && isSelected ->
-                                    JarvisTheme.colorScheme.emergencyContainer
-
-                                section.sectionType == "emergency" && !isSelected ->
-                                    JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
-
-                                section.sectionType == "reference" && isSelected ->
-                                    JarvisTheme.colorScheme.referenceContainer
-
-                                section.sectionType == "reference" && !isSelected ->
-                                    JarvisTheme.colorScheme.reference.copy(alpha = 0.7f)
-
-                                section.sectionType == "checklist" ->
-                                    if (isSelected)
-                                        JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-                                    else
-                                        JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
-
-                                isSelected ->
-                                    JarvisTheme.colorScheme.primaryContainer
-
-                                else ->
-                                    JarvisTheme.colorScheme.surfaceVariant
-                            }
-                        )
+                        .background(backgroundColor)
                         .clickable { onSectionSelected(index) }
                 ) {
                     if (section.sectionType == "checklist") {
@@ -173,10 +202,7 @@ fun SectionSelector(
                                         section.sectionTitle,
                                     style = JarvisTheme.typography.bodyMedium,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                    color = when {
-                                        isSelected -> JarvisTheme.colorScheme.onPrimaryContainer
-                                        else -> JarvisTheme.colorScheme.onSurfaceVariant
-                                    },
+                                    color = textColor,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -221,25 +247,7 @@ fun SectionSelector(
                                     section.sectionTitle,
                                 style = JarvisTheme.typography.bodyMedium,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                color = when {
-                                    section.sectionType == "emergency" && isSelected ->
-                                        JarvisTheme.colorScheme.onEmergencyContainer
-
-                                    section.sectionType == "emergency" && !isSelected ->
-                                        JarvisTheme.colorScheme.onEmergency
-
-                                    section.sectionType == "reference" && isSelected ->
-                                        JarvisTheme.colorScheme.onReferenceContainer
-
-                                    section.sectionType == "reference" && !isSelected ->
-                                        JarvisTheme.colorScheme.onReference
-
-                                    isSelected ->
-                                        JarvisTheme.colorScheme.onPrimaryContainer
-
-                                    else ->
-                                        JarvisTheme.colorScheme.onSurfaceVariant
-                                },
+                                color = textColor,
                                 textAlign = TextAlign.Center
                             )
                         }
