@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.model.ChecklistListData
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
-import site.jarviscopilot.jarvis.util.ChecklistUtils
 
 /**
  * A composable that displays a horizontal row of selectable list cards.
@@ -95,8 +92,10 @@ fun ListSelector(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
                         .background(
-                            if (isSelected) JarvisTheme.colorScheme.primaryContainer
-                            else JarvisTheme.colorScheme.surfaceVariant
+                            if (isSelected)
+                                JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                            else
+                                JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
                         )
                         .pointerInput(Unit) {
                             detectTapGestures(
@@ -112,82 +111,69 @@ fun ListSelector(
                             )
                         }
                 ) {
-                    Column(
-                        modifier = Modifier.padding(
-                            horizontal = 16.dp,
-                            vertical = 8.dp
-                        ),  // Reduced from vertical: 12.dp to 8.dp
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = if (list.listSelectorName.isNotEmpty())
-                                list.listSelectorName
-                            else
-                                list.listTitle,
-                            style = JarvisTheme.typography.bodyMedium,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            color = if (isSelected)
-                                JarvisTheme.colorScheme.onPrimaryContainer
-                            else
-                                JarvisTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center
-                        )
+                    // Calculate progress for this specific list when in normalListView mode
+                    val progress = if (isNormalListView) {
+                        val totalItems = list.listItems.size
+                        val completedCount = if (index < completedItemsByList.size) {
+                            completedItemsByList[index].size
+                        } else {
+                            0
+                        }
+                        if (totalItems > 0) completedCount.toFloat() / totalItems else 0f
+                    } else {
+                        0f
+                    }
 
-                        // Only show progress bar for normalListView mode
-                        if (isNormalListView) {
-                            // Calculate progress for this specific list
-                            val totalItems = list.listItems.size
-
-                            // Get the completed items for this specific list
-                            val completedCount = if (index < completedItemsByList.size) {
-                                completedItemsByList[index].size
-                            } else {
-                                0
-                            }
-
-                            val progress =
-                                if (totalItems > 0) completedCount.toFloat() / totalItems else 0f
-
-                            // Add percentage text above the progress bar
+                    // Content column that will be on top of the progress indicator
+                    val content = @Composable {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = 16.dp,
+                                    vertical = 8.dp
+                                ),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Text(
-                                text = ChecklistUtils.formatProgress(completedCount, totalItems),
-                                style = JarvisTheme.typography.labelSmall,
-                                color = if (isSelected)
-                                    JarvisTheme.colorScheme.primary
+                                text = if (list.listSelectorName.isNotEmpty())
+                                    list.listSelectorName
                                 else
-                                    JarvisTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                                modifier = Modifier.padding(bottom = 2.dp)
+                                    list.listTitle,
+                                style = JarvisTheme.typography.bodyMedium,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                color = if (isSelected)
+                                    JarvisTheme.colorScheme.onPrimaryContainer
+                                else
+                                    JarvisTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
                             )
-
-                            // Custom progress indicator implementation
-                            Box(
-                                modifier = Modifier
-                                    .padding(top = 6.dp)  // Reduced from 8.dp to 6.dp
-                                    .height(4.dp)
-                                    .width(80.dp)  // Use a fixed width that's smaller than typical card width
-                                    .background(
-                                        color = if (isSelected)
-                                            JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                                        else
-                                            JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .width(80.dp * progress)  // Scale the progress bar width
-                                        .background(
-                                            color = if (isSelected)
-                                                JarvisTheme.colorScheme.onPrimaryContainer
-                                            else
-                                                JarvisTheme.colorScheme.onSurfaceVariant,
-                                            shape = RoundedCornerShape(4.dp)
-                                        )
-                                )
-                            }
                         }
                     }
+
+                    // Create progress overlay that fills from left to right
+                    if (isNormalListView && progress > 0) {
+                        // First, place a Box with the desired size that will contain the progress indicator
+                        Box(
+                            modifier = Modifier.matchParentSize() // This ensures it matches the parent box size
+                        ) {
+                            // Then place the progress indicator inside this box
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(progress) // This is the key - fill width based on progress
+                                    .fillMaxHeight() // Now this will only fill the height of the containing box
+                                    .background(
+                                        if (isSelected)
+                                            JarvisTheme.colorScheme.primaryContainer
+                                        else
+                                            JarvisTheme.colorScheme.surfaceVariant
+                                    )
+                            )
+                        }
+                    }
+
+                    // Now draw the content on top
+                    content()
                 }
             }
         }

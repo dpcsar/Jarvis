@@ -1,20 +1,17 @@
 package site.jarviscopilot.jarvis.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.model.ChecklistSectionData
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
-import site.jarviscopilot.jarvis.util.ChecklistUtils
 
 /**
  * A composable that displays a horizontal row of selectable section cards.
@@ -115,122 +111,137 @@ fun SectionSelector(
                 val section = sections[index]
                 val isSelected = index == selectedSectionIndex
 
-                Card(
-                    onClick = { onSectionSelected(index) },
-                    colors = CardDefaults.cardColors(
-                        containerColor = when {
-                            section.sectionType == "emergency" && isSelected ->
-                                JarvisTheme.colorScheme.emergencyContainer
-
-                            section.sectionType == "emergency" && !isSelected ->
-                                JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
-
-                            section.sectionType == "reference" && isSelected ->
-                                JarvisTheme.colorScheme.referenceContainer
-
-                            section.sectionType == "reference" && !isSelected ->
-                                JarvisTheme.colorScheme.reference.copy(alpha = 0.7f)
-
-                            isSelected ->
-                                JarvisTheme.colorScheme.primaryContainer
-
-                            else ->
-                                JarvisTheme.colorScheme.surfaceVariant
-                        }
-                    ),
-                    modifier = Modifier.clip(RoundedCornerShape(16.dp))
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(
-                            horizontal = 16.dp,
-                            vertical = 8.dp
-                        )  // Reduced from vertical: 12.dp to 8.dp
-                    ) {
-                        Text(
-                            text = if (section.sectionSelectorName.isNotEmpty())
-                                section.sectionSelectorName
-                            else
-                                section.sectionTitle,
-                            style = JarvisTheme.typography.bodyMedium,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            color = when {
+                // Replace Card with Box to have full control over layout and gestures
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(
+                            when {
                                 section.sectionType == "emergency" && isSelected ->
-                                    JarvisTheme.colorScheme.onEmergencyContainer
+                                    JarvisTheme.colorScheme.emergencyContainer
 
                                 section.sectionType == "emergency" && !isSelected ->
-                                    JarvisTheme.colorScheme.onEmergency
+                                    JarvisTheme.colorScheme.emergency.copy(alpha = 0.7f)
 
                                 section.sectionType == "reference" && isSelected ->
-                                    JarvisTheme.colorScheme.onReferenceContainer
+                                    JarvisTheme.colorScheme.referenceContainer
 
                                 section.sectionType == "reference" && !isSelected ->
-                                    JarvisTheme.colorScheme.onReference
+                                    JarvisTheme.colorScheme.reference.copy(alpha = 0.7f)
+
+                                section.sectionType == "checklist" ->
+                                    if (isSelected)
+                                        JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                                    else
+                                        JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
 
                                 isSelected ->
-                                    JarvisTheme.colorScheme.onPrimaryContainer
+                                    JarvisTheme.colorScheme.primaryContainer
 
                                 else ->
-                                    JarvisTheme.colorScheme.onSurfaceVariant
-                            },
-                            textAlign = TextAlign.Center
-                        )
-
-                        // Only show progress for checklist sections
-                        if (section.sectionType == "checklist") {
-                            // Calculate total items across all lists in this section
-                            val totalItems = calculateTotalItemsForSection(section)
-
-                            // Get the completed items for this specific section
-                            val completedCount = if (index < completedItemsBySection.size) {
-                                // Sum up all items in all lists for this section
-                                completedItemsBySection[index].sumOf { it.size }
-                            } else {
-                                0
+                                    JarvisTheme.colorScheme.surfaceVariant
                             }
+                        )
+                        .clickable { onSectionSelected(index) }
+                ) {
+                    if (section.sectionType == "checklist") {
+                        // Calculate progress for checklist sections
+                        val totalItems = calculateTotalItemsForSection(section)
+                        val completedCount = if (index < completedItemsBySection.size) {
+                            completedItemsBySection[index].sumOf { it.size }
+                        } else {
+                            0
+                        }
+                        val progress =
+                            if (totalItems > 0) completedCount.toFloat() / totalItems else 0f
 
-                            val progress =
-                                if (totalItems > 0) completedCount.toFloat() / totalItems else 0f
-
-                            // Add percentage text above the progress bar
-                            Text(
-                                text = ChecklistUtils.formatProgress(completedCount, totalItems),
-                                style = JarvisTheme.typography.labelSmall,
-                                color = if (isSelected)
-                                    JarvisTheme.colorScheme.primary
-                                else
-                                    JarvisTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                                modifier = Modifier.padding(bottom = 2.dp),
-                                textAlign = TextAlign.Center
-                            )
-
-                            // Custom progress indicator implementation
-                            Box(
+                        // Content column that will be on top of the progress indicator
+                        val content = @Composable {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
-                                    .padding(top = 6.dp)
-                                    .height(4.dp)
-                                    .width(80.dp)
-                                    .background(
-                                        color = if (isSelected)
-                                            JarvisTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                                        else
-                                            JarvisTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                        shape = RoundedCornerShape(4.dp)
+                                    .fillMaxWidth()
+                                    .padding(
+                                        horizontal = 16.dp,
+                                        vertical = 8.dp
                                     )
                             ) {
+                                Text(
+                                    text = if (section.sectionSelectorName.isNotEmpty())
+                                        section.sectionSelectorName
+                                    else
+                                        section.sectionTitle,
+                                    style = JarvisTheme.typography.bodyMedium,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    color = when {
+                                        isSelected -> JarvisTheme.colorScheme.onPrimaryContainer
+                                        else -> JarvisTheme.colorScheme.onSurfaceVariant
+                                    },
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+
+                        // Create progress overlay that fills from left to right
+                        if (progress > 0) {
+                            // First, place a Box with the desired size that will contain the progress indicator
+                            Box(
+                                modifier = Modifier.matchParentSize() // This ensures it matches the parent box size
+                            ) {
+                                // Then place the progress indicator inside this box
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxHeight()
-                                        .width(80.dp * progress)
+                                        .fillMaxWidth(progress) // This is the key - fill width based on progress
+                                        .fillMaxHeight() // Now this will only fill the height of the containing box
                                         .background(
-                                            color = if (isSelected)
-                                                JarvisTheme.colorScheme.onPrimaryContainer
+                                            if (isSelected)
+                                                JarvisTheme.colorScheme.primaryContainer
                                             else
-                                                JarvisTheme.colorScheme.onSurfaceVariant,
-                                            shape = RoundedCornerShape(4.dp)
+                                                JarvisTheme.colorScheme.surfaceVariant
                                         )
                                 )
                             }
+                        }
+
+                        // Now draw the content on top
+                        content()
+                    } else {
+                        // For non-checklist sections, just display the content normally
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(
+                                horizontal = 16.dp,
+                                vertical = 8.dp
+                            )
+                        ) {
+                            Text(
+                                text = if (section.sectionSelectorName.isNotEmpty())
+                                    section.sectionSelectorName
+                                else
+                                    section.sectionTitle,
+                                style = JarvisTheme.typography.bodyMedium,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                color = when {
+                                    section.sectionType == "emergency" && isSelected ->
+                                        JarvisTheme.colorScheme.onEmergencyContainer
+
+                                    section.sectionType == "emergency" && !isSelected ->
+                                        JarvisTheme.colorScheme.onEmergency
+
+                                    section.sectionType == "reference" && isSelected ->
+                                        JarvisTheme.colorScheme.onReferenceContainer
+
+                                    section.sectionType == "reference" && !isSelected ->
+                                        JarvisTheme.colorScheme.onReference
+
+                                    isSelected ->
+                                        JarvisTheme.colorScheme.onPrimaryContainer
+
+                                    else ->
+                                        JarvisTheme.colorScheme.onSurfaceVariant
+                                },
+                                textAlign = TextAlign.Center
+                            )
                         }
                     }
                 }
