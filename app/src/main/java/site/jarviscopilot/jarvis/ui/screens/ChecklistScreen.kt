@@ -109,6 +109,14 @@ fun ChecklistScreen(
                 if (hasMultipleLists && !isTileListView) {
                     val lists = currentSection?.lists ?: emptyList()
 
+                    // Get the completed items for the current section
+                    val completedItemsForSection =
+                        if (uiState.selectedSectionIndex < uiState.completedItemsBySection.size) {
+                            uiState.completedItemsBySection[uiState.selectedSectionIndex]
+                        } else {
+                            emptyList()
+                        }
+
                     ListSelector(
                         lists = lists,
                         selectedListIndex = uiState.selectedListIndex,
@@ -117,7 +125,9 @@ fun ChecklistScreen(
                         },
                         onLongClick = {
                             viewModel.markAllItemsComplete()
-                        }
+                        },
+                        isNormalListView = true, // Enable progress display
+                        completedItemsByList = completedItemsForSection
                     )
                 }
 
