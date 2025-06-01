@@ -38,7 +38,7 @@ enum class ChecklistItemType {
 
 // A customized checklist item that uses the Jarvis theme colors
 @Composable
-fun ChecklistItem(
+fun ListItems(
     challenge: String,
     response: String = "",
     isCompleted: Boolean = false,

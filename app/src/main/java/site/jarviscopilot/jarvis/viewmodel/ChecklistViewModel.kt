@@ -464,7 +464,7 @@ class ChecklistViewModel(
      * Advances to the next appropriate list or section after completing all items in the current list.
      * Only advances if current section type is "checklist" and doesn't advance to emergency or reference sections.
      */
-    private fun advanceToNextListOrSection(queueMode: Int = TextToSpeech.QUEUE_FLUSH) {
+    private fun advanceToNextListOrSection() {
         val currentState = _uiState.value
         val data = currentState.checklistData ?: return
 
@@ -491,7 +491,7 @@ class ChecklistViewModel(
                     ttsHandler.handleListOpened(
                         list.listTitle,
                         list.listTitleAudio,
-                        queueMode
+                        TextToSpeech.QUEUE_ADD
                     )
 
                     // Process items until we find a task (this will speak the items)
@@ -969,7 +969,7 @@ class ChecklistViewModel(
     }
 
     /**
-     * Toggle between tile grid view and list view
+     * Toggle between tile grid view and item view
      */
     fun toggleTileGridView(showGrid: Boolean) {
         // Set activeItemIndex to 0 before doing anything
@@ -1318,7 +1318,7 @@ class ChecklistViewModel(
      * Reads through all items in the current list one by one, marking each complete after reading it,
      * then advances to the next list without reading it.
      */
-    fun handleChecklistTitleClick() {
+    fun handleListItemsTitleClick() {
         val currentState = _uiState.value
         val sectionIndex = currentState.selectedSectionIndex
         val listIndex = currentState.selectedListIndex
@@ -1376,7 +1376,7 @@ class ChecklistViewModel(
 
             // After all items have been read and marked complete,
             // advance to the next list without reading it
-            advanceToNextListOrSection(TextToSpeech.QUEUE_ADD)
+            advanceToNextListOrSection()
         }
     }
 

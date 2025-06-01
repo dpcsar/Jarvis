@@ -29,8 +29,8 @@ import site.jarviscopilot.jarvis.ui.components.JarvisIconButton
 import site.jarviscopilot.jarvis.ui.components.ListSelector
 import site.jarviscopilot.jarvis.ui.components.SectionSelector
 import site.jarviscopilot.jarvis.ui.components.TopBar
-import site.jarviscopilot.jarvis.ui.components.checklist.ChecklistListView
-import site.jarviscopilot.jarvis.ui.components.checklist.ChecklistTileView
+import site.jarviscopilot.jarvis.ui.components.checklist.ListItemsView
+import site.jarviscopilot.jarvis.ui.components.checklist.ListTilesView
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
 import site.jarviscopilot.jarvis.viewmodel.ChecklistViewModel
 
@@ -184,7 +184,7 @@ fun ChecklistScreen(
                         ClickableListTitle(
                             title = currentList.listTitle,
                             onClick = {
-                                viewModel.handleChecklistTitleClick()
+                                viewModel.handleListItemsTitleClick()
                             }
                         )
 
@@ -194,7 +194,7 @@ fun ChecklistScreen(
                     // Display the checklist items in either expanded or tile view
                     if (!uiState.showingTileGrid) {
                         // For list view, we use the individual items
-                        ChecklistListView(
+                        ListItemsView(
                             checklistItemData = currentList.listItems,
                             completedItems = uiState.completedItems,
                             activeItemIndex = uiState.activeItemIndex,
@@ -212,7 +212,7 @@ fun ChecklistScreen(
                         // Use all lists from the current section instead of just the current list
                         val allListsInSection = currentSection.lists
 
-                        ChecklistTileView(
+                        ListTilesView(
                             lists = allListsInSection,  // Show all lists in the section
                             sectionType = currentSectionType,
                             onTileClick = { listIndex ->

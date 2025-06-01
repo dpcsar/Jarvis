@@ -23,7 +23,7 @@ import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
  * A tile representation of a checklist list for the tile view.
  */
 @Composable
-fun ChecklistTile(
+fun ListTiles(
     modifier: Modifier = Modifier,
     checklistListData: ChecklistListData,
     onTileClick: () -> Unit,

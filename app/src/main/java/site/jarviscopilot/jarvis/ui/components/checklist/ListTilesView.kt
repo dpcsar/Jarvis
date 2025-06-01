@@ -8,13 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import site.jarviscopilot.jarvis.data.model.ChecklistListData
-import site.jarviscopilot.jarvis.ui.components.ChecklistTile
+import site.jarviscopilot.jarvis.ui.components.ListTiles
 
 /**
  * A composable that displays a grid of checklist tiles.
  */
 @Composable
-fun ChecklistTileView(
+fun ListTilesView(
     lists: List<ChecklistListData>,
     sectionType: String,
     onTileClick: (Int) -> Unit
@@ -25,7 +25,7 @@ fun ChecklistTileView(
     ) {
         items(lists.indices.toList()) { listIndex ->
             val list = lists[listIndex]
-            ChecklistTile(
+            ListTiles(
                 checklistListData = list,
                 onTileClick = { onTileClick(listIndex) },
                 category = sectionType

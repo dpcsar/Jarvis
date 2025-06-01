@@ -10,14 +10,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
 import site.jarviscopilot.jarvis.data.model.ChecklistItemData
-import site.jarviscopilot.jarvis.ui.components.ChecklistItem
+import site.jarviscopilot.jarvis.ui.components.ListItems
 import site.jarviscopilot.jarvis.util.ChecklistUtils
 
 /**
  * A composable that displays a list of checklist items.
  */
 @Composable
-fun ChecklistListView(
+fun ListItemsView(
     checklistItemData: List<ChecklistItemData>,
     completedItems: List<Int>,
     activeItemIndex: Int,
@@ -73,7 +73,7 @@ fun ChecklistListView(
             .fillMaxWidth()
     ) {
         itemsIndexed(checklistItemData) { index, item ->
-            ChecklistItem(
+            ListItems(
                 challenge = item.challenge,
                 response = item.response,
                 isCompleted = index in completedItems,
