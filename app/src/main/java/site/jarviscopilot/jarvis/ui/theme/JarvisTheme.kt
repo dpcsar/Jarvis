@@ -15,35 +15,77 @@ import androidx.compose.ui.platform.LocalContext
 // Create light color scheme with reference colors instead of error
 private val JarvisLightColorScheme = lightColorScheme(
     primary = JarvisLightBlue,
+    primaryContainer = JarvisLightBlueContainer,
+    onPrimaryContainer = JarvisLightOnBlueContainer,
     secondary = JarvisLightTeal,
+    secondaryContainer = JarvisLightTealContainer,
+    onSecondary = JarvisOnSecondary,
+    onSecondaryContainer = JarvisLightOnTealContainer,
     tertiary = JarvisLightAccent,
+    tertiaryContainer = JarvisLightAccentContainer,
+    onTertiary = JarvisOnTertiary,
+    onTertiaryContainer = JarvisLightOnAccentContainer,
     background = JarvisLightBackground,
     surface = JarvisLightSurface,
     error = JarvisLightReference, // Keep for Material compatibility
     errorContainer = JarvisLightReferenceBackground, // Keep for Material compatibility
     onPrimary = JarvisOnPrimary,
-    onSecondary = JarvisOnSecondary,
-    onTertiary = JarvisOnTertiary,
     onBackground = JarvisDarkGray,
     onSurface = JarvisDarkGray,
     onError = JarvisOnPrimary, // Keep for Material compatibility
+    surfaceVariant = JarvisLightSurfaceVariant,
+    onSurfaceVariant = JarvisLightOnSurfaceVariant,
+    outline = JarvisLightOutline,
+    outlineVariant = JarvisLightOutlineVariant,
+    surfaceContainer = JarvisLightSurfaceContainer,
+    surfaceContainerHigh = JarvisLightSurfaceContainerHigh,
+    surfaceContainerHighest = JarvisLightSurfaceContainerHighest,
+    surfaceContainerLow = JarvisLightSurfaceContainerLow,
+    surfaceContainerLowest = JarvisLightSurfaceContainerLowest,
+    surfaceDim = JarvisLightSurfaceDim,
+    surfaceBright = JarvisLightSurfaceBright,
+    inverseSurface = JarvisLightInverseSurface,
+    inverseOnSurface = JarvisLightInverseOnSurface,
+    inversePrimary = JarvisLightInversePrimary,
+    scrim = JarvisLightScrim
 )
 
 // Create dark color scheme with reference colors instead of error
 private val JarvisDarkColorScheme = darkColorScheme(
     primary = JarvisBlue,
+    primaryContainer = JarvisBlueContainer,
+    onPrimaryContainer = JarvisOnBlueContainer,
     secondary = JarvisTeal,
+    secondaryContainer = JarvisTealContainer,
+    onSecondary = JarvisOnSecondary,
+    onSecondaryContainer = JarvisOnTealContainer,
     tertiary = JarvisAccent,
+    tertiaryContainer = JarvisAccentContainer,
+    onTertiary = JarvisOnTertiary,
+    onTertiaryContainer = JarvisOnAccentContainer,
     background = JarvisDarkBackground,
     surface = JarvisDarkSurface,
     error = JarvisDarkReference, // Keep for Material compatibility
     errorContainer = JarvisDarkReferenceBackground, // Keep for Material compatibility
     onPrimary = JarvisOnPrimary,
-    onSecondary = JarvisOnSecondary,
-    onTertiary = JarvisOnTertiary,
     onBackground = JarvisAccent,
     onSurface = JarvisGray,
     onError = JarvisOnPrimary, // Keep for Material compatibility
+    surfaceVariant = JarvisDarkSurfaceVariant,
+    onSurfaceVariant = JarvisDarkOnSurfaceVariant,
+    outline = JarvisDarkOutline,
+    outlineVariant = JarvisDarkOutlineVariant,
+    surfaceContainer = JarvisDarkSurfaceContainer,
+    surfaceContainerHigh = JarvisDarkSurfaceContainerHigh,
+    surfaceContainerHighest = JarvisDarkSurfaceContainerHighest,
+    surfaceContainerLow = JarvisDarkSurfaceContainerLow,
+    surfaceContainerLowest = JarvisDarkSurfaceContainerLowest,
+    surfaceDim = JarvisDarkSurfaceDim,
+    surfaceBright = JarvisDarkSurfaceBright,
+    inverseSurface = JarvisDarkInverseSurface,
+    inverseOnSurface = JarvisDarkInverseOnSurface,
+    inversePrimary = JarvisDarkInversePrimary,
+    scrim = JarvisDarkScrim
 )
 
 // Create Jarvis light color scheme with reference, emergency, warning, and caution colors
@@ -91,7 +133,8 @@ private val JarvisDarkExtendedColorScheme = JarvisColorScheme(
 @Composable
 fun JarvisTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    // Set dynamic colors to false by default to ensure our custom colors are used
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val materialColorScheme = when {

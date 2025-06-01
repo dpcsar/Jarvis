@@ -23,16 +23,14 @@ class JarvisColorScheme(
     val emergencyContainer: Color,
     val onEmergency: Color,
     val onEmergencyContainer: Color,
-    // Adding warning colors
     val warning: Color,
     val warningContainer: Color,
     val onWarning: Color,
     val onWarningContainer: Color,
-    // Adding caution colors
     val caution: Color,
     val cautionContainer: Color,
     val onCaution: Color,
-    val onCautionContainer: Color
+    val onCautionContainer: Color,
 ) {
     // Provide the standard Material3 colors by delegation
     val primary get() = colorScheme.primary
@@ -121,3 +119,4 @@ val LocalJarvisColorScheme = staticCompositionLocalOf {
         onCautionContainer = Color.Unspecified
     )
 }
+
