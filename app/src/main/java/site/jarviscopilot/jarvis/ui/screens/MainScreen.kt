@@ -67,10 +67,8 @@ fun MainScreen(
         }
     }
 
-    // Collect states from ViewModel
-    val checklistInfoDataList by viewModel.checklists.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val resumableChecklists by viewModel.resumableChecklists.collectAsState()
+    // Collect consolidated UI state from ViewModel
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -115,21 +113,31 @@ fun MainScreen(
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            if (isLoading) {
+            if (uiState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(top = 24.dp),
                     color = JarvisTheme.colorScheme.primary
                 )
             } else {
+                // Show error message if exists
+                uiState.error?.let { errorMessage ->
+                    Text(
+                        text = errorMessage,
+                        color = JarvisTheme.colorScheme.warning,
+                        style = JarvisTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(checklistInfoDataList) { checklist ->
+                    items(uiState.checklists) { checklist ->
                         ChecklistCard(
                             checklist = checklist,
-                            canResume = resumableChecklists.contains(checklist.id),
+                            canResume = uiState.resumableChecklists.contains(checklist.id),
                             onStart = { onChecklistSelected(checklist.id) },
                             onResume = { onResumeChecklist(checklist.id, true) },
                             onRestart = {

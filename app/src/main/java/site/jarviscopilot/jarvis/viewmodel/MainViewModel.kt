@@ -6,10 +6,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import site.jarviscopilot.jarvis.data.model.ChecklistInfoData
 import site.jarviscopilot.jarvis.data.repository.IChecklistRepository
 import site.jarviscopilot.jarvis.data.source.ChecklistStateManager
+import site.jarviscopilot.jarvis.ui.state.MainUiState
 
 class MainViewModel(
     private val checklistRepository: IChecklistRepository,
@@ -17,14 +18,8 @@ class MainViewModel(
 ) : ViewModel() {
 
     // UI state
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _checklists = MutableStateFlow<List<ChecklistInfoData>>(emptyList())
-    val checklists: StateFlow<List<ChecklistInfoData>> = _checklists.asStateFlow()
-
-    private val _resumableChecklists = MutableStateFlow<Set<String>>(emptySet())
-    val resumableChecklists: StateFlow<Set<String>> = _resumableChecklists.asStateFlow()
+    private val _uiState = MutableStateFlow(MainUiState(isLoading = true))
+    val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
     init {
         loadChecklists()
@@ -32,14 +27,25 @@ class MainViewModel(
 
     fun loadChecklists() {
         viewModelScope.launch {
-            _isLoading.value = true
+            _uiState.update { it.copy(isLoading = true) }
             try {
-                _checklists.value = checklistRepository.getAvailableChecklists()
-                _resumableChecklists.value = checklistStateManager.getSavedChecklistNames()
-            } catch (_: Exception) {
-                // Handle error if needed
-            } finally {
-                _isLoading.value = false
+                val checklists = checklistRepository.getAvailableChecklists()
+                val resumableChecklists = checklistStateManager.getSavedChecklistNames()
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        checklists = checklists,
+                        resumableChecklists = resumableChecklists,
+                        error = null
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = e.message ?: "Failed to load checklists"
+                    )
+                }
             }
         }
     }
@@ -47,6 +53,10 @@ class MainViewModel(
     fun clearChecklistStateQuietly(checklistId: String) {
         viewModelScope.launch {
             checklistStateManager.clearChecklistState(checklistId)
+            // Update the resumable checklists after clearing one
+            _uiState.update {
+                it.copy(resumableChecklists = checklistStateManager.getSavedChecklistNames())
+            }
         }
     }
 }
