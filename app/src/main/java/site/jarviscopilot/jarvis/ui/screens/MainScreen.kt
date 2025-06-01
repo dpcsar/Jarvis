@@ -184,17 +184,17 @@ fun ChecklistCard(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     JarvisButton(
-                        onClick = onResume,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Resume")
-                    }
-
-                    JarvisButton(
                         onClick = onRestart,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Restart")
+                    }
+
+                    JarvisButton(
+                        onClick = onResume,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Resume")
                     }
                 }
             } else {
