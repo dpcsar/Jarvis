@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -45,6 +46,7 @@ import site.jarviscopilot.jarvis.viewmodel.MainViewModel
 fun MainScreen(
     onChecklistSelected: (String) -> Unit,
     onSettingsClick: () -> Unit,
+    onHelpClick: () -> Unit = {}, // Add onHelpClick parameter with default empty implementation
     onResumeChecklist: (String, Boolean) -> Unit = { _, _ -> }
 ) {
     val context = LocalContext.current
@@ -87,6 +89,14 @@ fun MainScreen(
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Settings",
+                            tint = JarvisTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+
+                    IconButton(onClick = onHelpClick) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Help,
+                            contentDescription = "Help",
                             tint = JarvisTheme.colorScheme.onPrimaryContainer
                         )
                     }

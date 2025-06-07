@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import site.jarviscopilot.jarvis.ui.screens.ChecklistScreen
+import site.jarviscopilot.jarvis.ui.screens.HelpScreen
 import site.jarviscopilot.jarvis.ui.screens.MainScreen
 import site.jarviscopilot.jarvis.ui.screens.SettingsScreen
 
@@ -16,6 +17,7 @@ object JarvisDestinations {
     const val MAIN_ROUTE = "main"
     const val CHECKLIST_ROUTE = "checklist/{checklistName}?resumeFromSaved={resumeFromSaved}"
     const val SETTINGS_ROUTE = "settings"
+    const val HELP_ROUTE = "help"  // Add help route
 
     // Helper functions to create route strings with arguments
     fun checklistRoute(checklistName: String, resumeFromSaved: Boolean = false): String =
@@ -42,6 +44,9 @@ fun JarvisNavHost(
                 },
                 onSettingsClick = {
                     navController.navigate(JarvisDestinations.SETTINGS_ROUTE)
+                },
+                onHelpClick = {
+                    navController.navigate(JarvisDestinations.HELP_ROUTE)
                 },
                 onResumeChecklist = { checklist, resumeFromSaved ->
                     navController.navigate(
@@ -87,6 +92,15 @@ fun JarvisNavHost(
         // Settings screen
         composable(JarvisDestinations.SETTINGS_ROUTE) {
             SettingsScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        // Help screen
+        composable(JarvisDestinations.HELP_ROUTE) {
+            HelpScreen(
                 onNavigateBack = {
                     navController.navigateUp()
                 }
