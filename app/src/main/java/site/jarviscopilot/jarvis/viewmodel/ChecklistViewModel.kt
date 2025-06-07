@@ -170,25 +170,37 @@ class ChecklistViewModel(
             emptyList()
         }
 
-        // Find first task item to set as active only if activeItemIndex is not already set
-        // or if it's out of bounds for the new item list
-        val existingActiveIndex = currentState.activeItemIndex
-        val useExistingIndex = existingActiveIndex >= 0 && existingActiveIndex < items.size
+        // FIXED: Reset activeItemIndex to -1 when changing screens and find the first task
+        // instead of using the previous screen's index
+        var newActiveIndex = -1
 
-        var newActiveIndex = if (useExistingIndex) {
-            existingActiveIndex  // Keep the existing active index if it's valid
-        } else {
-            // Otherwise find the first task item to set as active
-            var firstTaskIndex = -1
-            for (i in items.indices) {
+        // Find the first task item (or first uncompleted task) to set as active
+        for (i in items.indices) {
+            val item = items[i]
+            val isCompleted = i in completedItemsList
+
+            // Check if the item is a task (not a label, note, caution, or warning)
+            if (item.listItemType.equals("TASK", ignoreCase = true) && !isCompleted) {
+                newActiveIndex = i
+                break
+            }
+        }
+
+        // If all tasks are completed, set to the last task item as fallback
+        if (newActiveIndex == -1) {
+            // Find the last task item in the list
+            for (i in items.indices.reversed()) {
                 val item = items[i]
-                // Check if the item is a task (not a label, note, caution, or warning)
                 if (item.listItemType.equals("TASK", ignoreCase = true)) {
-                    firstTaskIndex = i
+                    newActiveIndex = i
                     break
                 }
             }
-            firstTaskIndex
+
+            // If still no task found, try to set to the last item of any type
+            if (newActiveIndex == -1 && items.isNotEmpty()) {
+                newActiveIndex = items.size - 1
+            }
         }
 
         // Calculate which tasks are blocked by previous required tasks
@@ -206,7 +218,7 @@ class ChecklistViewModel(
                 hasMultipleSections = data.sections.size > 1,
                 checklistItemData = items,              // Update the checklistItemData property
                 completedItems = completedItemsList,    // Update the completedItems property
-                activeItemIndex = newActiveIndex,       // Use the calculated active index (either preserved or new)
+                activeItemIndex = newActiveIndex,       // Use the calculated active index (always finding the first uncompleted task)
                 blockedTasks = blockedTasks,            // Update blocked tasks
                 showingTileGrid = showTileGrid         // Set showingTileGrid based on the section's listView property
             )
