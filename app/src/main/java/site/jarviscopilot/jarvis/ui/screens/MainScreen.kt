@@ -139,22 +139,58 @@ fun MainScreen(
                     )
                 }
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(uiState.checklists) { checklist ->
-                        ChecklistCard(
-                            checklist = checklist,
-                            canResume = uiState.resumableChecklists.contains(checklist.id),
-                            onStart = { onChecklistSelected(checklist.id) },
-                            onResume = { onResumeChecklist(checklist.id, true) },
-                            onRestart = {
-                                viewModel.clearChecklistStateQuietly(checklist.id)
-                                onChecklistSelected(checklist.id)
-                            }
+                if (uiState.checklists.isEmpty()) {
+                    // Display message and button when no checklists are available
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "No checklists available",
+                            style = JarvisTheme.typography.titleMedium,
+                            color = JarvisTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center
                         )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = "Please add checklists from the Settings screen",
+                            style = JarvisTheme.typography.bodyMedium,
+                            color = JarvisTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        JarvisButton(
+                            onClick = onSettingsClick,
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        ) {
+                            Text("Go to Settings")
+                        }
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(uiState.checklists) { checklist ->
+                            ChecklistCard(
+                                checklist = checklist,
+                                canResume = uiState.resumableChecklists.contains(checklist.id),
+                                onStart = { onChecklistSelected(checklist.id) },
+                                onResume = { onResumeChecklist(checklist.id, true) },
+                                onRestart = {
+                                    viewModel.clearChecklistStateQuietly(checklist.id)
+                                    onChecklistSelected(checklist.id)
+                                }
+                            )
+                        }
                     }
                 }
             }
