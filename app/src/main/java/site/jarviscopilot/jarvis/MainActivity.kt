@@ -1,5 +1,7 @@
 package site.jarviscopilot.jarvis
 
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import site.jarviscopilot.jarvis.ui.navigation.JarvisNavHost
 import site.jarviscopilot.jarvis.ui.theme.JarvisTheme
+import site.jarviscopilot.jarvis.util.DeviceUtils
 import site.jarviscopilot.jarvis.util.ThemeMode
 import site.jarviscopilot.jarvis.util.UserPreferences
 
@@ -26,8 +29,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Set orientation based on device type
+        setOrientationBasedOnDeviceType()
+
         setContent {
             JarvisApp()
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // Reapply orientation rules when configuration changes
+        setOrientationBasedOnDeviceType()
+    }
+
+    @Suppress("SourceLockedOrientationActivity")
+    private fun setOrientationBasedOnDeviceType() {
+        requestedOrientation = if (DeviceUtils.isTablet(this)) {
+            // Tablet: Allow both portrait and landscape
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        } else {
+            // Phone: Force portrait only
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }
 }

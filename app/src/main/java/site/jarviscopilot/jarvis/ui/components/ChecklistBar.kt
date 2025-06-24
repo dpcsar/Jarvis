@@ -3,6 +3,7 @@ package site.jarviscopilot.jarvis.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -34,7 +35,13 @@ fun ChecklistBar(
         modifier = Modifier.fillMaxWidth(),
         containerColor = JarvisTheme.colorScheme.primaryContainer,
         contentColor = JarvisTheme.colorScheme.onPrimaryContainer,
-        contentPadding = PaddingValues(vertical = 6.dp)  // Added reduced padding
+        contentPadding = PaddingValues(vertical = 2.dp),  // Reduced padding to match top spacing
+        windowInsets = WindowInsets(
+            0,
+            0,
+            0,
+            0
+        )  // Remove system insets to eliminate extra bottom padding
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
